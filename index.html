@@ -1,834 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aura - Modern Dating</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            400: '#fb7185',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        }
-                    },
-                    boxShadow: {
-                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
-                        'glow': '0 0 20px rgba(244, 63, 94, 0.4)',
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraLover - Авторизация</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            color: #333;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-        }
-
-        /* Hide scrollbar for clean UI */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .view-section {
-            display: none;
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        .view-section.active {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            height: 100vh;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .auth-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
-
-        /* Photo Upload Grid */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+        h2 { color: #333; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
         }
-        
-        .photo-grid .main-photo {
-            grid-column: span 2;
-            grid-row: span 2;
-            aspect-ratio: 3/4;
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: opacity 0.2s;
         }
-
-        .photo-slot {
-            background: #f3f4f6;
-            border-radius: 12px;
+        button:hover { opacity: 0.9; }
+        .btn-primary { background: #ff4b72; color: white; }
+        .btn-google { background: #4285F4; color: white; }
+        .btn-phone { background: #34A853; color: white; }
+        .divider {
+            margin: 20px 0;
             position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 2px dashed #d1d5db;
-            transition: all 0.2s;
-            aspect-ratio: 1;
+            text-align: center;
         }
-
-        .photo-slot.main-photo {
-            aspect-ratio: auto;
-        }
-
-        .photo-slot:hover {
-            border-color: #f43f5e;
-            background: #fff1f2;
-        }
-
-        .photo-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .divider::before {
+            content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-        }
-
-        .photo-slot .remove-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            font-size: 12px;
-        }
-
-        /* Interest Chips */
-        .interest-chip {
-            padding: 8px 16px;
-            border-radius: 9999px;
-            border: 1px solid #e5e7eb;
-            background: white;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            user-select: none;
-        }
-        
-        .interest-chip.selected {
-            background: #f43f5e;
-            color: white;
-            border-color: #f43f5e;
-            box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
-        }
-
-        /* Dating Cards */
-        .dating-card {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 24px;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            transform-origin: 50% 100%;
-        }
-
-        .dating-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .dating-card .card-info {
-            position: absolute;
-            bottom: 0;
+            top: 50%;
             left: 0;
             right: 0;
-            padding: 30px 20px 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-            color: white;
+            border-top: 1px solid #ddd;
+            z-index: 1;
         }
-
-        /* Custom Toast */
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        .toast {
+        .divider span {
             background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideDown 0.3s ease forwards, fadeOut 0.3s ease 3s forwards;
+            padding: 0 10px;
+            color: #888;
+            position: relative;
+            z-index: 2;
+            font-size: 14px;
         }
-
-        @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        /* Bottom Nav */
-        .nav-item {
-            color: #9ca3af;
-            transition: color 0.2s;
-        }
-        .nav-item.active {
-            color: #f43f5e;
-        }
+        .hidden { display: none; }
+        #message { margin-top: 15px; font-size: 14px; color: #ff4b72; }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex justify-center items-center">
+<body>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
+<div class="auth-container">
+    <h2>Вход в AuraLover</h2>
+    
+    <!-- Секция Email / Password -->
+    <div class="input-group">
+        <input type="email" id="email" placeholder="Email">
+    </div>
+    <div class="input-group">
+        <input type="password" id="password" placeholder="Пароль">
+    </div>
+    <button class="btn-primary" id="btn-email-login">Войти / Создать по Email</button>
 
-    <!-- Mobile Wrapper for App-like feel on desktop -->
-    <div class="relative w-full h-full max-w-md mx-auto bg-white/50 backdrop-blur-3xl shadow-2xl sm:rounded-[40px] sm:h-[95vh] overflow-hidden flex flex-col border border-white/40">
+    <div class="divider"><span>ИЛИ</span></div>
+
+    <!-- Секция Google -->
+    <button class="btn-google" id="btn-google">Войти через Google</button>
+
+    <!-- Секция Телефона -->
+    <button class="btn-phone" id="btn-phone-start">Войти по номеру телефона</button>
+    
+    <div id="phone-auth-section" class="hidden">
+        <div class="input-group">
+            <input type="tel" id="phone-number" placeholder="+7 999 000 00 00">
+        </div>
+        <button class="btn-phone" id="btn-send-code">Отправить SMS</button>
         
-        <!-- Loader View -->
-        <div id="view-loader" class="view-section active flex-col w-full h-full justify-center items-center bg-gradient-to-br from-brand-100 to-white z-50">
-            <div class="w-20 h-20 relative">
-                <div class="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-75"></div>
-                <div class="relative flex justify-center items-center w-full h-full bg-brand-500 text-white rounded-full text-3xl shadow-glow">
-                    <i class="fa-solid fa-heart"></i>
-                </div>
+        <div id="code-section" class="hidden">
+            <div class="input-group">
+                <input type="text" id="verification-code" placeholder="Код из SMS">
             </div>
-            <h1 class="mt-6 text-2xl font-bold text-gray-800 tracking-wider">Aura</h1>
-            <p class="text-sm text-gray-500 mt-2">Finding connections...</p>
+            <button class="btn-primary" id="btn-verify-code">Подтвердить код</button>
         </div>
-
-        <!-- Auth View -->
-        <div id="view-auth" class="view-section flex-col w-full h-full justify-center px-8 bg-gradient-to-br from-rose-50 to-teal-50">
-            <div class="text-center mb-10">
-                <div class="w-16 h-16 mx-auto bg-brand-500 text-white rounded-2xl flex items-center justify-center text-3xl shadow-glow mb-6 rotate-12">
-                    <i class="fa-solid fa-fire-flame-curved -rotate-12"></i>
-                </div>
-                <h2 class="text-3xl font-bold text-gray-800">Welcome to Aura</h2>
-                <p class="text-gray-500 mt-2">Discover meaningful connections today.</p>
-            </div>
-
-            <div class="glass-card p-6 rounded-3xl shadow-soft">
-                <button id="btn-start" class="w-full bg-gradient-to-r from-brand-500 to-brand-400 text-white font-semibold py-4 rounded-xl shadow-glow transition-transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                    <span>Create Profile / Sign In</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-                <p class="text-center text-xs text-gray-400 mt-4">By continuing, you agree to our Terms of Service & Privacy Policy.</p>
-            </div>
-        </div>
-
-        <!-- Profile Setup View -->
-        <div id="view-setup" class="view-section flex-col w-full h-full bg-white overflow-y-auto">
-            <div class="sticky top-0 bg-white/90 backdrop-blur-md z-30 px-6 py-4 border-b border-gray-100 flex items-center shadow-sm">
-                <h2 class="text-xl font-bold text-gray-800 flex-1">Complete Profile</h2>
-            </div>
-            
-            <div class="p-6 pb-24 space-y-8">
-                <!-- Basic Info -->
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                        <input type="text" id="setup-name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition" placeholder="e.g. Alex">
-                    </div>
-                    
-                    <div class="flex gap-4">
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Age</label>
-                            <input type="number" id="setup-age" min="18" max="100" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-400 transition" placeholder="18+">
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
-                            <select id="setup-gender" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-400 transition bg-white">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Non-binary">Non-binary</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                        <textarea id="setup-bio" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-400 transition resize-none" placeholder="Write something interesting about yourself..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Photos Section -->
-                <div>
-                    <div class="flex justify-between items-end mb-3">
-                        <label class="block text-sm font-medium text-gray-700">Photos (Up to 5)</label>
-                        <span class="text-xs text-gray-500" id="photo-count">0/5</span>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-3">The first photo will be your main profile picture.</p>
-                    
-                    <div class="photo-grid" id="photo-grid-container">
-                        <!-- Slots generated by JS -->
-                    </div>
-                    <input type="file" id="photo-upload-input" class="hidden" accept="image/*" multiple>
-                </div>
-
-                <!-- Interests Section -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Interests (Select up to 5)</label>
-                    <div class="flex flex-wrap gap-2" id="interests-container">
-                        <!-- Chips generated by JS -->
-                    </div>
-                </div>
-
-                <button id="btn-save-profile" class="w-full bg-brand-500 text-white font-semibold py-4 rounded-xl shadow-glow transition-transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                    <span id="btn-save-text">Complete Profile</span>
-                    <i class="fa-solid fa-check"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Main App View -->
-        <div id="view-main" class="view-section flex-col w-full h-full bg-gray-50 relative">
-            <!-- Header -->
-            <div class="pt-6 pb-2 px-6 flex justify-between items-center z-10">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center text-white text-sm shadow-glow">
-                        <i class="fa-solid fa-fire"></i>
-                    </div>
-                    <span class="font-bold text-xl text-gray-800 tracking-wide">Aura</span>
-                </div>
-                <button class="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center text-gray-600 hover:text-brand-500 transition">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
-            </div>
-
-            <!-- Cards Container -->
-            <div class="flex-1 relative px-4 pb-20 pt-4" id="cards-container">
-                <!-- Empty State -->
-                <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-center px-8 hidden">
-                    <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-4xl mb-4">
-                        <i class="fa-solid fa-radar"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No more profiles</h3>
-                    <p class="text-gray-500 text-sm">You've seen everyone nearby. Check back later for new matches!</p>
-                </div>
-                
-                <!-- Match Cards injected here -->
-            </div>
-
-            <!-- Action Buttons (Floating) -->
-            <div class="absolute bottom-24 left-0 right-0 flex justify-center gap-6 z-20 pointer-events-none px-6">
-                <button id="btn-nope" class="pointer-events-auto w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center text-red-500 text-2xl hover:bg-red-50 transition transform hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <button id="btn-super" class="pointer-events-auto w-12 h-12 mt-2 bg-white rounded-full shadow-lg flex items-center justify-center text-blue-500 text-xl hover:bg-blue-50 transition transform hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-star"></i>
-                </button>
-                <button id="btn-like" class="pointer-events-auto w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center text-green-500 text-2xl hover:bg-green-50 transition transform hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-heart"></i>
-                </button>
-            </div>
-
-            <!-- Bottom Navigation -->
-            <div class="absolute bottom-0 left-0 w-full bg-white border-t border-gray-100 px-6 py-4 flex justify-between items-center z-30 pb-safe shadow-[0_-5px_20px_rgba(0,0,0,0.03)]">
-                <button class="nav-item active flex flex-col items-center gap-1 w-16">
-                    <i class="fa-solid fa-layer-group text-xl"></i>
-                    <span class="text-[10px] font-medium">Discover</span>
-                </button>
-                <button class="nav-item flex flex-col items-center gap-1 w-16">
-                    <i class="fa-solid fa-comment-dots text-xl"></i>
-                    <span class="text-[10px] font-medium">Matches</span>
-                </button>
-                <button class="nav-item flex flex-col items-center gap-1 w-16" onclick="showView('setup')">
-                    <i class="fa-solid fa-user text-xl"></i>
-                    <span class="text-[10px] font-medium">Profile</span>
-                </button>
-            </div>
-        </div>
-
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- Контейнер для невидимой капчи (нужен для телефона) -->
+    <div id="recaptcha-container"></div>
+    
+    <!-- Вывод ошибок и сообщений -->
+    <div id="message"></div>
+</div>
 
-        // Environment Setup
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'aura-dating-app-default';
-        let firebaseConfig;
-        try {
-            firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-                // Mock config fallback to prevent crash if running locally without env
-                apiKey: "mock", projectId: "mock"
-            };
-        } catch (e) {
-            console.error("Firebase config parsing error", e);
-            firebaseConfig = { apiKey: "mock", projectId: "mock" };
-        }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+    import { 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword,
+        GoogleAuthProvider,
+        signInWithPopup,
+        RecaptchaVerifier,
+        signInWithPhoneNumber
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+    const firebaseConfig = {
+        apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
+        authDomain: "auralover.firebaseapp.com",
+        databaseURL: "https://auralover-default-rtdb.firebaseio.com",
+        projectId: "auralover",
+        storageBucket: "auralover.firebasestorage.app",
+        messagingSenderId: "626796547748",
+        appId: "1:626796547748:web:fd401e5985875c64fca031",
+        measurementId: "G-XV5YN3Z9KH"
+    };
 
-        // App State
-        let currentUser = null;
-        let userProfileData = null;
-        let uploadedPhotos = []; // Array of Base64 strings
-        let selectedInterests = [];
-        let publicProfiles = [];
-        let currentCardIndex = 0;
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const messageEl = document.getElementById('message');
 
-        const AVAILABLE_INTERESTS = [
-            "Music", "Travel", "Fitness", "Gaming", "Photography", 
-            "Art", "Foodie", "Coffee", "Movies", "Reading", 
-            "Pets", "Hiking", "Fashion", "Technology", "Dancing"
-        ];
+    function showMessage(text) {
+        messageEl.innerText = text;
+        console.log(text);
+    }
 
-        // Utility: Toast Notifications
-        window.showToast = function(message, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            
-            let icon = '<i class="fa-solid fa-circle-info text-blue-500"></i>';
-            if(type === 'success') icon = '<i class="fa-solid fa-circle-check text-green-500"></i>';
-            if(type === 'error') icon = '<i class="fa-solid fa-circle-exclamation text-red-500"></i>';
+    // Вход по Email
+    document.getElementById('btn-email-login').addEventListener('click', () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if(!email || !password) return showMessage("Введите email и пароль");
 
-            toast.innerHTML = `
-                <div class="text-xl">${icon}</div>
-                <div class="text-sm font-medium text-gray-700">${message}</div>
-            `;
-            
-            container.appendChild(toast);
-            setTimeout(() => {
-                if (toast.parentNode) toast.parentNode.removeChild(toast);
-            }, 3500);
-        };
-
-        // Utility: View Navigation
-        window.showView = function(viewId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewId}`).classList.add('active');
-        };
-
-        // Image Compression (Client-side to ensure < 1MB limit for Firestore doc)
-        function compressImage(file, maxSize = 600) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        
-                        if (width > height) {
-                            if (width > maxSize) {
-                                height *= maxSize / width;
-                                width = maxSize;
-                            }
-                        } else {
-                            if (height > maxSize) {
-                                width *= maxSize / height;
-                                height = maxSize;
-                            }
-                        }
-                        
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        // Convert to highly compressed JPEG to ensure 5 photos easily fit in 1MB doc
-                        resolve(canvas.toDataURL('image/jpeg', 0.6)); 
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // Initialize Profile Setup UI
-        function initSetupUI() {
-            // Render Interests
-            const interestsContainer = document.getElementById('interests-container');
-            interestsContainer.innerHTML = '';
-            AVAILABLE_INTERESTS.forEach(interest => {
-                const chip = document.createElement('div');
-                chip.className = 'interest-chip';
-                chip.innerText = interest;
-                chip.onclick = () => toggleInterest(interest, chip);
-                interestsContainer.appendChild(chip);
-            });
-
-            // Initialize Photo Grid
-            renderPhotoGrid();
-
-            // Photo Upload Listener
-            const uploadInput = document.getElementById('photo-upload-input');
-            uploadInput.addEventListener('change', async (e) => {
-                const files = Array.from(e.target.files);
-                if (!files.length) return;
-
-                const remainingSlots = 5 - uploadedPhotos.length;
-                const filesToProcess = files.slice(0, remainingSlots);
-
-                if (files.length > remainingSlots) {
-                    showToast(`You can only upload up to 5 photos.`, 'error');
-                }
-
-                showToast('Processing photos...', 'info');
-                
-                for (let file of filesToProcess) {
-                    try {
-                        const base64 = await compressImage(file);
-                        uploadedPhotos.push(base64);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                }
-                
-                uploadInput.value = ''; // reset
-                renderPhotoGrid();
-            });
-
-            // Save Button
-            document.getElementById('btn-save-profile').onclick = saveProfile;
-        }
-
-        function toggleInterest(interest, element) {
-            if (selectedInterests.includes(interest)) {
-                selectedInterests = selectedInterests.filter(i => i !== interest);
-                element.classList.remove('selected');
-            } else {
-                if (selectedInterests.length >= 5) {
-                    showToast('You can select a maximum of 5 interests.', 'error');
-                    return;
-                }
-                selectedInterests.push(interest);
-                element.classList.add('selected');
-            }
-        }
-
-        function renderPhotoGrid() {
-            const container = document.getElementById('photo-grid-container');
-            container.innerHTML = '';
-            document.getElementById('photo-count').innerText = `${uploadedPhotos.length}/5`;
-
-            for (let i = 0; i < 5; i++) {
-                const slot = document.createElement('div');
-                slot.className = `photo-slot ${i === 0 ? 'main-photo' : ''}`;
-                
-                if (i < uploadedPhotos.length) {
-                    // Image present
-                    slot.innerHTML = `
-                        <img src="${uploadedPhotos[i]}" alt="Photo ${i+1}">
-                        <div class="remove-btn" onclick="event.stopPropagation(); removePhoto(${i})">
-                            <i class="fa-solid fa-xmark"></i>
-                        </div>
-                    `;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                showMessage(`Успешный вход! Привет, ${userCredential.user.email}`);
+            })
+            .catch((error) => {
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                    createUserWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            showMessage(`Профиль создан! Привет, ${userCredential.user.email}`);
+                        })
+                        .catch((err) => showMessage("Ошибка регистрации: " + err.message));
                 } else {
-                    // Empty slot
-                    slot.innerHTML = `<i class="fa-solid fa-plus text-gray-400 text-2xl"></i>`;
-                    slot.onclick = () => document.getElementById('photo-upload-input').click();
+                    showMessage("Ошибка входа: " + error.message);
                 }
-                container.appendChild(slot);
-            }
-        }
+            });
+    });
 
-        window.removePhoto = function(index) {
-            uploadedPhotos.splice(index, 1);
-            renderPhotoGrid();
-        };
+    // Вход через Google
+    document.getElementById('btn-google').addEventListener('click', () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                showMessage(`Успешный вход через Google! Привет, ${result.user.displayName}`);
+            }).catch((error) => {
+                showMessage("Ошибка Google авторизации: " + error.message);
+            });
+    });
 
-        // Load existing profile if any
-        async function loadProfile() {
-            if (!currentUser) return;
-            try {
-                const profileRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'profile', 'data');
-                const docSnap = await getDoc(profileRef);
-                
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    userProfileData = data;
-                    
-                    // Populate UI
-                    document.getElementById('setup-name').value = data.name || '';
-                    document.getElementById('setup-age').value = data.age || '';
-                    document.getElementById('setup-gender').value = data.gender || 'Male';
-                    document.getElementById('setup-bio').value = data.bio || '';
-                    
-                    uploadedPhotos = data.photos || [];
-                    selectedInterests = data.interests || [];
-                    
-                    // Re-render setup UI to reflect loaded data
-                    renderPhotoGrid();
-                    const chips = document.querySelectorAll('.interest-chip');
-                    chips.forEach(chip => {
-                        if (selectedInterests.includes(chip.innerText)) {
-                            chip.classList.add('selected');
-                        } else {
-                            chip.classList.remove('selected');
-                        }
-                    });
-
-                    // If profile is fully complete, show main view, else stay on setup
-                    if (data.name && data.age && uploadedPhotos.length > 0) {
-                        loadPublicProfiles();
-                        showView('main');
-                    } else {
-                        showView('setup');
-                    }
-                } else {
-                    showView('setup');
-                }
-            } catch (e) {
-                console.error("Error loading profile", e);
-                showView('setup');
-            }
-        }
-
-        // Save profile to Firestore
-        async function saveProfile() {
-            if (!currentUser) return;
-            
-            const name = document.getElementById('setup-name').value.trim();
-            const age = parseInt(document.getElementById('setup-age').value);
-            const gender = document.getElementById('setup-gender').value;
-            const bio = document.getElementById('setup-bio').value.trim();
-
-            if (!name) return showToast('Please enter your name.', 'error');
-            if (!age || age < 18) return showToast('You must be at least 18 years old.', 'error');
-            if (uploadedPhotos.length === 0) return showToast('Please upload at least one photo.', 'error');
-
-            const btn = document.getElementById('btn-save-profile');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-            btn.disabled = true;
-
-            const profileData = {
-                userId: currentUser.uid,
-                name,
-                age,
-                gender,
-                bio,
-                interests: selectedInterests,
-                photos: uploadedPhotos,
-                updatedAt: new Date().toISOString()
-            };
-
-            try {
-                // Save Private Data (Rules 1: specific path)
-                const privateRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'profile', 'data');
-                await setDoc(privateRef, profileData);
-
-                // Save Public Data for Discover feed (Rules 1: specific path)
-                const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'profiles', currentUser.uid);
-                // Omit highly sensitive data if there was any, but for this app it's all public profile info
-                await setDoc(publicRef, profileData);
-
-                userProfileData = profileData;
-                showToast('Profile saved successfully!', 'success');
-                
-                loadPublicProfiles();
-                showView('main');
-            } catch (e) {
-                console.error("Error saving profile:", e);
-                showToast('Failed to save profile. Ensure you are connected.', 'error');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        async function loadPublicProfiles() {
-            try {
-                // Rule 2: Simple query, no complex order/where
-                const profilesCol = collection(db, 'artifacts', appId, 'public', 'data', 'profiles');
-                const snapshot = await getDocs(profilesCol);
-                
-                publicProfiles = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    // Filter out current user
-                    if (data.userId !== currentUser.uid) {
-                        publicProfiles.push(data);
-                    }
-                });
-
-                // If no profiles exist (e.g. fresh database), let's add some mock data visually
-                if (publicProfiles.length === 0) {
-                    publicProfiles = [
-                        { name: "Sarah", age: 24, bio: "Adventurer and coffee lover. Let's explore the city together! ☕✈️", interests: ["Travel", "Coffee", "Photography"], photos: ["https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600&h=800"] },
-                        { name: "James", age: 27, bio: "Software engineer by day, musician by night. Looking for someone to share playlists with.", interests: ["Music", "Technology", "Gaming"], photos: ["https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600&h=800"] },
-                        { name: "Emma", age: 22, bio: "Art student. Plant mom. Usually found in a museum or thrift store.", interests: ["Art", "Fashion", "Pets"], photos: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600&h=800"] }
-                    ];
-                }
-
-                currentCardIndex = 0;
-                renderCards();
-            } catch (e) {
-                console.error("Error loading profiles:", e);
-            }
-        }
-
-        function renderCards() {
-            const container = document.getElementById('cards-container');
-            // Keep empty state element
-            const emptyState = document.getElementById('empty-state');
-            container.innerHTML = '';
-            container.appendChild(emptyState);
-
-            if (currentCardIndex >= publicProfiles.length) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            // Render top 2 cards for stacking effect (performance optimization)
-            const cardsToRender = publicProfiles.slice(currentCardIndex, currentCardIndex + 2).reverse();
-            
-            cardsToRender.forEach((profile, i) => {
-                const isTopCard = (i === cardsToRender.length - 1);
-                const card = document.createElement('div');
-                card.className = 'dating-card';
-                card.style.zIndex = isTopCard ? 10 : 5;
-                
-                // Add scale and translation for background card to create depth
-                if (!isTopCard) {
-                    card.style.transform = 'scale(0.95) translateY(20px)';
-                    card.style.opacity = '0.9';
-                }
-
-                // Default placeholder if photo fails or missing
-                const imgUrl = (profile.photos && profile.photos.length > 0) ? profile.photos[0] : 'https://placehold.co/600x800/f43f5e/ffffff?text=No+Photo';
-                
-                const interestsHtml = (profile.interests || []).slice(0,3).map(int => 
-                    `<span class="px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs border border-white/30">${int}</span>`
-                ).join('');
-
-                card.innerHTML = `
-                    <img src="${imgUrl}" alt="${profile.name}" onerror="this.src='https://placehold.co/600x800/f43f5e/ffffff?text=${profile.name}'">
-                    <div class="card-info">
-                        <div class="flex items-end gap-2 mb-2">
-                            <h2 class="text-3xl font-bold">${profile.name}</h2>
-                            <span class="text-xl text-gray-200 mb-1">${profile.age}</span>
-                        </div>
-                        <p class="text-sm text-gray-200 line-clamp-2 mb-3">${profile.bio || ''}</p>
-                        <div class="flex gap-2 flex-wrap">
-                            ${interestsHtml}
-                        </div>
-                    </div>
-                `;
-
-                container.appendChild(card);
+    // Вход по телефону
+    document.getElementById('btn-phone-start').addEventListener('click', () => {
+        document.getElementById('phone-auth-section').classList.remove('hidden');
+        document.getElementById('btn-phone-start').classList.add('hidden');
+        
+        if(!window.recaptchaVerifier) {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'invisible'
             });
         }
+    });
 
-        function handleAction(type) {
-            if (currentCardIndex >= publicProfiles.length) return;
-            
-            const cards = document.querySelectorAll('.dating-card');
-            const topCard = cards[cards.length - 1]; // Top card is last in DOM
-            
-            if (!topCard) return;
+    let confirmationResult;
 
-            // Visual animation
-            topCard.style.transition = 'transform 0.5s ease-out, opacity 0.5s';
-            if (type === 'like') {
-                topCard.style.transform = 'translate(150%, -50px) rotate(30deg)';
-                showToast("Liked!", "success");
-            } else if (type === 'nope') {
-                topCard.style.transform = 'translate(-150%, -50px) rotate(-30deg)';
-            } else if (type === 'super') {
-                topCard.style.transform = 'translateY(-150%) scale(1.1)';
-                showToast("Super Liked!", "info");
-            }
-            topCard.style.opacity = '0';
+    document.getElementById('btn-send-code').addEventListener('click', () => {
+        const phoneNumber = document.getElementById('phone-number').value;
+        if(!phoneNumber) return showMessage("Введите номер телефона");
 
-            // Wait for animation, then re-render
-            setTimeout(() => {
-                currentCardIndex++;
-                renderCards();
-            }, 300);
-        }
+        const appVerifier = window.recaptchaVerifier;
+        
+        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then((result) => {
+                confirmationResult = result;
+                document.getElementById('code-section').classList.remove('hidden');
+                showMessage("SMS с кодом отправлено!");
+            }).catch((error) => {
+                showMessage("Ошибка отправки SMS: " + error.message);
+                if(window.recaptchaVerifier) window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
+            });
+    });
 
-        document.getElementById('btn-like').onclick = () => handleAction('like');
-        document.getElementById('btn-nope').onclick = () => handleAction('nope');
-        document.getElementById('btn-super').onclick = () => handleAction('super');
+    document.getElementById('btn-verify-code').addEventListener('click', () => {
+        const code = document.getElementById('verification-code').value;
+        if(!code) return showMessage("Введите код из SMS");
 
-        // Bootstrapping Authentication
-        document.getElementById('btn-start').addEventListener('click', async () => {
-            showView('loader');
-            try {
-                // Rule 3: Always authenticate first
-                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                if (token) {
-                    await signInWithCustomToken(auth, token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Auth error:", error);
-                showToast("Authentication failed. Please try again.", "error");
-                showView('auth');
-            }
+        confirmationResult.confirm(code).then((result) => {
+            const user = result.user;
+            showMessage(`Успешный вход по телефону! Ваш номер: ${user.phoneNumber}`);
+        }).catch((error) => {
+            showMessage("Неверный код! Ошибка: " + error.message);
         });
-
-        // Auth State Observer
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                loadProfile();
-            } else {
-                currentUser = null;
-                showView('auth');
-            }
-        });
-
-        // Initialize App UI components
-        initSetupUI();
-
-    </script>
+    });
+</script>
 </body>
 </html>
