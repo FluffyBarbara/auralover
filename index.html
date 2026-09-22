@@ -121,6 +121,9 @@
         .chip:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); }
         .chip.active { background: linear-gradient(135deg, rgba(255, 65, 108, 0.08), rgba(233, 64, 87, 0.08)); color: var(--primary); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 65, 108, 0.15); }
 
+        .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
+
         /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
@@ -138,12 +141,24 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* BOTTOM NAV */
+        /* ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS) */
+        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
+        .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 20px; padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideDown 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; }
+        .toast-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+        .toast-body { font-size: 14px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .toast.hiding { animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-50px); opacity: 0; } }
+
+        /* BOTTOM NAV И БЕЙДЖИ УВЕДОМЛЕНИЙ */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
         .nav-item { font-size: 26px; color: #D1D1D6; cursor: pointer; transition: 0.3s; position: relative; padding: 10px 20px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { filter: grayscale(0%); opacity: 1; transform: translateY(-2px); }
         .nav-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
         
+        .nav-badge { position: absolute; top: 5px; right: 15px; width: 12px; height: 12px; background: #FF416C; border-radius: 50%; border: 2px solid white; display: none; box-shadow: 0 2px 5px rgba(255,65,108,0.4); }
+        .nav-badge.active { display: block; animation: popIn 0.3s; }
+
         .icon-fire::before { content: '🔥'; } 
         .icon-heart::before { content: '💖'; }
         .icon-chat::before { content: '💬'; } 
@@ -154,10 +169,6 @@
         #loading-overlay.active { opacity: 1; pointer-events: all; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(255, 65, 108, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* КНОПКА СБРОСА ИСТОРИИ */
-        .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
     </style>
 </head>
 <body>
@@ -170,6 +181,9 @@
     <div id="loading-overlay">
         <div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div>
     </div>
+
+    <!-- Всплывающие In-App Уведомления -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
     <div id="screen-auth" class="screen">
@@ -281,8 +295,6 @@
                     </div>
 
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
-                    
-                    <!-- НОВАЯ КНОПКА СБРОСА -->
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                 </div>
             </div>
@@ -292,8 +304,13 @@
         <!-- НИЖНЯЯ НАВИГАЦИЯ -->
         <div class="bottom-nav" id="bottom-nav">
             <div class="nav-item icon-fire" data-target="view-discovery"></div>
-            <div class="nav-item icon-heart" data-target="view-likes"></div>
-            <div class="nav-item icon-chat" data-target="view-chats"></div>
+            <!-- БЕЙДЖИ ДЛЯ УВЕДОМЛЕНИЙ -->
+            <div class="nav-item icon-heart" data-target="view-likes">
+                <div class="nav-badge" id="likes-badge"></div>
+            </div>
+            <div class="nav-item icon-chat" data-target="view-chats">
+                <div class="nav-badge" id="chat-badge"></div>
+            </div>
             <div class="nav-item icon-user" data-target="view-profile"></div>
         </div>
     </div>
@@ -341,12 +358,14 @@
     let activeChatId = null;
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
+    let isInitialChatsLoad = true; // Для контроля уведомлений при первом входе
 
     function clearLocalState() {
         currentUserData = {}; userPhotos = ["", "", "", "", ""]; profilesQueue = []; currentViewingProfile = null;
         if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } 
         if (userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; } 
-        activeChatId = null;
+        activeChatId = null; isInitialChatsLoad = true;
+        
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
         document.getElementById('prof-city').value = ""; document.getElementById('prof-bio').value = "";
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); renderPhotos();
@@ -355,6 +374,8 @@
         document.getElementById('main-card').classList.add('hidden');
         document.getElementById('action-bar').classList.add('hidden');
         document.getElementById('empty-state').classList.remove('hidden');
+        document.getElementById('chat-badge').classList.remove('active');
+        document.getElementById('likes-badge').classList.remove('active');
     }
 
     const loadingOverlay = document.getElementById('loading-overlay');
@@ -365,6 +386,34 @@
         document.getElementById(screenId).classList.add('active');
     }
 
+    // --- ФУНКЦИЯ ПОКАЗА УВЕДОМЛЕНИЙ (TOASTS) И PUSH ---
+    window.showToast = (title, body, onClickCallback) => {
+        // Внутриигровой Toast
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<div class="toast-title">${title}</div><div class="toast-body">${body}</div>`;
+        
+        if (onClickCallback) {
+            toast.onclick = () => { onClickCallback(); toast.remove(); };
+        }
+        container.appendChild(toast);
+        
+        // Авто-удаление через 4 секунды
+        setTimeout(() => {
+            if(toast.parentElement) {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 4000);
+
+        // Браузерный Push (если вкладка свернута)
+        if ("Notification" in window && Notification.permission === "granted" && document.visibilityState !== "visible") {
+            new Notification(title, { body: body, icon: '/favicon.ico' });
+        }
+    }
+
+    // --- НАВИГАЦИЯ И СБРОС БЕЙДЖЕЙ ---
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -377,8 +426,14 @@
         document.getElementById(targetId).classList.add('active');
         
         if (targetId === 'view-discovery') headerTitle.innerText = 'Aura';
-        if (targetId === 'view-likes') headerTitle.innerText = 'Симпатии';
-        if (targetId === 'view-chats') headerTitle.innerText = 'Сообщения';
+        if (targetId === 'view-likes') {
+            headerTitle.innerText = 'Симпатии';
+            document.getElementById('likes-badge').classList.remove('active'); // Сброс бейджа
+        }
+        if (targetId === 'view-chats') {
+            headerTitle.innerText = 'Сообщения';
+            document.getElementById('chat-badge').classList.remove('active'); // Сброс бейджа
+        }
         if (targetId === 'view-profile') headerTitle.innerText = 'Профиль';
     }
     navItems.forEach(item => { item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item)); });
@@ -401,11 +456,19 @@
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
+            
+            // Запрос разрешения на браузерные уведомления (если еще не давали)
+            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+
             if(userDocUnsubscribe) userDocUnsubscribe(); 
             
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const isFirstLoad = !currentUserData.name;
+                    const oldLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
+                    
                     currentUserData = snap.data();
                     
                     document.getElementById('prof-name').value = currentUserData.name || "";
@@ -417,6 +480,13 @@
                     if(currentUserData.photos) userPhotos = currentUserData.photos;
                     renderPhotos();
                     
+                    // Проверка на новые лайки для уведомления
+                    const newLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
+                    if (!isFirstLoad && newLikedMeCount > oldLikedMeCount) {
+                        showToast("💖 Новая симпатия!", "Кому-то понравилась ваша анкета. Зайдите в Симпатии, чтобы посмотреть!", () => openTab('view-likes', navItems[1]));
+                        document.getElementById('likes-badge').classList.add('active');
+                    }
+
                     renderLikesTab();
 
                     if(isFirstLoad) {
@@ -488,6 +558,7 @@
                     [targetId]: { name: targetName, photo: targetPhoto }
                 },
                 lastMessage: "Aura: Взаимная симпатия! ✨",
+                lastMessageSenderId: "system", // Для правильной логики уведомлений
                 timestamp: serverTimestamp()
             }, { merge: true });
             
@@ -497,8 +568,8 @@
                 timestamp: serverTimestamp()
             });
             
-            alert("Взаимная симпатия! ✨ Чат создан.");
             openTab('view-chats', navItems[2]);
+            window.openChat(chatId, targetName, targetPhoto);
         }
     };
 
@@ -579,6 +650,7 @@
                         [targetId]: { name: targetName, photo: targetPhoto }
                     },
                     lastMessage: "Aura: Взаимная симпатия! ✨",
+                    lastMessageSenderId: "system",
                     timestamp: serverTimestamp()
                 }, { merge: true });
                 
@@ -587,7 +659,6 @@
                     senderId: "system",
                     timestamp: serverTimestamp()
                 });
-                alert("Взаимная симпатия! ✨ Чат создан.");
             }
         } 
         else if (isLike) {
@@ -638,39 +709,72 @@
         }, 300);
     };
 
-    // --- КНОПКА СБРОСА ИСТОРИИ ---
     document.getElementById('btn-reset-swipes').onclick = async () => {
-        if(!confirm("Хотите очистить историю просмотренных анкет? Люди, которых вы пропустили, снова появятся в вашей ленте.")) return;
-        
+        if(!confirm("Хотите очистить историю просмотренных анкет?")) return;
         const btn = document.getElementById('btn-reset-swipes');
         btn.innerText = "Сброс..."; btn.disabled = true;
-        
         try {
             await updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: [] });
             currentUserData.swiped = [];
             await loadProfilesFromCity();
-            alert("История очищена! Можете смотреть анкеты заново.");
-        } catch(e) {
-            alert("Ошибка при очистке: " + e.message);
-        } finally {
-            btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false;
-        }
+            alert("История очищена!");
+        } catch(e) { alert("Ошибка при очистке: " + e.message); } 
+        finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
     };
 
+    // --- ЛОГИКА ЧАТОВ И УВЕДОМЛЕНИЙ ---
     function loadChatsList() {
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         onSnapshot(q, (snapshot) => {
             const container = document.getElementById('chat-list-container');
+            
+            // Обработка уведомлений о новых сообщениях/мэтчах
+            snapshot.docChanges().forEach((change) => {
+                if (!isInitialChatsLoad) {
+                    const data = change.doc.data();
+                    
+                    // Если это новый чат (взаимный лайк)
+                    if (change.type === "added" && data.lastMessageSenderId === "system") {
+                        showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
+                        document.getElementById('chat-badge').classList.add('active');
+                    }
+                    
+                    // Если это новое сообщение от другого человека
+                    if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
+                        // Показываем уведомление ТОЛЬКО если у нас не открыт этот же самый диалог прямо сейчас
+                        if (activeChatId !== change.doc.id) {
+                            const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
+                            const otherUser = data.userInfo[otherUserId];
+                            
+                            showToast(`💬 Сообщение от ${otherUser.name}`, data.lastMessage, () => {
+                                openTab('view-chats', navItems[2]);
+                                window.openChat(change.doc.id, otherUser.name, otherUser.photo);
+                            });
+                            document.getElementById('chat-badge').classList.add('active');
+                        }
+                    }
+                }
+            });
+            isInitialChatsLoad = false;
+
+            // Отрисовка списка диалогов
             if (snapshot.empty) {
                 container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
                 return;
             }
+            
             let html = "";
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
+            // Сортируем локально по убыванию времени
+            const docs = [];
+            snapshot.forEach(docSnap => docs.push({ id: docSnap.id, ...docSnap.data() }));
+            docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+            docs.forEach(data => {
                 const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                 const otherUser = data.userInfo[otherUserId];
-                html += `<div class="chat-item" onclick="openChat('${docSnap.id}', '${otherUser.name}', '${otherUser.photo}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${data.lastMessage || ""}</div></div></div>`;
+                const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
+                
+                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${msgPreview || ""}</div></div></div>`;
             });
             container.innerHTML = html;
         });
@@ -701,16 +805,20 @@
                     messagesDiv.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">${msg.text}</div>`;
                 }
             });
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Прокрутка чата вниз
+            setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
     };
     
     document.getElementById('btn-close-chat').onclick = () => { document.getElementById('chat-room').classList.remove('active'); if (chatUnsubscribe) chatUnsubscribe(); activeChatId = null; };
+    
     document.getElementById('btn-send-message').onclick = async () => {
         const input = document.getElementById('chat-message-input'); const text = input.value.trim();
         if (!text || !activeChatId) return; input.value = ""; 
+        
         await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
-        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, timestamp: serverTimestamp() });
+        // ДОБАВЛЕНО: lastMessageSenderId для работы уведомлений
+        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, lastMessageSenderId: auth.currentUser.uid, timestamp: serverTimestamp() });
     };
 
     function compressImage(file, maxW=500) { return new Promise(res => { const r=new FileReader(); r.readAsDataURL(file); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'); const rat=maxW/i.width; c.width=maxW; c.height=i.height*rat; c.getContext('2d').drawImage(i,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',0.6));};};});}
