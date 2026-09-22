@@ -16,7 +16,6 @@
 
         body { background-color: #f4f5f7; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: var(--text-main); position: relative; }
 
-        /* АНИМИРОВАННЫЙ ФОН */
         .aura-background { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; z-index: 0; background: #fafcff; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8; animation: float 15s infinite alternate ease-in-out; }
         .orb:nth-child(1) { width: 400px; height: 400px; background: #FF416C; top: -10%; left: -10%; animation-delay: 0s; }
@@ -25,7 +24,6 @@
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -50px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
 
-        /* КОНТЕЙНЕР ПРИЛОЖЕНИЯ */
         .app-container { width: 100%; max-width: 420px; height: 100vh; max-height: 900px; position: relative; z-index: 10; overflow: hidden; background: transparent; display: flex; flex-direction: column; }
         @media (min-width: 421px) {
             .app-container { height: 92vh; border-radius: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: 8px solid rgba(255,255,255,0.8); background: var(--glass-bg); backdrop-filter: blur(20px); }
@@ -63,7 +61,7 @@
         .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
-        /* VIEW: DISCOVERY (КАРТОЧКИ + ФОТО ИНДИКАТОРЫ) */
+        /* VIEW: DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; cursor: pointer; }
         
@@ -236,6 +234,10 @@
                 <form id="auth-form" onsubmit="return false;">
                     <div class="input-box"><input type="email" id="auth-email" placeholder=" " required><label>Email</label></div>
                     <div class="input-box"><input type="password" id="auth-password" placeholder=" " required><label>Пароль</label></div>
+                    
+                    <!-- БЛОК ДЛЯ ВЫВОДА ОШИБКИ БАНА -->
+                    <div id="auth-ban-message" style="display:none; background:rgba(255,65,108,0.1); border:1px solid rgba(255,65,108,0.3); border-radius:12px; padding:12px; margin-bottom:15px; text-align:center;"></div>
+
                     <button type="submit" class="btn-glow" id="auth-submit-btn">Продолжить</button>
                     <div id="auth-error" style="color: #FF416C; font-size: 13px; text-align: center; margin-top: 15px; min-height: 18px;"></div>
                 </form>
@@ -429,7 +431,7 @@
 
     <div id="modal-admin-reports" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">🐞 Отчеты и Жалобы</div>
+            <div class="admin-modal-title">🐞 Отчеты от пользователей</div>
             <div id="admin-reports-list" style="max-height: 400px; overflow-y: auto;"></div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-reports')">Закрыть</button>
         </div>
@@ -438,7 +440,8 @@
     <div id="modal-admin-users" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">👥 База пользователей</div>
-            <div id="admin-users-list" style="max-height: 400px; overflow-y: auto; font-size: 13px;">Загрузка...</div>
+            <input type="text" id="admin-search-input" class="admin-input" placeholder="Поиск по имени, городу или UID..." oninput="renderAdminUsersList(this.value)">
+            <div id="admin-users-list" style="max-height: 350px; overflow-y: auto; font-size: 13px;">Загрузка...</div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-users')">Закрыть</button>
         </div>
     </div>
@@ -458,6 +461,7 @@
         <div class="admin-modal-content">
             <div class="admin-modal-title">🚫 Бан аккаунта</div>
             <input type="text" id="ban-uid" class="admin-input" placeholder="UID пользователя...">
+            <input type="text" id="ban-reason" class="admin-input" placeholder="Причина блокировки (будет видна юзеру)...">
             <div class="admin-modal-actions">
                 <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="toggleUserBan(true)">Заблокировать</button>
                 <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #00E676;" onclick="toggleUserBan(false)">Разблокировать</button>
@@ -600,11 +604,14 @@
     let chatDocUnsubscribe = null;
     let reportsUnsubscribe = null; 
     let sysChatUnsubscribe = null;
+    
     let isInitialChatsLoad = true;
     let isInitialSysChatLoad = true;
+    let isInitialReportsLoad = true;
 
     let systemChatData = null;
     let userChats = [];
+    let allAdminUsersList = [];
 
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
     notificationSound.volume = 0.5;
@@ -638,8 +645,8 @@
         if (sysChatUnsubscribe) { sysChatUnsubscribe(); sysChatUnsubscribe = null; }
         
         activeChatId = null; window.activeTargetId = null; 
-        isInitialChatsLoad = true; isInitialSysChatLoad = true;
-        systemChatData = null; userChats = [];
+        isInitialChatsLoad = true; isInitialSysChatLoad = true; isInitialReportsLoad = true;
+        systemChatData = null; userChats = []; allAdminUsersList = [];
         
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
         document.getElementById('prof-city').value = ""; document.getElementById('prof-bio').value = "";
@@ -776,7 +783,6 @@
         document.getElementById('chat-dropdown').classList.toggle('active');
     };
     
-    // Закрыть дропдаун при клике вне него
     document.addEventListener('click', (e) => {
         const dd = document.getElementById('chat-dropdown');
         if(dd && dd.classList.contains('active') && !e.target.closest('#chat-menu-container')) {
@@ -841,20 +847,35 @@
         try {
             const q = query(collection(db, "users"));
             const snaps = await getDocs(q);
-            let html = "";
-            snaps.forEach(s => {
-                const d = s.data();
-                const status = d.isOnline ? "🟢" : "⚪";
-                html += `<div style="background:#f4f5f7; padding:10px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <b>${d.name || "Нет имени"}</b> ${status} <br>
-                                <span style="color:gray; font-size:11px;">UID: ${s.id}</span>
-                            </div>
-                            <button onclick="navigator.clipboard.writeText('${s.id}'); alert('Скопировано!');" style="padding:6px 12px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Копия</button>
-                        </div>`;
-            });
-            listDiv.innerHTML = html;
+            allAdminUsersList = [];
+            snaps.forEach(s => { allAdminUsersList.push({ id: s.id, ...s.data() }); });
+            renderAdminUsersList("");
         } catch(e) { listDiv.innerHTML = "Ошибка: " + e.message; }
+    };
+
+    window.renderAdminUsersList = (searchTerm = "") => {
+        const listDiv = document.getElementById('admin-users-list');
+        let html = "";
+        const lowerTerm = searchTerm.toLowerCase();
+        
+        const filtered = allAdminUsersList.filter(u => 
+            (u.name && u.name.toLowerCase().includes(lowerTerm)) ||
+            (u.city && u.city.toLowerCase().includes(lowerTerm)) ||
+            u.id.toLowerCase().includes(lowerTerm)
+        );
+        
+        filtered.forEach(d => {
+            const status = d.isOnline ? "🟢" : "⚪";
+            html += `<div style="background:#f4f5f7; padding:10px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="flex:1; cursor:pointer;" onclick="viewUserProfile('${d.id}')">
+                            <b>${d.name || "Нет имени"}</b> ${status} <br>
+                            <span style="color:gray; font-size:11px;">UID: ${d.id}</span>
+                        </div>
+                        <button onclick="navigator.clipboard.writeText('${d.id}');" style="padding:6px 10px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-size: 11px;">Копия UID</button>
+                    </div>`;
+        });
+        if(filtered.length === 0) html = "Пользователи не найдены.";
+        listDiv.innerHTML = html;
     };
 
     window.sendBroadcast = async () => {
@@ -871,11 +892,16 @@
 
     window.toggleUserBan = async (isBanned) => {
         const uid = document.getElementById('ban-uid').value.trim();
+        const reason = document.getElementById('ban-reason').value.trim();
         if(!uid) return alert("Введите UID!");
         try {
-            await updateDoc(doc(db, "users", uid), { isBanned: isBanned });
+            await updateDoc(doc(db, "users", uid), { 
+                isBanned: isBanned,
+                banReason: isBanned ? (reason || "Нарушение правил сообщества") : null
+            });
             alert(isBanned ? "Пользователь заблокирован!" : "Пользователь разблокирован!");
-            document.getElementById('ban-uid').value = ""; closeAdminModal('modal-ban');
+            document.getElementById('ban-uid').value = ""; document.getElementById('ban-reason').value = "";
+            closeAdminModal('modal-ban');
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
@@ -997,6 +1023,7 @@
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
+    // Навигация
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -1022,10 +1049,12 @@
     document.getElementById('auth-form').onsubmit = (e) => {
         e.preventDefault();
         const em = document.getElementById('auth-email').value, pw = document.getElementById('auth-password').value;
-        const err = document.getElementById('auth-error'); err.innerText = "";
+        document.getElementById('auth-ban-message').style.display = 'none';
+        document.getElementById('auth-error').innerText = "";
+        
         showLoading("Секунду...");
-        if(isLogin) signInWithEmailAndPassword(auth, em, pw).catch(() => { hideLoading(); err.innerText = "Неверные данные"; });
-        else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); err.innerText = e.message; });
+        if(isLogin) signInWithEmailAndPassword(auth, em, pw).catch(() => { hideLoading(); document.getElementById('auth-error').innerText = "Неверные данные"; });
+        else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); document.getElementById('auth-error').innerText = e.message; });
     };
     
     document.getElementById('btn-logout').onclick = async () => {
@@ -1041,7 +1070,12 @@
 
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             if(checkSnap.exists() && checkSnap.data().isBanned) {
-                alert("Ваш аккаунт был заблокирован администратором платформы."); signOut(auth); hideLoading(); return;
+                const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
+                document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
+                document.getElementById('auth-ban-message').style.display = 'block';
+                signOut(auth);
+                hideLoading();
+                return;
             }
 
             if (user.uid === OWNER_UID) {
@@ -1051,6 +1085,14 @@
                 reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
                     const badge = document.getElementById('admin-reports-badge');
                     const list = document.getElementById('admin-reports-list');
+                    
+                    snap.docChanges().forEach((change) => {
+                        if (!isInitialReportsLoad && change.type === "added") {
+                            showToast("🐞 Новая жалоба", "Поступил новый отчет. Проверьте панель!", () => openAdminModal('modal-admin-reports'));
+                        }
+                    });
+                    isInitialReportsLoad = false;
+
                     if(snap.empty) {
                         badge.classList.add('hidden');
                         list.innerHTML = "<p style='font-size:13px; color:gray;'>Нет новых отчетов.</p>";
@@ -1073,13 +1115,21 @@
                         list.innerHTML = html;
                     }
                 });
-            } else { document.getElementById('owner-secret-section').classList.add('hidden'); }
+            } else {
+                document.getElementById('owner-secret-section').classList.add('hidden');
+            }
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    if(data.isBanned) { alert("Ваш аккаунт заблокирован."); signOut(auth); return; }
+                    if(data.isBanned) {
+                        const reason = data.banReason || "Нарушение правил платформы.";
+                        document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
+                        document.getElementById('auth-ban-message').style.display = 'block';
+                        signOut(auth);
+                        return;
+                    }
 
                     const isFirstLoad = !currentUserData.name;
                     const oldLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
@@ -1090,16 +1140,16 @@
                     document.getElementById('prof-city').value = currentUserData.city || "";
                     document.getElementById('prof-bio').value = currentUserData.bio || "";
                     
-                    if(currentUserData.interests) myCustomInterests = [...currentUserData.interests]; else myCustomInterests = [];
+                    if(currentUserData.interests) myCustomInterests = [...currentUserData.interests];
+                    else myCustomInterests = [];
                     renderCustomInterests();
 
                     if(currentUserData.photos) userPhotos = currentUserData.photos;
                     renderPhotos();
                     
                     const newLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
+                    const muted = currentUserData.mutedChats || [];
                     if (!isFirstLoad && newLikedMeCount > oldLikedMeCount) {
-                        const muted = currentUserData.mutedChats || [];
-                        // Показываем уведомление о мэтче (оно не привязано к конкретному чату)
                         showToast("💖 Новая симпатия!", "Кому-то понравилась ваша анкета. Зайдите в Симпатии!", () => openTab('view-likes', navItems[1]));
                         document.getElementById('likes-badge').classList.add('active');
                     }
@@ -1112,7 +1162,9 @@
                     if(!currentUserData.name) { switchMainScreen('screen-main'); openTab('view-profile', navItems[3]); hideLoading(); }
                 }
             });
-        } else { clearLocalState(); switchMainScreen('screen-auth'); hideLoading(); }
+        } else {
+            clearLocalState(); switchMainScreen('screen-auth'); hideLoading();
+        }
     });
 
     async function renderLikesTab() {
