@@ -16,6 +16,7 @@
 
         body { background-color: #f4f5f7; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: var(--text-main); position: relative; }
 
+        /* АНИМИРОВАННЫЙ ФОН */
         .aura-background { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; z-index: 0; background: #fafcff; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8; animation: float 15s infinite alternate ease-in-out; }
         .orb:nth-child(1) { width: 400px; height: 400px; background: #FF416C; top: -10%; left: -10%; animation-delay: 0s; }
@@ -24,6 +25,7 @@
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -50px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
 
+        /* КОНТЕЙНЕР ПРИЛОЖЕНИЯ */
         .app-container { width: 100%; max-width: 420px; height: 100vh; max-height: 900px; position: relative; z-index: 10; overflow: hidden; background: transparent; display: flex; flex-direction: column; }
         @media (min-width: 421px) {
             .app-container { height: 92vh; border-radius: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: 8px solid rgba(255,255,255,0.8); background: var(--glass-bg); backdrop-filter: blur(20px); }
@@ -64,7 +66,7 @@
         /* VIEW: DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; }
-        .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; }
+        .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; width: 100%; }
         .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
         .card-age { font-size: 24px; font-weight: 400; opacity: 0.9; }
         .card-city { font-size: 14px; opacity: 0.8; margin-bottom: 10px; display: block; }
@@ -145,8 +147,7 @@
         /* ЧАТ-КОМНАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
-        .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
-        .chat-room-header:active { background: rgba(0,0,0,0.02); }
+        .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .chat-room-avatar { width: 42px; height: 42px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
         .chat-header-info { display: flex; flex-direction: column; justify-content: center; }
         .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2;}
@@ -364,15 +365,15 @@
     
     <!-- ПРОСМОТР АНКЕТЫ ИЗ ЧАТА -->
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
-        <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none;">
-            <div class="swipe-card" id="view-profile-card" style="position:relative; transform:none; height:70vh; max-height:600px;">
-                <div class="card-info">
+        <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
+            <div class="swipe-card" id="view-profile-card" style="position:relative; transform:none; height:70vh; max-height:600px; display:flex;">
+                <div class="card-info" style="border-radius: 0 0 32px 32px; width: 100%;">
                     <div class="card-name" id="vp-card-name">Имя, <span class="card-age" id="vp-card-age">20</span></div>
                     <span class="card-city" id="vp-card-city">📍 Город</span>
                     <div class="card-bio" id="vp-card-bio">Описание...</div>
                     <div class="card-tags" id="vp-card-tags"></div>
                 </div>
-                <button onclick="closeAdminModal('modal-view-profile')" class="circle-btn" style="position:absolute; top:15px; right:15px; width:45px; height:45px; font-size:18px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">✕</button>
+                <button onclick="closeAdminModal('modal-view-profile')" class="circle-btn" style="position:absolute; top:15px; right:15px; width:45px; height:45px; font-size:18px; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index: 10;">✕</button>
             </div>
         </div>
     </div>
@@ -478,10 +479,9 @@
 
     <!-- ВСПЛЫВАЮЩИЙ ЧАТ -->
     <div id="chat-room" class="chat-room">
-        <!-- ОБРАТИТЕ ВНИМАНИЕ: ДОБАВЛЕН ONCLICK ДЛЯ ПРОСМОТРА ПРОФИЛЯ -->
         <div class="chat-room-header">
             <button class="icon-btn" id="btn-close-chat" style="margin-right:10px; box-shadow:none;">←</button>
-            <div style="display:flex; align-items:center; flex:1; cursor:pointer;" onclick="viewUserProfile(activeTargetId)">
+            <div style="display:flex; align-items:center; flex:1; cursor:pointer;" onclick="viewUserProfile(window.activeTargetId)">
                 <img src="" class="chat-room-avatar" id="chat-active-avatar">
                 <div class="chat-header-info">
                     <div class="chat-room-name" id="chat-active-name">Имя</div>
@@ -522,7 +522,7 @@
 
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
-    let myCustomInterests = []; // ЛОКАЛЬНЫЙ МАССИВ ИНТЕРЕСОВ
+    let myCustomInterests = []; 
     
     let profilesQueue = []; 
     let currentViewingProfile = null;
@@ -625,7 +625,7 @@
         }
     });
 
-    // --- СИСТЕМА ЖАЛОБ (ОБНОВЛЕННАЯ С ССЫЛКОЙ) ---
+    // --- СИСТЕМА ЖАЛОБ ---
     window.submitReport = async () => {
         const text = document.getElementById('report-text-input').value.trim();
         const link = document.getElementById('report-link-input').value.trim();
@@ -635,7 +635,7 @@
                 uid: auth.currentUser.uid, 
                 name: currentUserData.name || "Без имени", 
                 text: text, 
-                link: link || null, // Сохраняем ссылку если она есть
+                link: link || null, 
                 timestamp: serverTimestamp() 
             });
             alert("Спасибо! Ваше сообщение отправлено разработчикам.");
@@ -651,8 +651,6 @@
     };
 
     // --- АДМИН ПАНЕЛЬ ---
-    
-    // Получение списка всех UID (Новая функция)
     window.fetchAdminUsersList = async () => {
         const listDiv = document.getElementById('admin-users-list');
         listDiv.innerHTML = "Загрузка базы...";
@@ -751,7 +749,7 @@
                 }
                 html += `</div>`;
             }
-            if(html === "") html = "Обычных чатов нет.";
+            if(html === "") html = "Обычных чатов нет (только системные).";
             resBox.innerHTML = html;
         } catch(e) { resBox.innerHTML = "Ошибка: " + e.message; }
     };
@@ -991,7 +989,6 @@
         }
     };
 
-    // Обновленный поиск по интересам (case-insensitive)
     async function loadProfilesFromCity() {
         if(!currentUserData.cityLower) return;
         const q = query(collection(db, "users"), where("cityLower", "==", currentUserData.cityLower));
@@ -1125,7 +1122,6 @@
         } else {
             userChats.forEach(data => {
                 const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
-                // Динамическая загрузка аватара для защиты от битых ссылок
                 const otherUser = data.userInfo[otherUserId];
                 const safePhoto = otherUser.photo || 'https://via.placeholder.com/150';
                 
@@ -1198,7 +1194,7 @@
     function updateChatStatusUI() {
         const statusEl = document.getElementById('chat-active-status');
         if (!activeChatId) return;
-        if (activeTargetId === 'system') { statusEl.innerText = "Официальный канал 📢"; statusEl.className = "chat-room-status online"; return; }
+        if (window.activeTargetId === 'system') { statusEl.innerText = "Официальный канал 📢"; statusEl.className = "chat-room-status online"; return; }
 
         if (activeTargetTyping) { statusEl.innerText = "Печатает... ✏️"; statusEl.className = "chat-room-status typing"; } 
         else if (activeTargetOnline) { statusEl.innerText = "В сети 🟢"; statusEl.className = "chat-room-status online"; } 
@@ -1206,7 +1202,7 @@
     }
 
     window.openChat = (chatId, name, photoUrl, targetId) => {
-        activeChatId = chatId; window.activeTargetId = targetId; // Global expose for viewing profile
+        activeChatId = chatId; window.activeTargetId = targetId; 
         document.getElementById('chat-active-name').innerText = name;
         document.getElementById('chat-active-avatar').src = photoUrl || 'https://via.placeholder.com/150';
         document.getElementById('chat-room').classList.add('active');
@@ -1239,8 +1235,9 @@
             targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
                 if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
             });
-            chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
-                if(snap.exists()) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
+            // Не слушаем typing у системного чата
+            onSnapshot(doc(db, "chats", chatId), (snap) => {
+                if(snap.exists() && activeChatId === chatId) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
             });
         }
     };
@@ -1253,11 +1250,10 @@
             const snap = await getDoc(doc(db, "users", uid));
             if (snap.exists()) {
                 const data = snap.data();
-                document.getElementById('vp-card-name').innerText = data.name + ", ";
-                document.getElementById('vp-card-age').innerText = data.age;
+                document.getElementById('vp-card-name').innerHTML = `${data.name}, <span class="card-age" id="vp-card-age">${data.age}</span>`;
                 document.getElementById('vp-card-city').innerText = "📍 " + (data.city || "");
                 document.getElementById('vp-card-bio').innerText = data.bio || "";
-                document.getElementById('view-profile-card').style.backgroundImage = `url('${data.photos?.[0] || 'https://via.placeholder.com/150'}')`;
+                document.getElementById('view-profile-card').style.backgroundImage = `url('${data.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
                 
                 const tags = document.getElementById('vp-card-tags'); tags.innerHTML = '';
                 if(data.interests) {
@@ -1273,7 +1269,7 @@
                 alert("Анкета удалена.");
             }
         } catch(e) { alert("Ошибка: " + e.message); }
-        hideLoading();
+        finally { hideLoading(); }
     };
     
     document.getElementById('btn-close-chat').onclick = () => { 
@@ -1340,14 +1336,16 @@
             // ДИНАМИЧЕСКОЕ ОБНОВЛЕНИЕ ДАННЫХ ВО ВСЕХ ЧАТАХ ДЛЯ ИСПРАВЛЕНИЯ "БИТЫХ" КАРТИНОК И ИМЕН
             const qChats = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
             const chatsSnap = await getDocs(qChats);
+            const updatePromises = [];
             chatsSnap.forEach(cSnap => {
                 const cData = cSnap.data();
                 if(cData.userInfo && cData.userInfo[auth.currentUser.uid]) {
                     cData.userInfo[auth.currentUser.uid].name = name;
                     cData.userInfo[auth.currentUser.uid].photo = userPhotos[0] || "";
-                    updateDoc(doc(db, "chats", cSnap.id), { userInfo: cData.userInfo });
+                    updatePromises.push(updateDoc(doc(db, "chats", cSnap.id), { userInfo: cData.userInfo }));
                 }
             });
+            await Promise.all(updatePromises);
 
             await loadProfilesFromCity();
             openTab('view-discovery', navItems[0]);
