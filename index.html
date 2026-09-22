@@ -80,7 +80,7 @@
         .circle-btn:active { transform: scale(0.85); }
         .btn-nope { color: #FF416C; } .btn-msg { color: #8A2387; font-size: 24px; } .btn-like { color: #00E676; }
 
-        /* VIEW: LIKES (Симпатии) - НОВАЯ ВКЛАДКА */
+        /* VIEW: LIKES (Симпатии) */
         .likes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px 20px 20px; }
         .like-card { background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.5); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; backdrop-filter: blur(10px); }
         .like-card img { width: 100%; height: 180px; object-fit: cover; }
@@ -145,7 +145,7 @@
         .nav-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
         
         .icon-fire::before { content: '🔥'; } 
-        .icon-heart::before { content: '💖'; } /* НОВАЯ ИКОНКА ЛАЙКОВ */
+        .icon-heart::before { content: '💖'; }
         .icon-chat::before { content: '💬'; } 
         .icon-user::before { content: '👤'; }
 
@@ -154,6 +154,10 @@
         #loading-overlay.active { opacity: 1; pointer-events: all; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(255, 65, 108, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* КНОПКА СБРОСА ИСТОРИИ */
+        .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
+        .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
     </style>
 </head>
 <body>
@@ -222,11 +226,9 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА 2: ЛАЙКИ (СИМПАТИИ) - НОВОЕ -->
+            <!-- ВКЛАДКА 2: ЛАЙКИ (СИМПАТИИ) -->
             <div id="view-likes" class="view">
-                <div class="likes-grid" id="likes-container">
-                    <!-- Здесь будут карточки тех, кто поставил лайк -->
-                </div>
+                <div class="likes-grid" id="likes-container"></div>
             </div>
 
             <!-- ВКЛАДКА 3: СООБЩЕНИЯ -->
@@ -279,12 +281,15 @@
                     </div>
 
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
+                    
+                    <!-- НОВАЯ КНОПКА СБРОСА -->
+                    <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                 </div>
             </div>
 
         </div>
 
-        <!-- НИЖНЯЯ НАВИГАЦИЯ С 4 КНОПКАМИ -->
+        <!-- НИЖНЯЯ НАВИГАЦИЯ -->
         <div class="bottom-nav" id="bottom-nav">
             <div class="nav-item icon-fire" data-target="view-discovery"></div>
             <div class="nav-item icon-heart" data-target="view-likes"></div>
@@ -335,7 +340,7 @@
     let currentViewingProfile = null;
     let activeChatId = null;
     let chatUnsubscribe = null;
-    let userDocUnsubscribe = null; // Для отслеживания новых лайков в реальном времени
+    let userDocUnsubscribe = null; 
 
     function clearLocalState() {
         currentUserData = {}; userPhotos = ["", "", "", "", ""]; profilesQueue = []; currentViewingProfile = null;
@@ -393,19 +398,16 @@
     };
     document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-    // --- МАГИЯ REAL-TIME ДЛЯ ПРОФИЛЯ И ЛАЙКОВ ---
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
-            if(userDocUnsubscribe) userDocUnsubscribe(); // Очищаем старый слушатель
+            if(userDocUnsubscribe) userDocUnsubscribe(); 
             
-            // Слушаем документ пользователя в реальном времени!
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const isFirstLoad = !currentUserData.name;
                     currentUserData = snap.data();
                     
-                    // Обновляем форму в профиле
                     document.getElementById('prof-name').value = currentUserData.name || "";
                     document.getElementById('prof-age').value = currentUserData.age || "";
                     document.getElementById('prof-city').value = currentUserData.city || "";
@@ -415,7 +417,6 @@
                     if(currentUserData.photos) userPhotos = currentUserData.photos;
                     renderPhotos();
                     
-                    // Если кто-то лайкнул - мгновенно обновляем вкладку Симпатий
                     renderLikesTab();
 
                     if(isFirstLoad) {
@@ -440,7 +441,6 @@
         }
     });
 
-    // --- ГЕНЕРАЦИЯ ВКЛАДКИ "СИМПАТИИ" ---
     async function renderLikesTab() {
         const container = document.getElementById('likes-container');
         const likedMe = currentUserData.likedMe || [];
@@ -471,20 +471,16 @@
         container.innerHTML = html;
     }
 
-    // --- ОТВЕТ НА ЛАЙК ИЗ ВКЛАДКИ СИМПАТИЙ ---
     window.handleLikeResponse = async (targetId, isAccept, targetName, targetPhoto) => {
         const myRef = doc(db, "users", auth.currentUser.uid);
         
-        // Удаляем человека из списка "Кто лайкнул" и добавляем в просмотренные
         await updateDoc(myRef, {
             likedMe: arrayRemove(targetId),
             swiped: arrayUnion(targetId)
         });
         
         if(isAccept) {
-            // ВЗАИМНАЯ СИМПАТИЯ - СОЗДАЕМ ЧАТ И УВЕДОМЛЕНИЕ
             const chatId = [auth.currentUser.uid, targetId].sort().join('_');
-            
             await setDoc(doc(db, "chats", chatId), {
                 users: [auth.currentUser.uid, targetId],
                 userInfo: {
@@ -495,7 +491,6 @@
                 timestamp: serverTimestamp()
             }, { merge: true });
             
-            // Системное сообщение-уведомление
             await addDoc(collection(db, `chats/${chatId}/messages`), {
                 text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨",
                 senderId: "system",
@@ -503,7 +498,7 @@
             });
             
             alert("Взаимная симпатия! ✨ Чат создан.");
-            openTab('view-chats', navItems[2]); // Перекидываем в диалоги
+            openTab('view-chats', navItems[2]);
         }
     };
 
@@ -559,7 +554,6 @@
         }
     }
 
-    // --- ЛОГИКА СВАЙПОВ И ЛАЙКОВ ИЗ ГЛАВНОЙ ЛЕНТЫ ---
     async function handleSwipe(isLike) {
         if(!currentViewingProfile) return;
         const targetId = currentViewingProfile.id;
@@ -571,14 +565,11 @@
         
         const myRef = doc(db, "users", auth.currentUser.uid);
         
-        // Записываем в просмотренные
         updateDoc(myRef, { swiped: arrayUnion(targetId) });
         if(!currentUserData.swiped) currentUserData.swiped = []; currentUserData.swiped.push(targetId);
 
-        // Если свайпаем того, кто уже лайкнул нас (взаимно из ленты)
         if (currentUserData.likedMe && currentUserData.likedMe.includes(targetId)) {
-            updateDoc(myRef, { likedMe: arrayRemove(targetId) }); // Убираем из вкладки лайков
-            
+            updateDoc(myRef, { likedMe: arrayRemove(targetId) }); 
             if (isLike) {
                 const chatId = [auth.currentUser.uid, targetId].sort().join('_');
                 setDoc(doc(db, "chats", chatId), {
@@ -599,7 +590,6 @@
                 alert("Взаимная симпатия! ✨ Чат создан.");
             }
         } 
-        // Иначе просто отправляем ему лайк
         else if (isLike) {
             updateDoc(doc(db, "users", targetId), { likedMe: arrayUnion(auth.currentUser.uid) });
         }
@@ -646,6 +636,25 @@
             renderNextProfile(); 
             setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
         }, 300);
+    };
+
+    // --- КНОПКА СБРОСА ИСТОРИИ ---
+    document.getElementById('btn-reset-swipes').onclick = async () => {
+        if(!confirm("Хотите очистить историю просмотренных анкет? Люди, которых вы пропустили, снова появятся в вашей ленте.")) return;
+        
+        const btn = document.getElementById('btn-reset-swipes');
+        btn.innerText = "Сброс..."; btn.disabled = true;
+        
+        try {
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: [] });
+            currentUserData.swiped = [];
+            await loadProfilesFromCity();
+            alert("История очищена! Можете смотреть анкеты заново.");
+        } catch(e) {
+            alert("Ошибка при очистке: " + e.message);
+        } finally {
+            btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false;
+        }
     };
 
     function loadChatsList() {
@@ -720,8 +729,8 @@
 
         const updatedData = { name, age, city, cityLower: city.toLowerCase().trim(), bio, interests, photos: userPhotos, swiped: currentUserData.swiped || [] };
         try {
-            await setDoc(doc(db, "users", auth.currentUser.uid), updatedData);
-            currentUserData = updatedData;
+            await setDoc(doc(db, "users", auth.currentUser.uid), updatedData, {merge: true});
+            currentUserData = { ...currentUserData, ...updatedData };
             await loadProfilesFromCity();
             openTab('view-discovery', navItems[0]);
         } catch(e) { alert("Ошибка: " + e.message); } 
