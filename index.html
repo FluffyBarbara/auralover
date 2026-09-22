@@ -446,8 +446,7 @@
         } else {
             empty.classList.add('hidden'); actions.classList.remove('hidden'); card.classList.remove('hidden');
             currentViewingProfile = profilesQueue.shift();
-            document.getElementById('card-name').innerText = currentViewingProfile.name + ", ";
-            document.getElementById('card-age').innerText = currentViewingProfile.age;
+            document.getElementById('card-name').innerHTML = `${currentViewingProfile.name}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
             card.style.backgroundImage = `url('${currentViewingProfile.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
