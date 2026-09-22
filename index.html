@@ -1671,14 +1671,13 @@
                 const msgTime = msg.timestamp ? new Date(msg.timestamp.toDate()) : new Date();
                 const currentDateStr = msgTime.toDateString();
                 
-                // ВСТАВКА ДАТЫ-РАЗДЕЛИТЕЛЯ
                 if (currentDateStr !== lastDateStr) {
                     const today = new Date();
                     const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
                     let dateText = "";
                     if (currentDateStr === today.toDateString()) dateText = "Сегодня";
                     else if (currentDateStr === yesterday.toDateString()) dateText = "Вчера";
-                    else dateText = msgTime.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+                    else dateText = msgTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
                     
                     html += `<div class="chat-date-divider">${dateText}</div>`;
                     lastDateStr = currentDateStr;
