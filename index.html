@@ -124,22 +124,29 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ПАНЕЛЬ АДМИНИСТРАТОРА */
-        .admin-panel-card { background: linear-gradient(135deg, rgba(138, 35, 135, 0.08), rgba(255, 65, 108, 0.08)); border: 2px solid rgba(138, 35, 135, 0.2); border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(138, 35, 135, 0.05); }
-        .admin-title { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .admin-btn { width: 100%; padding: 14px; background: white; color: var(--text-main); border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 10px; transition: 0.2s; text-align: left; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .admin-btn:hover { background: var(--secondary); color: white; border-color: transparent; }
+        /* ================== ПАНЕЛЬ АДМИНА (FULLSCREEN DASHBOARD) ================== */
+        .admin-dashboard { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0F0F13; color: white; z-index: 400; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .admin-dashboard.active { transform: translateY(0); }
+        .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; overflow-y: auto; }
+        .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
+        .admin-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+        .admin-card-icon { font-size: 38px; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+        .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; }
+        .admin-badge { position: absolute; top: -8px; right: -8px; background: #FF416C; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 3px solid #0F0F13; box-shadow: 0 4px 10px rgba(255,65,108,0.4); }
 
-        /* МОДАЛЬНЫЕ ОКНА АДМИНКИ */
-        .admin-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(28, 28, 40, 0.6); backdrop-filter: blur(15px); z-index: 300; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s; }
+        /* МОДАЛЬНЫЕ ОКНА */
+        .admin-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 15, 19, 0.85); backdrop-filter: blur(15px); z-index: 500; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s; }
         .admin-modal.active { opacity: 1; pointer-events: all; }
-        .admin-modal-content { background: white; width: 100%; max-width: 360px; border-radius: 28px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
+        .admin-modal-content { background: white; width: 100%; max-width: 380px; border-radius: 28px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 85vh; overflow-y: auto; color: var(--text-main); }
         .admin-modal-title { font-size: 20px; font-weight: 800; margin-bottom: 15px; color: var(--text-main); }
-        .admin-input { width: 100%; padding: 14px 16px; background: #f4f5f7; border: none; border-radius: 14px; font-size: 14px; outline: none; margin-bottom: 12px; }
-        .admin-textarea { width: 100%; padding: 14px 16px; background: #f4f5f7; border: none; border-radius: 14px; font-size: 14px; outline: none; resize: none; min-height: 90px; margin-bottom: 12px; }
+        .admin-input { width: 100%; padding: 14px 16px; background: #f4f5f7; border: none; border-radius: 14px; font-size: 14px; outline: none; margin-bottom: 12px; border: 1px solid transparent; transition: 0.2s;}
+        .admin-input:focus { border-color: var(--primary); background: white; }
+        .admin-textarea { width: 100%; padding: 14px 16px; background: #f4f5f7; border: none; border-radius: 14px; font-size: 14px; outline: none; resize: none; min-height: 90px; margin-bottom: 12px; border: 1px solid transparent; transition: 0.2s; }
+        .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
+        /* ЧАТ-КОМНАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -269,18 +276,12 @@
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     
-                    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА (ВЫВОДИТСЯ ТОЛЬКО ДЛЯ ВАС) -->
-                    <div id="admin-panel-section" class="admin-panel-card hidden">
-                        <div class="admin-title">🛡️ Панель Администратора</div>
-                        <button class="admin-btn" onclick="openAdminModal('modal-broadcast')">📢 Системная рассылка <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-ban')">🚫 Бан / Разбан пользователя <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-logs')">📋 Просмотр логов по UID <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-msgs')">💬 Сообщения по UID <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-photos')">🖼️ Удалить фото по UID <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-edit-user')">✏️ Изменить анкету по UID <span>→</span></button>
+                    <!-- КНОПКА ПАНЕЛИ АДМИНИСТРАТОРА (ПОЯВИТСЯ ТОЛЬКО У ВАС) -->
+                    <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
+                        <button class="btn-glow" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Войти в панель управления</button>
                     </div>
 
-                    <div class="section-title" style="margin-top: 15px;">Фотографии (до 5)</div>
+                    <div class="section-title" style="margin-top: 0;">Фотографии (до 5)</div>
                     <div class="photo-grid" id="photo-grid">
                         <label class="photo-slot main" data-index="0"><input type="file" class="photo-input" accept="image/*" hidden></label>
                         <label class="photo-slot" data-index="1"><input type="file" class="photo-input" accept="image/*" hidden></label>
@@ -304,6 +305,10 @@
 
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
+                    
+                    <!-- СИСТЕМА ЖАЛОБ (ДЛЯ ВСЕХ) -->
+                    <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка</div>
+                    <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-user-report')">🐞 Сообщить о баге / Предложение</button>
                 </div>
             </div>
         </div>
@@ -316,7 +321,71 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ -->
+    <!-- ================== FULLSCREEN ПАНЕЛЬ АДМИНИСТРАТОРА ================== -->
+    <div id="admin-dashboard" class="admin-dashboard">
+        <div class="admin-header">
+            <h2 style="margin:0; font-size: 20px; font-weight:800; display:flex; align-items:center; gap:8px;">👑 Панель управления</h2>
+            <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:white;" onclick="document.getElementById('admin-dashboard').classList.remove('active')">✕</button>
+        </div>
+        <div class="admin-grid">
+            <div class="admin-card" onclick="openAdminModal('modal-broadcast')">
+                <div class="admin-card-icon">📢</div>
+                <div class="admin-card-title">Рассылка</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-admin-reports')">
+                <div class="admin-badge hidden" id="admin-reports-badge">0</div>
+                <div class="admin-card-icon">🐞</div>
+                <div class="admin-card-title">Отчеты и Баги</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-ban')">
+                <div class="admin-card-icon">🚫</div>
+                <div class="admin-card-title">Бан аккаунта</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-logs')">
+                <div class="admin-card-icon">📋</div>
+                <div class="admin-card-title">Логи по UID</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-msgs')">
+                <div class="admin-card-icon">💬</div>
+                <div class="admin-card-title">Чаты UID</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-photos')">
+                <div class="admin-card-icon">🖼️</div>
+                <div class="admin-card-title">Фото по UID</div>
+            </div>
+            <div class="admin-card" onclick="openAdminModal('modal-edit-user')" style="grid-column: span 2;">
+                <div class="admin-card-icon">✏️</div>
+                <div class="admin-card-title">Изменить анкету пользователя</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ (И РЕПОРТОВ) -->
+    
+    <!-- Для юзеров: написать репорт -->
+    <div id="modal-user-report" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">🐞 Сообщить о баге</div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px; line-height:1.4;">Опишите проблему или предложение. Разработчики оперативно всё проверят!</p>
+            <textarea id="report-text-input" class="admin-textarea" placeholder="Подробно опишите баг или идею..."></textarea>
+            <div class="admin-modal-actions">
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="submitReport()">Отправить</button>
+                <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-user-report')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Для админа: просмотр репортов -->
+    <div id="modal-admin-reports" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">🐞 Отчеты от пользователей</div>
+            <div id="admin-reports-list" style="max-height: 400px; overflow-y: auto;">
+                <p style="font-size:13px; color:var(--text-muted);">Загрузка...</p>
+            </div>
+            <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-reports')">Закрыть</button>
+        </div>
+    </div>
+
     <div id="modal-broadcast" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">📢 Рассылка всем</div>
@@ -408,7 +477,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, addDoc, serverTimestamp, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
@@ -436,7 +505,8 @@
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
     let targetUserUnsubscribe = null; 
-    let chatDocUnsubscribe = null;    
+    let chatDocUnsubscribe = null;
+    let reportsUnsubscribe = null; // Для прослушивания репортов админом
     let isInitialChatsLoad = true;
 
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
@@ -467,6 +537,7 @@
         if (userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; } 
         if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
         if (chatDocUnsubscribe) { chatDocUnsubscribe(); chatDocUnsubscribe = null; }
+        if (reportsUnsubscribe) { reportsUnsubscribe(); reportsUnsubscribe = null; }
         activeChatId = null; activeTargetId = null; isInitialChatsLoad = true;
         
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
@@ -479,13 +550,41 @@
         document.getElementById('empty-state').classList.remove('hidden');
         document.getElementById('chat-badge').classList.remove('active');
         document.getElementById('likes-badge').classList.remove('active');
-        document.getElementById('admin-panel-section').classList.add('hidden');
+        document.getElementById('owner-secret-section').classList.add('hidden');
     }
 
     const loadingOverlay = document.getElementById('loading-overlay');
     function showLoading(text) { document.getElementById('loading-text').innerText = text; loadingOverlay.classList.add('active'); }
     function hideLoading() { loadingOverlay.classList.remove('active'); }
     function switchMainScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
+
+    // --- УПРАВЛЕНИЕ МОДАЛКАМИ ---
+    window.openAdminModal = (modalId) => document.getElementById(modalId).classList.add('active');
+    window.closeAdminModal = (modalId) => document.getElementById(modalId).classList.remove('active');
+
+    // --- ФУНКЦИИ СИСТЕМЫ РЕПОРТОВ ---
+    window.submitReport = async () => {
+        const text = document.getElementById('report-text-input').value.trim();
+        if (!text) return alert("Пожалуйста, опишите проблему.");
+        try {
+            await addDoc(collection(db, "reports"), {
+                uid: auth.currentUser.uid,
+                name: currentUserData.name || "Без имени",
+                text: text,
+                timestamp: serverTimestamp()
+            });
+            alert("Спасибо! Ваше сообщение отправлено разработчикам.");
+            document.getElementById('report-text-input').value = "";
+            closeAdminModal('modal-user-report');
+        } catch(e) { alert("Ошибка при отправке: " + e.message); }
+    };
+
+    window.deleteReport = async (id) => {
+        if(!confirm("Удалить этот отчет?")) return;
+        try {
+            await deleteDoc(doc(db, "reports", id));
+        } catch(e) { alert("Ошибка: " + e.message); }
+    };
 
     // --- ФУНКЦИИ ПАНЕЛИ АДМИНИСТРАТОРА ---
     window.sendBroadcast = async () => {
@@ -632,6 +731,7 @@
 
             setMyPresence(true); 
 
+            // ПРОВЕРКА БАНА ПРИ ВХОДЕ
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             if(checkSnap.exists() && checkSnap.data().isBanned) {
                 alert("Ваш аккаунт был заблокирован администратором платформы.");
@@ -640,11 +740,38 @@
                 return;
             }
 
-            // ПРОВЕРКА ВЛАДЕЛЬЦА ДЛЯ АДМИН ПАНЕЛИ
+            // ПРОВЕРКА НА ВЛАДЕЛЬЦА (ДЛЯ АДМИН-ПАНЕЛИ)
             if (user.uid === OWNER_UID) {
-                document.getElementById('admin-panel-section').classList.remove('hidden');
+                document.getElementById('owner-secret-section').classList.remove('hidden');
+                
+                // Live-слушатель репортов для админа
+                if(reportsUnsubscribe) reportsUnsubscribe();
+                reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
+                    const badge = document.getElementById('admin-reports-badge');
+                    const list = document.getElementById('admin-reports-list');
+                    if(snap.empty) {
+                        badge.classList.add('hidden');
+                        list.innerHTML = "<p style='font-size:13px; color:gray;'>Нет новых отчетов.</p>";
+                    } else {
+                        badge.classList.remove('hidden');
+                        badge.innerText = snap.size;
+                        let html = "";
+                        snap.forEach(doc => {
+                            const d = doc.data();
+                            const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleString() : "";
+                            html += `
+                            <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
+                                <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
+                                <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text}</div>
+                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid}</div>
+                                <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Проблема решена</button>
+                            </div>`;
+                        });
+                        list.innerHTML = html;
+                    }
+                });
             } else {
-                document.getElementById('admin-panel-section').classList.add('hidden');
+                document.getElementById('owner-secret-section').classList.add('hidden');
             }
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
