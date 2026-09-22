@@ -55,16 +55,17 @@
         .btn-glow:active { transform: translateY(2px) scale(0.98); }
 
         /* ГЛАВНЫЙ ЭКРАН */
-        .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; }
+        .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; flex-shrink: 0;}
         .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); }
         
-        .main-views-container { flex: 1; position: relative; overflow: hidden; padding-bottom: 70px; }
-        .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden;}
+        .main-views-container { flex: 1; position: relative; overflow: hidden; }
+        /* ДОБАВЛЕН padding-bottom: 85px ДЛЯ ВСЕХ ВКЛАДОК, ЧТОБЫ МЕНЮ НЕ ЗАКРЫВАЛО КОНТЕНТ */
+        .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
         /* VIEW: DISCOVERY (Огонек) */
-        .card-container { flex: 1; position: relative; margin: 15px 20px; perspective: 1000px; display: flex; flex-direction: column; }
+        .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; }
         .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; }
         .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
@@ -75,13 +76,16 @@
         .card-tags::-webkit-scrollbar { display: none; }
         .card-tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;}
         
-        .action-bar { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 15px 0; z-index: 10; }
-        .circle-btn { width: 65px; height: 65px; border-radius: 50%; background: white; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-size: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
+        /* ИСПРАВЛЕНА ПАНЕЛЬ КНОПОК */
+        .action-bar { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 15px 0 10px 0; z-index: 10; flex-shrink: 0; }
+        .circle-btn { width: 60px; height: 60px; border-radius: 50%; background: white; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-size: 26px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
         .circle-btn:active { transform: scale(0.85); }
-        .btn-nope { color: #FF416C; } .btn-star { width: 50px; height: 50px; font-size: 22px; color: #00C9FF; } .btn-like { color: #00E676; }
+        .btn-nope { color: #FF416C; } 
+        .btn-msg { color: #8A2387; font-size: 24px; } /* Кнопка прямого сообщения */
+        .btn-like { color: #00E676; }
 
         /* VIEW: MESSAGES (Чат) */
-        .chat-list { padding: 10px 20px 100px 20px; }
+        .chat-list { padding: 10px 20px; }
         .chat-item { display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 20px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .chat-item:active { transform: scale(0.98); }
         .chat-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -92,7 +96,7 @@
         .empty-state span { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.5; }
 
         /* VIEW: PROFILE (Настройка) */
-        .profile-content { padding: 20px 20px 100px 20px; }
+        .profile-content { padding: 20px; }
         .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .photo-slot { background: rgba(255,255,255,0.6); border: 2px dashed rgba(143, 144, 166, 0.3); border-radius: 20px; aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; position: relative; }
@@ -103,7 +107,6 @@
         textarea.input-styled { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 18px; font-size: 15px; outline: none; resize: none; min-height: 100px; color: var(--text-main); }
         textarea.input-styled:focus { background: white; border-color: rgba(255, 65, 108, 0.4); }
         
-        /* КРАСИВЫЕ ИНТЕРЕСЫ */
         .interest-category-title { font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px; }
         .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
         .chip { padding: 10px 16px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 6px; }
@@ -186,6 +189,7 @@
                 <div class="card-container">
                     <div class="swipe-card hidden" id="main-card">
                         <div class="card-info">
+                            <!-- ИСПРАВЛЕНО: id="card-name" и вложенный id="card-age" -->
                             <div class="card-name" id="card-name">Имя, <span class="card-age" id="card-age">20</span></div>
                             <span class="card-city" id="card-city">📍 Город</span>
                             <div class="card-bio" id="card-bio">Описание...</div>
@@ -198,10 +202,11 @@
                         <p>В твоем городе пока нет новых пользователей. Загляни позже!</p>
                     </div>
                 </div>
+                <!-- ДОБАВЛЕНА КНОПКА ПРЯМОГО СООБЩЕНИЯ -->
                 <div class="action-bar" id="action-bar">
-                    <button class="circle-btn btn-nope" id="btn-pass">✕</button>
-                    <button class="circle-btn btn-star">★</button>
-                    <button class="circle-btn btn-like" id="btn-like">♥</button>
+                    <button class="circle-btn btn-nope" id="btn-pass" title="Пропустить">✕</button>
+                    <button class="circle-btn btn-msg" id="btn-direct-msg" title="Написать сразу">💬</button>
+                    <button class="circle-btn btn-like" id="btn-like" title="Лайк">♥</button>
                 </div>
             </div>
 
@@ -304,7 +309,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Глобальные переменные (кэш пользователя)
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
     let profilesQueue = []; 
@@ -312,26 +316,12 @@
     let activeChatId = null;
     let chatUnsubscribe = null;
 
-    // --- ФУНКЦИЯ ОЧИСТКИ ЛОКАЛЬНЫХ ДАННЫХ ПРИ ВЫХОДЕ ---
     function clearLocalState() {
-        currentUserData = {};
-        userPhotos = ["", "", "", "", ""];
-        profilesQueue = [];
-        currentViewingProfile = null;
-        if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
-        activeChatId = null;
-
-        // Очищаем форму профиля
-        document.getElementById('prof-name').value = "";
-        document.getElementById('prof-age').value = "";
-        document.getElementById('prof-city').value = "";
-        document.getElementById('prof-bio').value = "";
-        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        
-        // Очищаем фото в UI
-        renderPhotos();
-
-        // Очищаем списки и карточки
+        currentUserData = {}; userPhotos = ["", "", "", "", ""]; profilesQueue = []; currentViewingProfile = null;
+        if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } activeChatId = null;
+        document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
+        document.getElementById('prof-city').value = ""; document.getElementById('prof-bio').value = "";
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active')); renderPhotos();
         document.getElementById('chat-list-container').innerHTML = "";
         document.getElementById('main-card').classList.add('hidden');
         document.getElementById('action-bar').classList.add('hidden');
@@ -346,7 +336,6 @@
         document.getElementById(screenId).classList.add('active');
     }
 
-    // --- НАВИГАЦИЯ ---
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -364,7 +353,6 @@
     }
     navItems.forEach(item => { item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item)); });
 
-    // --- АВТОРИЗАЦИЯ ---
     let isLogin = true;
     document.getElementById('btn-tab-login').onclick = () => { isLogin=true; document.getElementById('tab-slider').style.left='5px'; document.getElementById('btn-tab-login').classList.add('active'); document.getElementById('btn-tab-register').classList.remove('active'); document.getElementById('auth-submit-btn').innerText='Войти'; };
     document.getElementById('btn-tab-register').onclick = () => { isLogin=false; document.getElementById('tab-slider').style.left='50%'; document.getElementById('btn-tab-register').classList.add('active'); document.getElementById('btn-tab-login').classList.remove('active'); document.getElementById('auth-submit-btn').innerText='Создать аккаунт'; };
@@ -378,7 +366,6 @@
         else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); err.innerText = e.message; });
     };
     
-    // ВЫХОД ИЗ АККАУНТА
     document.getElementById('btn-logout').onclick = () => signOut(auth);
 
     onAuthStateChanged(auth, async (user) => {
@@ -405,14 +392,12 @@
             }
             hideLoading();
         } else {
-            // КОГДА ВЫШЛИ: Очищаем всё и переводим на экран входа
             clearLocalState();
             switchMainScreen('screen-auth'); 
             hideLoading();
         }
     });
 
-    // --- УМНЫЙ АЛГОРИТМ ПОДБОРА (MATCHING) ---
     async function loadProfilesFromCity() {
         if(!currentUserData.cityLower) return;
         
@@ -427,7 +412,6 @@
             if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) {
                 const data = s.data();
                 let sharedCount = 0;
-                
                 if (data.interests && myInterests.length > 0) {
                     sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
                 }
@@ -446,6 +430,8 @@
         } else {
             empty.classList.add('hidden'); actions.classList.remove('hidden'); card.classList.remove('hidden');
             currentViewingProfile = profilesQueue.shift();
+            
+            // СОХРАНЕН ИСПРАВЛЕННЫЙ ВЫВОД ИМЕНИ И ВОЗРАСТА
             document.getElementById('card-name').innerHTML = `${currentViewingProfile.name}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
@@ -497,10 +483,46 @@
             setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
         }, 300);
     }
+    
     document.getElementById('btn-pass').onclick = () => handleSwipe(false);
     document.getElementById('btn-like').onclick = () => handleSwipe(true);
 
-    // --- СИСТЕМА ЧАТОВ ---
+    // НОВАЯ КНОПКА: ПРЯМОЕ СООБЩЕНИЕ
+    document.getElementById('btn-direct-msg').onclick = async () => {
+        if(!currentViewingProfile) return;
+        const targetId = currentViewingProfile.id;
+        const targetName = currentViewingProfile.name;
+        const targetPhoto = currentViewingProfile.photos?.[0] || "";
+
+        // 1. Убираем анкету из будущих показов
+        updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: arrayUnion(targetId) });
+        if(!currentUserData.swiped) currentUserData.swiped = []; currentUserData.swiped.push(targetId);
+
+        // 2. Создаем или объединяем чат-комнату
+        const chatId = [auth.currentUser.uid, targetId].sort().join('_');
+        await setDoc(doc(db, "chats", chatId), {
+            users: [auth.currentUser.uid, targetId],
+            userInfo: {
+                [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
+                [targetId]: { name: targetName, photo: targetPhoto }
+            },
+            timestamp: serverTimestamp()
+        }, { merge: true });
+
+        // 3. Открываем окно чата поверх всего
+        window.openChat(chatId, targetName, targetPhoto);
+
+        // 4. Убираем карточку свайпом вверх
+        const card = document.getElementById('main-card');
+        card.style.transform = `translate(0px, -350px) scale(0.8)`; card.style.opacity = '0';
+        
+        setTimeout(() => {
+            card.style.transition = 'none'; card.style.transform = 'translate(0px, 0px) scale(0.9)';
+            renderNextProfile(); // Загружаем следующую карточку на фон
+            setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
+        }, 300);
+    };
+
     function loadChatsList() {
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         onSnapshot(q, (snapshot) => {
@@ -550,7 +572,6 @@
         await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, timestamp: serverTimestamp() });
     };
 
-    // --- ПРОФИЛЬ ---
     function compressImage(file, maxW=500) { return new Promise(res => { const r=new FileReader(); r.readAsDataURL(file); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'); const rat=maxW/i.width; c.width=maxW; c.height=i.height*rat; c.getContext('2d').drawImage(i,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',0.6));};};});}
     function renderPhotos() { document.querySelectorAll('.photo-slot').forEach((s, i) => { const oI=s.querySelector('img'), oB=s.querySelector('.delete-photo-btn'); if(oI)oI.remove(); if(oB)oB.remove(); if(userPhotos[i]) { const img=document.createElement('img'); img.src=userPhotos[i]; const dB=document.createElement('button'); dB.className='delete-photo-btn'; dB.innerHTML='✖'; dB.onclick=(e)=>{e.preventDefault();userPhotos[i]="";renderPhotos();}; s.appendChild(img); s.appendChild(dB); }}); }
     
