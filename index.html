@@ -3,231 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraLover - Авторизация</title>
+    <title>AuraLover - Знакомства</title>
     <style>
+        :root {
+            --primary: #ff4b72;
+            --primary-hover: #e03a5f;
+            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
+            color: var(--text-dark);
         }
-        .auth-container {
-            background: white;
+
+        /* Утилиты */
+        .hidden { display: none !important; }
+        .btn {
+            width: 100%; padding: 14px; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .input-field {
+            width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd;
+            border-radius: 10px; box-sizing: border-box; font-size: 15px; background: rgba(255,255,255,0.9);
+        }
+        
+        /* Контейнеры экранов */
+        .screen {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 90%; max-width: 420px;
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        h2 { color: #333; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
             box-sizing: border-box;
-            font-size: 14px;
+            animation: fadeIn 0.4s ease-out;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 10px;
-            transition: opacity 0.2s;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        button:hover { opacity: 0.9; }
-        .btn-primary { background: #ff4b72; color: white; }
-        .btn-google { background: #4285F4; color: white; }
-        .btn-phone { background: #34A853; color: white; }
-        .divider {
-            margin: 20px 0;
-            position: relative;
-            text-align: center;
+
+        /* --- ЭКРАН АВТОРИЗАЦИИ --- */
+        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 2px solid #eee; }
+        .auth-tab {
+            flex: 1; text-align: center; padding: 10px; cursor: pointer;
+            color: var(--text-gray); font-weight: 600;
         }
-        .divider::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            border-top: 1px solid #ddd;
-            z-index: 1;
+        .auth-tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
+        .error-text { color: #d63031; font-size: 14px; text-align: center; margin-top: 10px; }
+
+        /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
+        #app-screen { max-width: 480px; padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 90vh; }
+        .app-header {
+            background: white; padding: 15px 20px; text-align: center;
+            font-size: 20px; font-weight: bold; color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
         }
-        .divider span {
-            background: white;
-            padding: 0 10px;
-            color: #888;
-            position: relative;
-            z-index: 2;
-            font-size: 14px;
+        .logout-btn { font-size: 14px; color: var(--text-gray); background: none; border: none; cursor: pointer; }
+        
+        /* --- НАСТРОЙКА ПРОФИЛЯ --- */
+        .profile-setup { padding: 20px; overflow-y: auto; flex: 1; }
+        .photo-upload-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .photo-slot {
+            width: 70px; height: 90px; background: #eee; border-radius: 12px;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            overflow: hidden; position: relative; border: 2px dashed #ccc;
         }
-        .hidden { display: none; }
-        #message { margin-top: 15px; font-size: 14px; color: #ff4b72; }
+        .photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-slot.add-btn::after { content: '+'; font-size: 24px; color: #888; }
+        
+        .interests-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+        .interest-tag {
+            padding: 8px 15px; background: white; border: 1px solid #ddd;
+            border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s;
+        }
+        .interest-tag.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- КАРТОЧКИ (СВАЙПЫ) --- */
+        .discovery-view { flex: 1; position: relative; background: #fafafa; overflow: hidden; padding: 20px; }
+        .dating-card {
+            position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+            background: white; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=400');
+            background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-end;
+        }
+        .card-info {
+            background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 20px 20px;
+            color: white; border-radius: 0 0 20px 20px;
+        }
+        .card-info h2 { margin: 0 0 5px 0; font-size: 24px; }
+        .card-info p { margin: 0; font-size: 15px; opacity: 0.9; }
+        .card-actions { display: flex; justify-content: space-evenly; margin-top: 15px; padding-bottom: 10px; }
+        .action-btn { width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-dislike { background: white; color: #ff4b4b; }
+        .btn-like { background: white; color: #4bffb3; }
     </style>
 </head>
 <body>
 
-<div class="auth-container">
-    <h2>Вход в AuraLover</h2>
-    
-    <!-- Секция Email / Password -->
-    <div class="input-group">
-        <input type="email" id="email" placeholder="Email">
-    </div>
-    <div class="input-group">
-        <input type="password" id="password" placeholder="Пароль">
-    </div>
-    <button class="btn-primary" id="btn-email-login">Войти / Создать по Email</button>
-
-    <div class="divider"><span>ИЛИ</span></div>
-
-    <!-- Секция Google -->
-    <button class="btn-google" id="btn-google">Войти через Google</button>
-
-    <!-- Секция Телефона -->
-    <button class="btn-phone" id="btn-phone-start">Войти по номеру телефона</button>
-    
-    <div id="phone-auth-section" class="hidden">
-        <div class="input-group">
-            <input type="tel" id="phone-number" placeholder="+7 999 000 00 00">
-        </div>
-        <button class="btn-phone" id="btn-send-code">Отправить SMS</button>
+    <!-- ЭКРАН АВТОРИЗАЦИИ (ВХОД И РЕГИСТРАЦИЯ) -->
+    <div id="auth-screen" class="screen">
+        <h2 style="text-align: center; margin-top:0;">AuraLover</h2>
         
-        <div id="code-section" class="hidden">
-            <div class="input-group">
-                <input type="text" id="verification-code" placeholder="Код из SMS">
+        <div class="auth-tabs">
+            <div class="auth-tab active" id="tab-login">Вход</div>
+            <div class="auth-tab" id="tab-register">Регистрация</div>
+        </div>
+
+        <form id="auth-form" onsubmit="return false;">
+            <input type="email" id="auth-email" class="input-field" placeholder="Email" required>
+            <input type="password" id="auth-password" class="input-field" placeholder="Пароль" required>
+            <button type="submit" class="btn btn-primary" id="auth-submit-btn">Войти</button>
+        </form>
+        <div id="auth-error" class="error-text"></div>
+    </div>
+
+    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
+    <div id="app-screen" class="screen hidden">
+        <div class="app-header">
+            <span>AuraLover</span>
+            <button class="logout-btn" id="btn-logout">Выйти</button>
+        </div>
+
+        <!-- 1. Настройка профиля (Первый вход) -->
+        <div id="profile-setup-view" class="profile-setup hidden">
+            <h3>Создайте свой профиль</h3>
+            <input type="text" id="prof-name" class="input-field" placeholder="Ваше имя">
+            <input type="number" id="prof-age" class="input-field" placeholder="Возраст">
+            <textarea id="prof-bio" class="input-field" placeholder="О себе..." rows="3"></textarea>
+
+            <h4>Фотографии (до 5 шт.)</h4>
+            <div class="photo-upload-container" id="photo-grid">
+                <label class="photo-slot add-btn">
+                    <input type="file" id="photo-input" accept="image/*" multiple class="hidden">
+                </label>
+                <!-- Сюда будут добавляться превью -->
             </div>
-            <button class="btn-primary" id="btn-verify-code">Подтвердить код</button>
+
+            <h4>Интересы</h4>
+            <div class="interests-grid" id="interests-container">
+                <div class="interest-tag">Музыка</div>
+                <div class="interest-tag">Кино</div>
+                <div class="interest-tag">Игры</div>
+                <div class="interest-tag">Спорт</div>
+                <div class="interest-tag">Путешествия</div>
+                <div class="interest-tag">Книги</div>
+                <div class="interest-tag">Котики</div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-save-profile">Сохранить и начать</button>
+        </div>
+
+        <!-- 2. Лента знакомств (Discovery) -->
+        <div id="discovery-view" class="discovery-view hidden">
+            <div class="dating-card">
+                <div class="card-info">
+                    <h2>Алиса, 21</h2>
+                    <p>Люблю гулять по ночному городу и пить кофе. Ищу компанию на вечер ✨</p>
+                    <div class="card-actions">
+                        <button class="action-btn btn-dislike">✖</button>
+                        <button class="action-btn btn-like">♥</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Контейнер для невидимой капчи (нужен для телефона) -->
-    <div id="recaptcha-container"></div>
-    
-    <!-- Вывод ошибок и сообщений -->
-    <div id="message"></div>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-    import { 
-        getAuth, 
-        createUserWithEmailAndPassword, 
-        signInWithEmailAndPassword,
-        GoogleAuthProvider,
-        signInWithPopup,
-        RecaptchaVerifier,
-        signInWithPhoneNumber
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
+            authDomain: "auralover.firebaseapp.com",
+            databaseURL: "https://auralover-default-rtdb.firebaseio.com",
+            projectId: "auralover",
+            storageBucket: "auralover.firebasestorage.app",
+            messagingSenderId: "626796547748",
+            appId: "1:626796547748:web:fd401e5985875c64fca031",
+            measurementId: "G-XV5YN3Z9KH"
+        };
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
-        authDomain: "auralover.firebaseapp.com",
-        databaseURL: "https://auralover-default-rtdb.firebaseio.com",
-        projectId: "auralover",
-        storageBucket: "auralover.firebasestorage.app",
-        messagingSenderId: "626796547748",
-        appId: "1:626796547748:web:fd401e5985875c64fca031",
-        measurementId: "G-XV5YN3Z9KH"
-    };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const messageEl = document.getElementById('message');
-
-    function showMessage(text) {
-        messageEl.innerText = text;
-        console.log(text);
-    }
-
-    // Вход по Email
-    document.getElementById('btn-email-login').addEventListener('click', () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        // UI Элементы
+        const authScreen = document.getElementById('auth-screen');
+        const appScreen = document.getElementById('app-screen');
+        const setupView = document.getElementById('profile-setup-view');
+        const discoveryView = document.getElementById('discovery-view');
         
-        if(!email || !password) return showMessage("Введите email и пароль");
+        let isLoginMode = true;
 
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                showMessage(`Успешный вход! Привет, ${userCredential.user.email}`);
-            })
-            .catch((error) => {
-                if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                    createUserWithEmailAndPassword(auth, email, password)
-                        .then((userCredential) => {
-                            showMessage(`Профиль создан! Привет, ${userCredential.user.email}`);
-                        })
-                        .catch((err) => showMessage("Ошибка регистрации: " + err.message));
-                } else {
-                    showMessage("Ошибка входа: " + error.message);
-                }
-            });
-    });
-
-    // Вход через Google
-    document.getElementById('btn-google').addEventListener('click', () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                showMessage(`Успешный вход через Google! Привет, ${result.user.displayName}`);
-            }).catch((error) => {
-                showMessage("Ошибка Google авторизации: " + error.message);
-            });
-    });
-
-    // Вход по телефону
-    document.getElementById('btn-phone-start').addEventListener('click', () => {
-        document.getElementById('phone-auth-section').classList.remove('hidden');
-        document.getElementById('btn-phone-start').classList.add('hidden');
-        
-        if(!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                'size': 'invisible'
-            });
-        }
-    });
-
-    let confirmationResult;
-
-    document.getElementById('btn-send-code').addEventListener('click', () => {
-        const phoneNumber = document.getElementById('phone-number').value;
-        if(!phoneNumber) return showMessage("Введите номер телефона");
-
-        const appVerifier = window.recaptchaVerifier;
-        
-        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then((result) => {
-                confirmationResult = result;
-                document.getElementById('code-section').classList.remove('hidden');
-                showMessage("SMS с кодом отправлено!");
-            }).catch((error) => {
-                showMessage("Ошибка отправки SMS: " + error.message);
-                if(window.recaptchaVerifier) window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));
-            });
-    });
-
-    document.getElementById('btn-verify-code').addEventListener('click', () => {
-        const code = document.getElementById('verification-code').value;
-        if(!code) return showMessage("Введите код из SMS");
-
-        confirmationResult.confirm(code).then((result) => {
-            const user = result.user;
-            showMessage(`Успешный вход по телефону! Ваш номер: ${user.phoneNumber}`);
-        }).catch((error) => {
-            showMessage("Неверный код! Ошибка: " + error.message);
+        // --- ЛОГИКА ИНТЕРФЕЙСА АВТОРИЗАЦИИ ---
+        document.getElementById('tab-login').addEventListener('click', (e) => {
+            isLoginMode = true;
+            e.target.classList.add('active');
+            document.getElementById('tab-register').classList.remove('active');
+            document.getElementById('auth-submit-btn').innerText = "Войти";
         });
-    });
-</script>
+
+        document.getElementById('tab-register').addEventListener('click', (e) => {
+            isLoginMode = false;
+            e.target.classList.add('active');
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('auth-submit-btn').innerText = "Создать аккаунт";
+        });
+
+        document.getElementById('auth-form').addEventListener('submit', () => {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const errorEl = document.getElementById('auth-error');
+            errorEl.innerText = "";
+
+            if (isLoginMode) {
+                signInWithEmailAndPassword(auth, email, password).catch(err => errorEl.innerText = "Ошибка: " + err.message);
+            } else {
+                createUserWithEmailAndPassword(auth, email, password).catch(err => errorEl.innerText = "Ошибка: " + err.message);
+            }
+        });
+
+        // --- НАБЛЮДАТЕЛЬ ЗА СОСТОЯНИЕМ ВХОДА (МАГИЯ ПЕРЕХОДА) ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Пользователь вошел! Скрываем авторизацию, показываем приложение
+                authScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                
+                // В реальном приложении здесь проверяется база данных Firestore. 
+                // Для демонстрации: показываем настройку профиля
+                setupView.classList.remove('hidden');
+                discoveryView.classList.add('hidden');
+            } else {
+                // Пользователь не авторизован
+                authScreen.classList.remove('hidden');
+                appScreen.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // --- ЛОГИКА НАСТРОЙКИ ПРОФИЛЯ ---
+        
+        // Выбор интересов
+        document.querySelectorAll('.interest-tag').forEach(tag => {
+            tag.addEventListener('click', () => tag.classList.toggle('selected'));
+        });
+
+        // Загрузка фото
+        const photoInput = document.getElementById('photo-input');
+        const photoGrid = document.getElementById('photo-grid');
+        let uploadedPhotosCount = 0;
+
+        photoInput.addEventListener('change', function() {
+            const files = Array.from(this.files);
+            
+            files.forEach(file => {
+                if (uploadedPhotosCount >= 5) {
+                    alert("Можно загрузить максимум 5 фотографий!");
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newSlot = document.createElement('div');
+                    newSlot.className = 'photo-slot';
+                    newSlot.innerHTML = `<img src="${e.target.result}" alt="Photo">`;
+                    photoGrid.insertBefore(newSlot, photoGrid.firstChild);
+                    uploadedPhotosCount++;
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Сохранение профиля и переход к карточкам
+        document.getElementById('btn-save-profile').addEventListener('click', () => {
+            const name = document.getElementById('prof-name').value;
+            if(!name) return alert("Введите имя!");
+            
+            // Здесь данные должны отправляться в Firebase Firestore. 
+            // Переключаем экраны:
+            setupView.classList.add('hidden');
+            discoveryView.classList.remove('hidden');
+        });
+
+    </script>
 </body>
 </html>
