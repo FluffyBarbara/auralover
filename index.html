@@ -276,7 +276,7 @@
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     
-                    <!-- КНОПКА ПАНЕЛИ АДМИНИСТРАТОРА -->
+                    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА -->
                     <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
                         <button class="btn-glow" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Войти в панель управления</button>
                     </div>
@@ -306,7 +306,7 @@
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                     
-                    <!-- СИСТЕМА ЖАЛОБ (ДЛЯ ВСЕХ) -->
+                    <!-- СИСТЕМА ЖАЛОБ -->
                     <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка</div>
                     <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-user-report')">🐞 Сообщить о баге / Предложение</button>
                 </div>
@@ -330,7 +330,7 @@
         <div class="admin-grid">
             <div class="admin-card" onclick="openAdminModal('modal-broadcast')">
                 <div class="admin-card-icon">📢</div>
-                <div class="admin-card-title">Системная рассылка</div>
+                <div class="admin-card-title">Глобальная Рассылка</div>
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-admin-reports')">
                 <div class="admin-badge hidden" id="admin-reports-badge">0</div>
@@ -360,7 +360,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ (И РЕПОРТОВ) -->
+    <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ -->
     
     <div id="modal-user-report" class="admin-modal">
         <div class="admin-modal-content">
@@ -386,10 +386,11 @@
 
     <div id="modal-broadcast" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">📢 Рассылка в Системный Чат</div>
-            <textarea id="broadcast-text" class="admin-textarea" placeholder="Текст системного уведомления..."></textarea>
+            <div class="admin-modal-title">📢 Глобальная Рассылка</div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px; line-height:1.4;">Сообщение появится в закрепленном системном чате «Aura Обновления» абсолютно у всех.</p>
+            <textarea id="broadcast-text" class="admin-textarea" placeholder="Текст новости..."></textarea>
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Отправить всем</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Опубликовать</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-broadcast')">Отмена</button>
             </div>
         </div>
@@ -417,28 +418,26 @@
         </div>
     </div>
 
-    <!-- Улучшенный просмотр чатов -->
     <div id="modal-msgs" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">💬 Сообщения по UID</div>
             <input type="text" id="msgs-uid" class="admin-input" placeholder="UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Найти чаты</button>
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Загрузить историю</button>
             <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 12px;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-msgs')">Закрыть</button>
         </div>
     </div>
 
-    <!-- Умное удаление фото -->
     <div id="modal-photos" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🖼️ Управление фото</div>
             <input type="text" id="photos-uid" class="admin-input" placeholder="UID пользователя...">
             <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="loadUserPhotosForAdmin()">Найти фото</button>
             
-            <div id="admin-photos-grid" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px;"></div>
+            <div id="admin-photos-grid" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px; min-height:80px;"></div>
             
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Очистить все</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Удалить все</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-photos')">Отмена</button>
             </div>
         </div>
@@ -469,7 +468,7 @@
             </div>
         </div>
         <div class="chat-messages" id="chat-messages"></div>
-        <div class="chat-input-area">
+        <div class="chat-input-area" id="chat-input-area">
             <input type="text" id="chat-message-input" placeholder="Написать сообщение...">
             <button id="btn-send-message">➤</button>
         </div>
@@ -511,7 +510,13 @@
     let targetUserUnsubscribe = null; 
     let chatDocUnsubscribe = null;
     let reportsUnsubscribe = null; 
+    let sysChatUnsubscribe = null;
     let isInitialChatsLoad = true;
+    let isInitialSysChatLoad = true;
+
+    // Глобальные переменные для отрисовки чатов
+    let systemChatData = null;
+    let userChats = [];
 
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
     notificationSound.volume = 0.5;
@@ -542,7 +547,11 @@
         if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
         if (chatDocUnsubscribe) { chatDocUnsubscribe(); chatDocUnsubscribe = null; }
         if (reportsUnsubscribe) { reportsUnsubscribe(); reportsUnsubscribe = null; }
-        activeChatId = null; activeTargetId = null; isInitialChatsLoad = true;
+        if (sysChatUnsubscribe) { sysChatUnsubscribe(); sysChatUnsubscribe = null; }
+        
+        activeChatId = null; activeTargetId = null; 
+        isInitialChatsLoad = true; isInitialSysChatLoad = true;
+        systemChatData = null; userChats = [];
         
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
         document.getElementById('prof-city').value = ""; document.getElementById('prof-bio').value = "";
@@ -563,11 +572,9 @@
     function hideLoading() { loadingOverlay.classList.remove('active'); }
     function switchMainScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
 
-    // --- УПРАВЛЕНИЕ МОДАЛКАМИ ---
     window.openAdminModal = (modalId) => document.getElementById(modalId).classList.add('active');
     window.closeAdminModal = (modalId) => document.getElementById(modalId).classList.remove('active');
 
-    // --- СИСТЕМА ЖАЛОБ ---
     window.submitReport = async () => {
         const text = document.getElementById('report-text-input').value.trim();
         if (!text) return alert("Пожалуйста, опишите проблему.");
@@ -584,42 +591,28 @@
         try { await deleteDoc(doc(db, "reports", id)); } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // --- ОБНОВЛЕННАЯ ПАНЕЛЬ АДМИНИСТРАТОРА ---
-
-    // 1. Рассылка теперь создает закрепленный Системный Чат
+    // --- АДМИН ПАНЕЛЬ ---
+    
+    // Новая Системная Рассылка (Глобальный Чат)
     window.sendBroadcast = async () => {
         const text = document.getElementById('broadcast-text').value.trim();
         if(!text) return alert("Введите текст!");
-        if(!confirm("Отправить системное уведомление всем пользователям?")) return;
+        if(!confirm("Опубликовать новость в глобальный системный канал?")) return;
         
         try {
-            const allUsersSnap = await getDocs(collection(db, "users"));
-            const promises = [];
-            
-            allUsersSnap.forEach((userDoc) => {
-                const targetId = userDoc.id;
-                if(targetId === auth.currentUser.uid) return;
-                
-                const chatId = 'system_' + targetId; 
-                promises.push(setDoc(doc(db, "chats", chatId), {
-                    users: [targetId, "system"],
-                    userInfo: {
-                        [targetId]: { name: userDoc.data().name || "Пользователь", photo: userDoc.data().photos?.[0] || "" },
-                        "system": { name: "Aura Обновления", photo: "https://cdn-icons-png.flaticon.com/512/8660/8660341.png" }
-                    },
-                    lastMessage: text,
-                    lastMessageSenderId: "system",
-                    timestamp: serverTimestamp(),
-                    isSystemChat: true
-                }, { merge: true }));
+            const chatId = 'system_broadcast';
+            await setDoc(doc(db, "chats", chatId), {
+                lastMessage: text,
+                lastMessageSenderId: "system",
+                timestamp: serverTimestamp(),
+                isSystemChat: true
+            }, { merge: true });
 
-                promises.push(addDoc(collection(db, `chats/${chatId}/messages`), {
-                    text: text, senderId: "system", timestamp: serverTimestamp()
-                }));
+            await addDoc(collection(db, `chats/${chatId}/messages`), {
+                text: text, senderId: "system", timestamp: serverTimestamp()
             });
 
-            await Promise.all(promises);
-            alert("Рассылка во все Системные Чаты успешно выполнена!");
+            alert("Новость успешно опубликована!");
             document.getElementById('broadcast-text').value = "";
             closeAdminModal('modal-broadcast');
         } catch(e) { alert("Ошибка: " + e.message); }
@@ -648,7 +641,7 @@
         } catch(e) { resBox.innerText = "Ошибка: " + e.message; }
     };
 
-    // 2. Просмотр полной истории (последние 20 сообщений по каждому чату)
+    // Обновленный просмотр чатов (20 сообщений)
     window.fetchUserMessages = async () => {
         const uid = document.getElementById('msgs-uid').value.trim();
         const resBox = document.getElementById('msgs-result');
@@ -673,12 +666,12 @@
                 const msgs = msgSnaps.docs.map(m => m.data()).reverse();
                 
                 if(msgs.length === 0) {
-                    html += `<em>Сообщений нет.</em>`;
+                    html += `<em style="color:gray;">Сообщений нет.</em>`;
                 } else {
                     msgs.forEach(m => {
                         const sender = m.senderId === uid ? "Он(а)" : (m.senderId === "system" ? "Система" : "Собеседник");
                         const color = m.senderId === uid ? "#FF416C" : "#1C1C28";
-                        html += `<div style="margin-bottom:4px;"><b style="color:${color}">${sender}:</b> ${m.text}</div>`;
+                        html += `<div style="margin-bottom:4px; border-bottom:1px solid #eee; padding-bottom:4px;"><b style="color:${color}">${sender}:</b> ${m.text}</div>`;
                     });
                 }
                 html += `</div>`;
@@ -687,7 +680,7 @@
         } catch(e) { resBox.innerHTML = "Ошибка: " + e.message; }
     };
 
-    // 3. Умное удаление фото
+    // Обновленное удаление фото
     window.loadUserPhotosForAdmin = async () => {
         const uid = document.getElementById('photos-uid').value.trim();
         if(!uid) return alert("Введите UID!");
@@ -758,7 +751,6 @@
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // Навигация
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -799,7 +791,6 @@
         if (user) {
             showLoading("Загрузка...");
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
-
             setMyPresence(true); 
 
             const checkSnap = await getDoc(doc(db, "users", user.uid));
@@ -827,12 +818,11 @@
                         snap.forEach(doc => {
                             const d = doc.data();
                             const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleString() : "";
-                            html += `
-                            <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
+                            html += `<div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                 <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
                                 <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text}</div>
                                 <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid}</div>
-                                <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Проблема решена</button>
+                                <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Решено</button>
                             </div>`;
                         });
                         list.innerHTML = html;
@@ -1021,21 +1011,74 @@
         catch(e) { alert("Ошибка при очистке: " + e.message); } finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
     };
 
+    // --- ОБНОВЛЕННАЯ СИСТЕМА ЧАТОВ И СИСТЕМНОГО КАНАЛА ---
+    function renderCombinedChats() {
+        const container = document.getElementById('chat-list-container');
+        let html = "";
+
+        if (systemChatData) {
+            html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+                <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
+                <div class="chat-info">
+                    <div class="chat-name">🌟 Aura Обновления</div>
+                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">${systemChatData.lastMessage || "Добро пожаловать в Aura!"}</div>
+                </div>
+            </div>`;
+        } else {
+            // Системный чат есть всегда по умолчанию в UI
+             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+                <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
+                <div class="chat-info">
+                    <div class="chat-name">🌟 Aura Обновления</div>
+                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">Добро пожаловать в Aura!</div>
+                </div>
+            </div>`;
+        }
+
+        if (userChats.length === 0) {
+            html += `<div class="empty-state" style="padding-top:20px;"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
+        } else {
+            userChats.forEach(data => {
+                const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
+                const otherUser = data.userInfo[otherUserId];
+                const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
+                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}', '${otherUserId}')">
+                    <img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}">
+                    <div class="chat-info">
+                        <div class="chat-name">${otherUser.name}</div>
+                        <div class="chat-last-msg">${msgPreview || ""}</div>
+                    </div>
+                </div>`;
+            });
+        }
+        container.innerHTML = html;
+    }
+
     function loadChatsList() {
+        // Слушаем системный чат отдельно
+        if (sysChatUnsubscribe) sysChatUnsubscribe();
+        sysChatUnsubscribe = onSnapshot(doc(db, "chats", "system_broadcast"), (snap) => {
+            if(snap.exists()) {
+                systemChatData = { id: snap.id, ...snap.data() };
+                if (!isInitialSysChatLoad && systemChatData.lastMessageSenderId === 'system') {
+                    showToast("📢 Aura Обновления", systemChatData.lastMessage, () => openTab('view-chats', navItems[2]));
+                    document.getElementById('chat-badge').classList.add('active');
+                }
+            }
+            isInitialSysChatLoad = false;
+            renderCombinedChats();
+        });
+
+        // Слушаем обычные чаты
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
-        onSnapshot(q, (snapshot) => {
-            const container = document.getElementById('chat-list-container');
-            
+        if (chatUnsubscribe) chatUnsubscribe();
+        chatUnsubscribe = onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
                     
                     if (change.type === "added" && data.lastMessageSenderId === "system" && !data.isSystemChat) {
                         showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
-                        document.getElementById('chat-badge').classList.add('active');
-                    }
-                    else if (change.type === "added" && data.isSystemChat) {
-                        showToast("📢 Системное уведомление", data.lastMessage, () => openTab('view-chats', navItems[2]));
                         document.getElementById('chat-badge').classList.add('active');
                     }
                     else if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
@@ -1050,39 +1093,11 @@
             });
             isInitialChatsLoad = false;
 
-            if (snapshot.empty) { container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`; return; }
-            let html = ""; const docs = [];
-            snapshot.forEach(docSnap => docs.push({ id: docSnap.id, ...docSnap.data() }));
+            userChats = [];
+            snapshot.forEach(docSnap => userChats.push({ id: docSnap.id, ...docSnap.data() }));
+            userChats.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
             
-            // Сортировка: Системные чаты всегда сверху, остальные по времени
-            docs.sort((a, b) => {
-                if (a.isSystemChat && !b.isSystemChat) return -1;
-                if (!a.isSystemChat && b.isSystemChat) return 1;
-                return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
-            });
-
-            docs.forEach(data => {
-                const isSys = data.isSystemChat;
-                let otherUser;
-                if (isSys) {
-                    otherUser = data.userInfo["system"];
-                } else {
-                    const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
-                    otherUser = data.userInfo[otherUserId];
-                }
-
-                const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
-                const extraStyle = isSys ? 'border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);' : '';
-                
-                html += `<div class="chat-item" style="${extraStyle}" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}', '${isSys ? 'system' : data.users.find(id => id !== auth.currentUser.uid)}')">
-                    <img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}">
-                    <div class="chat-info">
-                        <div class="chat-name">${isSys ? '🌟 ' + otherUser.name : otherUser.name}</div>
-                        <div class="chat-last-msg">${msgPreview || ""}</div>
-                    </div>
-                </div>`;
-            });
-            container.innerHTML = html;
+            renderCombinedChats();
         });
     }
 
@@ -1106,12 +1121,12 @@
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
         
-        // Скрываем поле ввода, если это системный чат (писать нельзя)
-        const isSys = chatId.startsWith('system_');
+        // Скрываем поле ввода, если это системный чат и вы НЕ владелец
+        const isSys = chatId === 'system_broadcast';
         if (isSys && auth.currentUser.uid !== OWNER_UID) {
-            document.querySelector('.chat-input-area').style.display = 'none';
+            document.getElementById('chat-input-area').style.display = 'none';
         } else {
-            document.querySelector('.chat-input-area').style.display = 'flex';
+            document.getElementById('chat-input-area').style.display = 'flex';
         }
 
         activeTargetOnline = false; activeTargetTyping = false; updateChatStatusUI();
@@ -1119,12 +1134,11 @@
         const messagesDiv = document.getElementById('chat-messages');
         messagesDiv.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>Загрузка...</div>";
         
-        if (chatUnsubscribe) chatUnsubscribe(); 
-        if (targetUserUnsubscribe) targetUserUnsubscribe();
         if (chatDocUnsubscribe) chatDocUnsubscribe();
+        if (targetUserUnsubscribe) targetUserUnsubscribe();
 
         const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
-        chatUnsubscribe = onSnapshot(q, (snapshot) => {
+        chatDocUnsubscribe = onSnapshot(q, (snapshot) => {
             messagesDiv.innerHTML = "";
             snapshot.forEach(docSnap => {
                 const msg = docSnap.data();
@@ -1146,9 +1160,8 @@
     
     document.getElementById('btn-close-chat').onclick = () => { 
         document.getElementById('chat-room').classList.remove('active'); 
-        if (chatUnsubscribe) chatUnsubscribe(); 
+        if (chatDocUnsubscribe) chatDocUnsubscribe(); 
         if (targetUserUnsubscribe) targetUserUnsubscribe();
-        if (chatDocUnsubscribe) chatDocUnsubscribe();
         activeChatId = null; activeTargetId = null;
     };
     
@@ -1177,10 +1190,9 @@
         if(typingTimeout) clearTimeout(typingTimeout);
         isTypingRef = false;
         
-        await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
-        
-        // Обновляем статус чата с учетом логики (Админ отвечает в системном чате?)
-        const isSysChat = activeChatId.startsWith('system_');
+        const isSysChat = activeChatId === 'system_broadcast';
+
+        await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: isSysChat ? "system" : auth.currentUser.uid, timestamp: serverTimestamp() });
         await updateDoc(doc(db, "chats", activeChatId), { 
             lastMessage: text, 
             lastMessageSenderId: isSysChat ? "system" : auth.currentUser.uid, 
