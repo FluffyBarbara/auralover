@@ -124,7 +124,7 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ================== ПАНЕЛЬ АДМИНА (FULLSCREEN DASHBOARD) ================== */
+        /* ПАНЕЛЬ АДМИНА */
         .admin-dashboard { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0F0F13; color: white; z-index: 400; display: flex; flex-direction: column; transform: translateY(100%); transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .admin-dashboard.active { transform: translateY(0); }
         .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
@@ -146,7 +146,7 @@
         .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ЧАТ-КОМНАТА */
+        /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -276,7 +276,7 @@
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     
-                    <!-- КНОПКА ПАНЕЛИ АДМИНИСТРАТОРА (ПОЯВИТСЯ ТОЛЬКО У ВАС) -->
+                    <!-- КНОПКА ПАНЕЛИ АДМИНИСТРАТОРА -->
                     <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
                         <button class="btn-glow" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Войти в панель управления</button>
                     </div>
@@ -330,7 +330,7 @@
         <div class="admin-grid">
             <div class="admin-card" onclick="openAdminModal('modal-broadcast')">
                 <div class="admin-card-icon">📢</div>
-                <div class="admin-card-title">Рассылка</div>
+                <div class="admin-card-title">Системная рассылка</div>
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-admin-reports')">
                 <div class="admin-badge hidden" id="admin-reports-badge">0</div>
@@ -351,7 +351,7 @@
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-photos')">
                 <div class="admin-card-icon">🖼️</div>
-                <div class="admin-card-title">Фото по UID</div>
+                <div class="admin-card-title">Управление Фото</div>
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-edit-user')" style="grid-column: span 2;">
                 <div class="admin-card-icon">✏️</div>
@@ -362,7 +362,6 @@
 
     <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ (И РЕПОРТОВ) -->
     
-    <!-- Для юзеров: написать репорт -->
     <div id="modal-user-report" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🐞 Сообщить о баге</div>
@@ -375,7 +374,6 @@
         </div>
     </div>
 
-    <!-- Для админа: просмотр репортов -->
     <div id="modal-admin-reports" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🐞 Отчеты от пользователей</div>
@@ -388,10 +386,10 @@
 
     <div id="modal-broadcast" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">📢 Рассылка всем</div>
+            <div class="admin-modal-title">📢 Рассылка в Системный Чат</div>
             <textarea id="broadcast-text" class="admin-textarea" placeholder="Текст системного уведомления..."></textarea>
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Отправить</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Отправить всем</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-broadcast')">Отмена</button>
             </div>
         </div>
@@ -419,22 +417,28 @@
         </div>
     </div>
 
+    <!-- Улучшенный просмотр чатов -->
     <div id="modal-msgs" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">💬 Сообщения по UID</div>
             <input type="text" id="msgs-uid" class="admin-input" placeholder="UID пользователя...">
             <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Найти чаты</button>
-            <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 140px; overflow-y: auto; margin-bottom: 12px;"></div>
+            <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 12px;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-msgs')">Закрыть</button>
         </div>
     </div>
 
+    <!-- Умное удаление фото -->
     <div id="modal-photos" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">🖼️ Удалить фото</div>
+            <div class="admin-modal-title">🖼️ Управление фото</div>
             <input type="text" id="photos-uid" class="admin-input" placeholder="UID пользователя...">
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="loadUserPhotosForAdmin()">Найти фото</button>
+            
+            <div id="admin-photos-grid" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px;"></div>
+            
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteUserPhotos()">Очистить фото</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Очистить все</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-photos')">Отмена</button>
             </div>
         </div>
@@ -477,7 +481,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, addDoc, serverTimestamp, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, addDoc, serverTimestamp, orderBy, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
@@ -506,7 +510,7 @@
     let userDocUnsubscribe = null; 
     let targetUserUnsubscribe = null; 
     let chatDocUnsubscribe = null;
-    let reportsUnsubscribe = null; // Для прослушивания репортов админом
+    let reportsUnsubscribe = null; 
     let isInitialChatsLoad = true;
 
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
@@ -551,6 +555,7 @@
         document.getElementById('chat-badge').classList.remove('active');
         document.getElementById('likes-badge').classList.remove('active');
         document.getElementById('owner-secret-section').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('active');
     }
 
     const loadingOverlay = document.getElementById('loading-overlay');
@@ -562,17 +567,12 @@
     window.openAdminModal = (modalId) => document.getElementById(modalId).classList.add('active');
     window.closeAdminModal = (modalId) => document.getElementById(modalId).classList.remove('active');
 
-    // --- ФУНКЦИИ СИСТЕМЫ РЕПОРТОВ ---
+    // --- СИСТЕМА ЖАЛОБ ---
     window.submitReport = async () => {
         const text = document.getElementById('report-text-input').value.trim();
         if (!text) return alert("Пожалуйста, опишите проблему.");
         try {
-            await addDoc(collection(db, "reports"), {
-                uid: auth.currentUser.uid,
-                name: currentUserData.name || "Без имени",
-                text: text,
-                timestamp: serverTimestamp()
-            });
+            await addDoc(collection(db, "reports"), { uid: auth.currentUser.uid, name: currentUserData.name || "Без имени", text: text, timestamp: serverTimestamp() });
             alert("Спасибо! Ваше сообщение отправлено разработчикам.");
             document.getElementById('report-text-input').value = "";
             closeAdminModal('modal-user-report');
@@ -580,13 +580,13 @@
     };
 
     window.deleteReport = async (id) => {
-        if(!confirm("Удалить этот отчет?")) return;
-        try {
-            await deleteDoc(doc(db, "reports", id));
-        } catch(e) { alert("Ошибка: " + e.message); }
+        if(!confirm("Пометить проблему как решенную и удалить?")) return;
+        try { await deleteDoc(doc(db, "reports", id)); } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // --- ФУНКЦИИ ПАНЕЛИ АДМИНИСТРАТОРА ---
+    // --- ОБНОВЛЕННАЯ ПАНЕЛЬ АДМИНИСТРАТОРА ---
+
+    // 1. Рассылка теперь создает закрепленный Системный Чат
     window.sendBroadcast = async () => {
         const text = document.getElementById('broadcast-text').value.trim();
         if(!text) return alert("Введите текст!");
@@ -595,26 +595,31 @@
         try {
             const allUsersSnap = await getDocs(collection(db, "users"));
             const promises = [];
+            
             allUsersSnap.forEach((userDoc) => {
                 const targetId = userDoc.id;
                 if(targetId === auth.currentUser.uid) return;
-                const chatId = [auth.currentUser.uid, targetId].sort().join('_');
+                
+                const chatId = 'system_' + targetId; 
                 promises.push(setDoc(doc(db, "chats", chatId), {
-                    users: [auth.currentUser.uid, targetId],
+                    users: [targetId, "system"],
                     userInfo: {
-                        [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
-                        [targetId]: { name: userDoc.data().name || "Пользователь", photo: userDoc.data().photos?.[0] || "" }
+                        [targetId]: { name: userDoc.data().name || "Пользователь", photo: userDoc.data().photos?.[0] || "" },
+                        "system": { name: "Aura Обновления", photo: "https://cdn-icons-png.flaticon.com/512/8660/8660341.png" }
                     },
-                    lastMessage: "📢 Администрация: " + text,
+                    lastMessage: text,
                     lastMessageSenderId: "system",
-                    timestamp: serverTimestamp()
+                    timestamp: serverTimestamp(),
+                    isSystemChat: true
                 }, { merge: true }));
+
                 promises.push(addDoc(collection(db, `chats/${chatId}/messages`), {
-                    text: "📢 Системное уведомление: " + text, senderId: "system", timestamp: serverTimestamp()
+                    text: text, senderId: "system", timestamp: serverTimestamp()
                 }));
             });
+
             await Promise.all(promises);
-            alert("Рассылка успешно выполнена!");
+            alert("Рассылка во все Системные Чаты успешно выполнена!");
             document.getElementById('broadcast-text').value = "";
             closeAdminModal('modal-broadcast');
         } catch(e) { alert("Ошибка: " + e.message); }
@@ -643,30 +648,96 @@
         } catch(e) { resBox.innerText = "Ошибка: " + e.message; }
     };
 
+    // 2. Просмотр полной истории (последние 20 сообщений по каждому чату)
     window.fetchUserMessages = async () => {
         const uid = document.getElementById('msgs-uid').value.trim();
         const resBox = document.getElementById('msgs-result');
         if(!uid) return alert("Введите UID!");
-        resBox.innerText = "Поиск...";
+        resBox.innerHTML = "Поиск...";
         try {
             const q = query(collection(db, "chats"), where("users", "array-contains", uid));
             const snaps = await getDocs(q);
-            if(snaps.empty) { resBox.innerText = "Чатов нет."; return; }
-            let txt = "";
-            snaps.forEach(s => { txt += `💬 ID: ${s.id}\nПоследнее: ${s.data().lastMessage}\n\n`; });
-            resBox.innerText = txt;
-        } catch(e) { resBox.innerText = "Ошибка: " + e.message; }
+            if(snaps.empty) { resBox.innerHTML = "Чатов нет."; return; }
+            
+            let html = "";
+            for (let s of snaps.docs) {
+                const chatData = s.data();
+                const otherUid = chatData.users.find(id => id !== uid) || "Неизвестно";
+                const otherName = chatData.userInfo?.[otherUid]?.name || "Собеседник/Система";
+                
+                html += `<div style="background:white; padding:10px; border-radius:10px; margin-bottom:10px; border: 1px solid #e2e2e2;">
+                    <strong style="color:var(--primary)">Чат: ${otherName} (ID: ${otherUid})</strong><br><br>`;
+                
+                const msgQ = query(collection(db, `chats/${s.id}/messages`), orderBy("timestamp", "desc"), limit(20));
+                const msgSnaps = await getDocs(msgQ);
+                const msgs = msgSnaps.docs.map(m => m.data()).reverse();
+                
+                if(msgs.length === 0) {
+                    html += `<em>Сообщений нет.</em>`;
+                } else {
+                    msgs.forEach(m => {
+                        const sender = m.senderId === uid ? "Он(а)" : (m.senderId === "system" ? "Система" : "Собеседник");
+                        const color = m.senderId === uid ? "#FF416C" : "#1C1C28";
+                        html += `<div style="margin-bottom:4px;"><b style="color:${color}">${sender}:</b> ${m.text}</div>`;
+                    });
+                }
+                html += `</div>`;
+            }
+            resBox.innerHTML = html;
+        } catch(e) { resBox.innerHTML = "Ошибка: " + e.message; }
     };
 
-    window.deleteUserPhotos = async () => {
+    // 3. Умное удаление фото
+    window.loadUserPhotosForAdmin = async () => {
         const uid = document.getElementById('photos-uid').value.trim();
         if(!uid) return alert("Введите UID!");
-        if(!confirm("Очистить все фото пользователя?")) return;
+        const grid = document.getElementById('admin-photos-grid');
+        grid.innerHTML = "Загрузка...";
+        try {
+            const snap = await getDoc(doc(db, "users", uid));
+            if(!snap.exists()) return grid.innerHTML = "Пользователь не найден.";
+            window.adminTempPhotos = snap.data().photos || ["", "", "", "", ""];
+            window.adminTempUid = uid;
+            renderAdminPhotos();
+        } catch(e) { grid.innerHTML = "Ошибка: " + e.message; }
+    };
+
+    function renderAdminPhotos() {
+        const grid = document.getElementById('admin-photos-grid');
+        grid.innerHTML = "";
+        let count = 0;
+        window.adminTempPhotos.forEach((photo, index) => {
+            if(photo) {
+                count++;
+                grid.innerHTML += `<div style="position:relative; width: 60px; height: 80px; border-radius: 8px; overflow:hidden;">
+                    <img src="${photo}" style="width:100%;height:100%;object-fit:cover;">
+                    <button onclick="deleteSingleAdminPhoto(${index})" style="position:absolute;top:2px;right:2px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;">X</button>
+                </div>`;
+            }
+        });
+        if(count === 0) grid.innerHTML = "<div style='font-size:12px;color:gray;'>У пользователя нет фотографий.</div>";
+    }
+
+    window.deleteSingleAdminPhoto = async (index) => {
+        if(!confirm("Удалить эту фотографию у пользователя?")) return;
+        window.adminTempPhotos[index] = "";
+        try {
+            await updateDoc(doc(db, "users", window.adminTempUid), { photos: window.adminTempPhotos });
+            renderAdminPhotos();
+        } catch(e) { alert(e.message); }
+    };
+
+    window.deleteAllUserPhotos = async () => {
+        const uid = window.adminTempUid || document.getElementById('photos-uid').value.trim();
+        if(!uid) return alert("Сначала найдите пользователя!");
+        if(!confirm("Очистить ВСЕ фото пользователя?")) return;
         try {
             await updateDoc(doc(db, "users", uid), { photos: ["", "", "", "", ""] });
-            alert("Фото удалены!");
-            document.getElementById('photos-uid').value = "";
-            closeAdminModal('modal-photos');
+            if(window.adminTempUid === uid) {
+                window.adminTempPhotos = ["", "", "", "", ""];
+                renderAdminPhotos();
+            }
+            alert("Все фото удалены!");
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
@@ -731,7 +802,6 @@
 
             setMyPresence(true); 
 
-            // ПРОВЕРКА БАНА ПРИ ВХОДЕ
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             if(checkSnap.exists() && checkSnap.data().isBanned) {
                 alert("Ваш аккаунт был заблокирован администратором платформы.");
@@ -740,11 +810,9 @@
                 return;
             }
 
-            // ПРОВЕРКА НА ВЛАДЕЛЬЦА (ДЛЯ АДМИН-ПАНЕЛИ)
             if (user.uid === OWNER_UID) {
                 document.getElementById('owner-secret-section').classList.remove('hidden');
                 
-                // Live-слушатель репортов для админа
                 if(reportsUnsubscribe) reportsUnsubscribe();
                 reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
                     const badge = document.getElementById('admin-reports-badge');
@@ -961,11 +1029,16 @@
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
-                    if (change.type === "added" && data.lastMessageSenderId === "system") {
+                    
+                    if (change.type === "added" && data.lastMessageSenderId === "system" && !data.isSystemChat) {
                         showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
                         document.getElementById('chat-badge').classList.add('active');
                     }
-                    if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
+                    else if (change.type === "added" && data.isSystemChat) {
+                        showToast("📢 Системное уведомление", data.lastMessage, () => openTab('view-chats', navItems[2]));
+                        document.getElementById('chat-badge').classList.add('active');
+                    }
+                    else if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
                         if (activeChatId !== change.doc.id) {
                             const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                             const otherUser = data.userInfo[otherUserId];
@@ -980,13 +1053,34 @@
             if (snapshot.empty) { container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`; return; }
             let html = ""; const docs = [];
             snapshot.forEach(docSnap => docs.push({ id: docSnap.id, ...docSnap.data() }));
-            docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            
+            // Сортировка: Системные чаты всегда сверху, остальные по времени
+            docs.sort((a, b) => {
+                if (a.isSystemChat && !b.isSystemChat) return -1;
+                if (!a.isSystemChat && b.isSystemChat) return 1;
+                return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
+            });
 
             docs.forEach(data => {
-                const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
-                const otherUser = data.userInfo[otherUserId];
+                const isSys = data.isSystemChat;
+                let otherUser;
+                if (isSys) {
+                    otherUser = data.userInfo["system"];
+                } else {
+                    const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
+                    otherUser = data.userInfo[otherUserId];
+                }
+
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
-                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}', '${otherUserId}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${msgPreview || ""}</div></div></div>`;
+                const extraStyle = isSys ? 'border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);' : '';
+                
+                html += `<div class="chat-item" style="${extraStyle}" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}', '${isSys ? 'system' : data.users.find(id => id !== auth.currentUser.uid)}')">
+                    <img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}">
+                    <div class="chat-info">
+                        <div class="chat-name">${isSys ? '🌟 ' + otherUser.name : otherUser.name}</div>
+                        <div class="chat-last-msg">${msgPreview || ""}</div>
+                    </div>
+                </div>`;
             });
             container.innerHTML = html;
         });
@@ -998,6 +1092,8 @@
     function updateChatStatusUI() {
         const statusEl = document.getElementById('chat-active-status');
         if (!activeChatId) return;
+        if (activeTargetId === 'system') { statusEl.innerText = "Официальный канал 📢"; statusEl.className = "chat-room-status online"; return; }
+
         if (activeTargetTyping) { statusEl.innerText = "Печатает... ✏️"; statusEl.className = "chat-room-status typing"; } 
         else if (activeTargetOnline) { statusEl.innerText = "В сети 🟢"; statusEl.className = "chat-room-status online"; } 
         else { statusEl.innerText = "Не в сети ⚪"; statusEl.className = "chat-room-status"; }
@@ -1010,6 +1106,14 @@
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
         
+        // Скрываем поле ввода, если это системный чат (писать нельзя)
+        const isSys = chatId.startsWith('system_');
+        if (isSys && auth.currentUser.uid !== OWNER_UID) {
+            document.querySelector('.chat-input-area').style.display = 'none';
+        } else {
+            document.querySelector('.chat-input-area').style.display = 'flex';
+        }
+
         activeTargetOnline = false; activeTargetTyping = false; updateChatStatusUI();
 
         const messagesDiv = document.getElementById('chat-messages');
@@ -1030,13 +1134,14 @@
             setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
 
-        targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
-            if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
-        });
-
-        chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
-            if(snap.exists()) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
-        });
+        if (!isSys) {
+            targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
+                if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
+            });
+            chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
+                if(snap.exists()) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
+            });
+        }
     };
     
     document.getElementById('btn-close-chat').onclick = () => { 
@@ -1050,7 +1155,7 @@
     let typingTimeout = null;
     let isTypingRef = false;
     document.getElementById('chat-message-input').addEventListener('input', () => {
-        if(!activeChatId || !auth.currentUser) return;
+        if(!activeChatId || !auth.currentUser || activeTargetId === 'system') return;
         const val = document.getElementById('chat-message-input').value;
         
         if (val.length > 0 && !isTypingRef) {
@@ -1073,7 +1178,15 @@
         isTypingRef = false;
         
         await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
-        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, lastMessageSenderId: auth.currentUser.uid, timestamp: serverTimestamp(), [`typing.${auth.currentUser.uid}`]: false });
+        
+        // Обновляем статус чата с учетом логики (Админ отвечает в системном чате?)
+        const isSysChat = activeChatId.startsWith('system_');
+        await updateDoc(doc(db, "chats", activeChatId), { 
+            lastMessage: text, 
+            lastMessageSenderId: isSysChat ? "system" : auth.currentUser.uid, 
+            timestamp: serverTimestamp(), 
+            [`typing.${auth.currentUser.uid}`]: false 
+        });
     };
 
     function compressImage(file, maxW=500) { return new Promise(res => { const r=new FileReader(); r.readAsDataURL(file); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'); const rat=maxW/i.width; c.width=maxW; c.height=i.height*rat; c.getContext('2d').drawImage(i,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',0.6));};};});}
