@@ -12,14 +12,12 @@
             --glass-bg: rgba(255, 255, 255, 0.75); --glass-border: rgba(255, 255, 255, 0.6);
         }
 
-        /* ЖЕСТКОЕ СКРЫТИЕ ВСЕХ ПОЛОС ПРОКРУТКИ БРАУЗЕРА */
         ::-webkit-scrollbar { display: none; width: 0; height: 0; background: transparent; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; scrollbar-width: none; -ms-overflow-style: none; }
 
         html, body { width: 100%; height: 100%; overflow: hidden; background-color: #f4f5f7; margin: 0; padding: 0; }
         body { display: flex; justify-content: center; align-items: flex-start; color: var(--text-main); position: relative; }
 
-        /* АНИМИРОВАННЫЙ ФОН */
         .aura-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; background: #fafcff; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8; animation: float 15s infinite alternate ease-in-out; }
         .orb:nth-child(1) { width: 400px; height: 400px; background: #FF416C; top: -10%; left: -10%; animation-delay: 0s; }
@@ -28,7 +26,6 @@
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -50px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
 
-        /* КОНТЕЙНЕР ПРИЛОЖЕНИЯ */
         .app-container { width: 100%; max-width: 420px; height: calc(100% - 45px); max-height: 900px; position: relative; z-index: 10; overflow: hidden; background: transparent; display: flex; flex-direction: column; }
         @media (min-width: 421px) {
             body { align-items: center; } 
@@ -36,7 +33,6 @@
             .aura-background { border-radius: 32px; }
         }
 
-        /* ГЛОБАЛЬНЫЙ КОПИРАЙТ */
         .global-copyright { position: absolute; bottom: 8px; left: 0; width: 100%; text-align: center; font-size: 11px; color: var(--text-muted); z-index: 1000; line-height: 1.4; pointer-events: none; }
         .global-copyright a { color: var(--primary); text-decoration: none; font-weight: 700; pointer-events: auto; transition: 0.2s; }
         .global-copyright a:hover { opacity: 0.8; text-decoration: underline; }
@@ -44,7 +40,6 @@
         .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.4s; opacity: 0; pointer-events: none; transform: translateY(20px); z-index: 1; background: transparent; }
         .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
 
-        /* ЭКРАН АВТОРИЗАЦИИ */
         .auth-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); }
         .logo-container { text-align: center; margin-bottom: 40px; }
         .logo-icon { font-size: 50px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
@@ -63,9 +58,8 @@
         .btn-glow { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s; }
         .btn-glow:active { transform: translateY(2px) scale(0.98); }
 
-        /* ГЛАВНЫЙ ЭКРАН */
         .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; flex-shrink: 0;}
-        .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; flex: 1; }
         
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); outline: none !important; -webkit-appearance: none; padding: 0; flex-shrink: 0; }
         .icon-btn:active { background: rgba(0,0,0,0.05); }
@@ -74,7 +68,6 @@
         .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
-        /* VIEW: DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; cursor: pointer; }
         
@@ -108,7 +101,6 @@
         .circle-btn:active { transform: scale(0.85); }
         .btn-nope { color: #FF416C; } .btn-msg { color: #8A2387; font-size: 24px; } .btn-like { color: #00E676; }
 
-        /* VIEW: LIKES */
         .likes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px 20px 20px; }
         .like-card { background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.5); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; backdrop-filter: blur(10px); }
         .like-card img { width: 100%; height: 180px; object-fit: cover; }
@@ -120,7 +112,6 @@
         .like-btn-nope { color: #FF416C; background: white; }
         .like-btn-yes { color: #00E676; background: white; }
 
-        /* VIEW: MESSAGES */
         .chat-list { padding: 10px 20px; }
         .chat-item { display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 20px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .chat-item:active { transform: scale(0.98); }
@@ -131,7 +122,6 @@
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;}
         .empty-state span { font-size: 50px; display: block; margin-bottom: 15px; opacity: 0.8; }
 
-        /* VIEW: PROFILE */
         .profile-content { padding: 20px; }
         .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -150,10 +140,8 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; outline: none; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ИСПРАВЛЕННАЯ ПАНЕЛЬ АДМИНА (opacity 0 для защиты от серых полосок) */
         .admin-dashboard { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0F0F13; color: white; z-index: 400; display: flex; flex-direction: column; transform: translateY(105%); opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .admin-dashboard.active { transform: translateY(0); opacity: 1; pointer-events: all; }
-        
         .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; overflow-y: auto; }
         .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
@@ -162,7 +150,6 @@
         .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; }
         .admin-badge { position: absolute; top: -8px; right: -8px; background: #FF416C; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 3px solid #0F0F13; box-shadow: 0 4px 10px rgba(255,65,108,0.4); }
 
-        /* МОДАЛЬНЫЕ ОКНА */
         .admin-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 15, 19, 0.85); backdrop-filter: blur(15px); z-index: 500; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s; }
         .admin-modal.active { opacity: 1; pointer-events: all; }
         .admin-modal-content { background: white; width: 100%; max-width: 380px; border-radius: 28px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 85vh; overflow-y: auto; color: var(--text-main); }
@@ -173,10 +160,9 @@
         .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ИСПРАВЛЕННАЯ ЧАТ-КОМНАТА И МЕНЮ В ЧАТЕ */
+        /* ЧАТ-КОМНАТА И МЕНЮ В ЧАТЕ */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(105%); opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); opacity: 1; pointer-events: all; }
-        
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         
         .chat-dropdown-container { position: relative; }
@@ -194,11 +180,16 @@
         @keyframes pulseTyping { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
-        .msg { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: popIn 0.3s; }
+        
+        /* СООБЩЕНИЯ (ДОБАВЛЕНО ВРЕМЯ) */
+        .msg { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: popIn 0.3s; display: flex; flex-direction: column; }
         @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .msg.received { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .msg.sent { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; align-self: flex-end; border-bottom-right-radius: 5px; box-shadow: 0 2px 10px rgba(255, 65, 108, 0.2); }
         .msg.system { max-width: 90%; align-self: center; background: rgba(0,0,0,0.05); color: var(--text-muted); font-size: 13px; text-align: center; border-radius: 15px; font-weight: 500; padding: 10px 15px;}
+        .msg-time { font-size: 10px; align-self: flex-end; margin-top: 4px; opacity: 0.7; }
+        .msg.sent .msg-time { color: rgba(255,255,255,0.9); }
+        .msg.received .msg-time { color: var(--text-muted); }
         
         .banned-chat-overlay { background: rgba(255, 65, 108, 0.1); color: #FF416C; text-align: center; padding: 15px; font-weight: bold; font-size: 14px; margin: 0 20px 20px 20px; border-radius: 15px; border: 1px solid rgba(255, 65, 108, 0.2); display: none; }
 
@@ -206,18 +197,15 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none !important; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; outline: none; }
 
-        /* TOASTS */
         .toast-container { position: fixed; top: 20px; right: 20px; left: auto; transform: none; z-index: 2000; display: flex; flex-direction: column; gap: 10px; width: 300px; max-width: 90vw; pointer-events: none; align-items: flex-end; }
         .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; width: 100%; position: relative; overflow: hidden; }
         .toast::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
         .toast-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; padding-left: 5px;}
         .toast-body { font-size: 14px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; padding-left: 5px;}
-        
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .toast.hiding { animation: slideOutRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
-        /* BOTTOM NAV */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
         .nav-item { font-size: 26px; color: #D1D1D6; cursor: pointer; transition: 0.3s; position: relative; padding: 10px 20px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { filter: grayscale(0%); opacity: 1; transform: translateY(-2px); }
@@ -274,6 +262,8 @@
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" id="main-header-title">Просмотр анкет</div>
+            <!-- КНОПКА ФИЛЬТРА АНКЕТ -->
+            <button class="icon-btn" id="btn-search-settings" onclick="openAdminModal('modal-search-settings')" style="background:transparent; border:none!important; font-size:24px; color:var(--text-main); font-weight:bold;">⋮</button>
         </div>
 
         <div class="main-views-container">
@@ -294,7 +284,7 @@
                     <div id="empty-state" class="empty-state hidden">
                         <span>📭</span>
                         <h3 style="color:var(--text-main); margin-bottom:10px;">Анкеты закончились</h3>
-                        <p>В твоем городе пока нет новых пользователей. Загляни позже!</p>
+                        <p>Настройте фильтры или загляните позже!</p>
                     </div>
                 </div>
                 <div class="action-bar" id="action-bar">
@@ -330,7 +320,16 @@
                         <label class="photo-slot" data-index="3"><input type="file" class="photo-input" accept="image/*" hidden></label>
                         <label class="photo-slot" data-index="4"><input type="file" class="photo-input" accept="image/*" hidden></label>
                     </div>
+
                     <div class="section-title">О себе</div>
+                    
+                    <!-- ПОЛ В ПРОФИЛЕ ДЛЯ ФИЛЬТРАЦИИ -->
+                    <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Ваш пол</div>
+                    <div style="display:flex; gap:10px; margin-bottom: 20px;">
+                        <div class="chip" id="my-gender-male" onclick="setMyGender('male')">Парень</div>
+                        <div class="chip" id="my-gender-female" onclick="setMyGender('female')">Девушка</div>
+                    </div>
+
                     <div class="input-box"><input type="text" id="prof-name" placeholder=" " required><label>Имя</label></div>
                     <div class="input-box"><input type="number" id="prof-age" placeholder=" " required><label>Возраст</label></div>
                     <div class="input-box"><input type="text" id="prof-city" placeholder=" " required><label>Город (например, Хабаровск)</label></div>
@@ -407,6 +406,41 @@
     </div>
 
     <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ И ДОП. ФУНКЦИОНАЛА -->
+
+    <!-- МОДАЛКА НАСТРОЕК ПОИСКА (ФИЛЬТРЫ) -->
+    <div id="modal-search-settings" class="admin-modal" style="z-index: 800;">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">Настройки поиска</div>
+            
+            <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Кого вы ищете?</div>
+            <div style="display:flex; gap:10px; margin-bottom: 25px;">
+                <div class="chip" id="search-gender-female" onclick="setSearchGender('female')">Девушку</div>
+                <div class="chip" id="search-gender-male" onclick="setSearchGender('male')">Парня</div>
+                <div class="chip" id="search-gender-all" onclick="setSearchGender('all')">Всех</div>
+            </div>
+
+            <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Желаемый возраст</div>
+            
+            <div style="margin-bottom: 25px;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-main); font-weight:600; margin-bottom:5px;">
+                    <span>Минимальный: <b id="age-min-val" style="color:var(--primary);">18</b></span>
+                </div>
+                <input type="range" id="age-min" min="18" max="60" value="18" oninput="document.getElementById('age-min-val').innerText = this.value; if(parseInt(this.value) > parseInt(document.getElementById('age-max').value)) { document.getElementById('age-max').value = this.value; document.getElementById('age-max-val').innerText = this.value == 60 ? '60+' : this.value; }" style="width:100%; margin-bottom:15px; accent-color: var(--primary);">
+                
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-main); font-weight:600; margin-bottom:5px;">
+                    <span>Максимальный: <b id="age-max-val" style="color:var(--primary);">60+</b></span>
+                </div>
+                <input type="range" id="age-max" min="18" max="60" value="60" oninput="document.getElementById('age-max-val').innerText = this.value == 60 ? '60+' : this.value; if(parseInt(this.value) < parseInt(document.getElementById('age-min').value)) { document.getElementById('age-min').value = this.value; document.getElementById('age-min-val').innerText = this.value; }" style="width:100%; accent-color: var(--primary);">
+            </div>
+
+            <div class="admin-modal-actions">
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="saveSearchSettings()">Применить фильтры</button>
+                <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-search-settings')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
         <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
             <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:75vh; max-height:650px; display:flex;">
@@ -431,7 +465,6 @@
         </div>
     </div>
 
-    <!-- ОКНО ДЛЯ БЫСТРОГО БАНА В ПРОФИЛЕ -->
     <div id="modal-profile-ban" class="admin-modal" style="z-index: 1000;">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🚫 Блокировка</div>
@@ -636,6 +669,8 @@
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
     let myCustomInterests = []; 
+    let myGender = 'male';
+    let searchGender = 'all';
     
     let profilesQueue = []; 
     let currentViewingProfile = null;
@@ -782,6 +817,40 @@
         }
     });
 
+    // --- ФИЛЬТРЫ И НАСТРОЙКИ ПОИСКА ---
+    window.setSearchGender = (g) => {
+        searchGender = g;
+        document.querySelectorAll('#modal-search-settings .chip').forEach(c => c.classList.remove('active'));
+        document.getElementById('search-gender-' + g).classList.add('active');
+    };
+    
+    window.setMyGender = (g) => {
+        myGender = g;
+        document.getElementById('my-gender-male').classList.remove('active');
+        document.getElementById('my-gender-female').classList.remove('active');
+        document.getElementById('my-gender-' + g).classList.add('active');
+    };
+
+    window.saveSearchSettings = async () => {
+        const ageMin = parseInt(document.getElementById('age-min').value);
+        const ageMax = parseInt(document.getElementById('age-max').value);
+        
+        try {
+            await updateDoc(doc(db, "users", auth.currentUser.uid), {
+                searchGender: searchGender,
+                searchAgeMin: ageMin,
+                searchAgeMax: ageMax
+            });
+            currentUserData.searchGender = searchGender;
+            currentUserData.searchAgeMin = ageMin;
+            currentUserData.searchAgeMax = ageMax;
+            closeAdminModal('modal-search-settings');
+            showToast("Успех", "Настройки поиска применены");
+            loadProfilesFromCity();
+        } catch(e) { showToast("Ошибка", e.message); }
+    };
+
+
     window.openUserReportModal = (uid) => {
         if(!uid || uid === 'system') return showToast("Ошибка", "Невозможно выполнить действие.");
         window.reportingUid = uid;
@@ -905,12 +974,22 @@
         listDiv.innerHTML = html;
     };
 
-    // БЫСТРЫЙ БАН ПОВЕРХ АНКЕТЫ
-    window.openProfileBanModal = (uid) => {
+    window.quickToggleBan = async (uid, isBanned) => {
         if (uid === OWNER_UID) return showToast("Ошибка", "Владельца платформы невозможно заблокировать!");
-        document.getElementById('profile-ban-uid').value = uid;
-        document.getElementById('profile-ban-reason').value = "";
-        openAdminModal('modal-profile-ban');
+        if(isBanned) {
+            document.getElementById('profile-ban-uid').value = uid;
+            document.getElementById('profile-ban-reason').value = "";
+            openAdminModal('modal-profile-ban');
+        } else {
+            try {
+                await updateDoc(doc(db, "users", uid), { 
+                    isBanned: false,
+                    banReason: null
+                });
+                showToast("Успех", "Пользователь разблокирован!");
+                viewUserProfile(uid); 
+            } catch(e) { showToast("Ошибка", e.message); }
+        }
     };
 
     window.executeProfileBan = async () => {
@@ -924,14 +1003,6 @@
             });
             showToast("Успех", "Пользователь заблокирован!");
             closeAdminModal('modal-profile-ban');
-            viewUserProfile(uid); 
-        } catch(e) { showToast("Ошибка", e.message); }
-    };
-
-    window.quickUnban = async (uid) => {
-        try {
-            await updateDoc(doc(db, "users", uid), { isBanned: false, banReason: null });
-            showToast("Успех", "Пользователь разблокирован!");
             viewUserProfile(uid); 
         } catch(e) { showToast("Ошибка", e.message); }
     };
@@ -1097,7 +1168,14 @@
         views.forEach(v => v.classList.remove('active'));
         document.getElementById(targetId).classList.add('active');
         
-        if (targetId === 'view-discovery') headerTitle.innerText = 'Просмотр анкет';
+        const btnSettings = document.getElementById('btn-search-settings');
+        if (targetId === 'view-discovery') {
+            headerTitle.innerText = 'Просмотр анкет';
+            btnSettings.style.display = 'flex';
+        } else {
+            btnSettings.style.display = 'none';
+        }
+
         if (targetId === 'view-likes') { headerTitle.innerText = 'Симпатии'; document.getElementById('likes-badge').classList.remove('active'); }
         if (targetId === 'view-chats') { headerTitle.innerText = 'Сообщения'; document.getElementById('chat-badge').classList.remove('active'); }
         if (targetId === 'view-profile') headerTitle.innerText = 'Профиль';
@@ -1212,6 +1290,15 @@
                     document.getElementById('prof-city').value = currentUserData.city || "";
                     document.getElementById('prof-bio').value = currentUserData.bio || "";
                     
+                    // ПОДГРУЗКА ПОЛА
+                    if(currentUserData.gender) setMyGender(currentUserData.gender);
+                    else setMyGender('male');
+
+                    // ПОДГРУЗКА НАСТРОЕК ПОИСКА
+                    if(currentUserData.searchGender) setSearchGender(currentUserData.searchGender);
+                    if(currentUserData.searchAgeMin) { document.getElementById('age-min').value = currentUserData.searchAgeMin; document.getElementById('age-min-val').innerText = currentUserData.searchAgeMin; }
+                    if(currentUserData.searchAgeMax) { document.getElementById('age-max').value = currentUserData.searchAgeMax; document.getElementById('age-max-val').innerText = currentUserData.searchAgeMax == 60 ? '60+' : currentUserData.searchAgeMax; }
+
                     if(currentUserData.interests) myCustomInterests = [...currentUserData.interests];
                     else myCustomInterests = [];
                     renderCustomInterests();
@@ -1282,11 +1369,24 @@
         const swiped = currentUserData.swiped || [];
         const myInterestsNorm = (currentUserData.interests || []).map(i => i.toLowerCase().trim());
         
+        const prefGender = currentUserData.searchGender || 'all';
+        const prefAgeMin = currentUserData.searchAgeMin || 18;
+        const prefAgeMax = currentUserData.searchAgeMax || 60;
+
         profilesQueue = [];
         snaps.forEach(s => {
             if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) {
                 const data = s.data(); 
                 if(data.isBanned) return; 
+                
+                // ФИЛЬТР ПО ПОЛУ
+                if (prefGender !== 'all' && data.gender && data.gender !== prefGender) return;
+                
+                // ФИЛЬТР ПО ВОЗРАСТУ
+                const age = parseInt(data.age) || 0;
+                if (age < prefAgeMin) return;
+                if (prefAgeMax < 60 && age > prefAgeMax) return;
+
                 let sharedCount = 0;
                 if (data.interests && myInterestsNorm.length > 0) {
                     sharedCount = data.interests.filter(i => myInterestsNorm.includes(i.toLowerCase().trim())).length;
@@ -1554,8 +1654,14 @@
             messagesDiv.innerHTML = "";
             snapshot.forEach(docSnap => {
                 const msg = docSnap.data();
+                
+                // ВРЕМЯ ОТПРАВКИ СООБЩЕНИЯ
+                const msgTime = msg.timestamp ? new Date(msg.timestamp.toDate()) : new Date();
+                const timeStr = msgTime.getHours().toString().padStart(2, '0') + ':' + msgTime.getMinutes().toString().padStart(2, '0');
+                const timeHtml = `<div class="msg-time">${timeStr}</div>`;
+
                 if (msg.senderId === "system") messagesDiv.innerHTML += `<div class="msg system">${msg.text}</div>`;
-                else messagesDiv.innerHTML += `<div class="msg ${msg.senderId === auth.currentUser.uid ? 'sent' : 'received'}">${msg.text}</div>`;
+                else messagesDiv.innerHTML += `<div class="msg ${msg.senderId === auth.currentUser.uid ? 'sent' : 'received'}">${msg.text}${timeHtml}</div>`;
             });
             setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
@@ -1681,7 +1787,12 @@
         if(name.trim().length<2 || city.trim().length<2 || !userPhotos[0]) return showToast("Внимание", "Заполните Имя, Город и добавьте фото!");
         btn.innerText = "Сохраняем..."; btn.disabled = true;
 
-        const updatedData = { name, age, city, cityLower: city.toLowerCase().trim(), bio, interests: myCustomInterests, photos: userPhotos, swiped: currentUserData.swiped || [] };
+        const updatedData = { 
+            name, age, city, cityLower: city.toLowerCase().trim(), 
+            bio, interests: myCustomInterests, photos: userPhotos, 
+            swiped: currentUserData.swiped || [],
+            gender: myGender 
+        };
         try {
             await setDoc(doc(db, "users", auth.currentUser.uid), updatedData, {merge: true});
             currentUserData = { ...currentUserData, ...updatedData };
