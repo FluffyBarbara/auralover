@@ -81,7 +81,7 @@
         .btn-nope { color: #FF416C; } .btn-star { width: 50px; height: 50px; font-size: 22px; color: #00C9FF; } .btn-like { color: #00E676; }
 
         /* VIEW: MESSAGES (Чат) */
-        .chat-list { padding: 10px 20px 100px 20px; } /* ДОБАВЛЕН ОТСТУП СНИЗУ */
+        .chat-list { padding: 10px 20px 100px 20px; }
         .chat-item { display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 20px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .chat-item:active { transform: scale(0.98); }
         .chat-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -92,7 +92,7 @@
         .empty-state span { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.5; }
 
         /* VIEW: PROFILE (Настройка) */
-        .profile-content { padding: 20px 20px 100px 20px; } /* ИСПРАВЛЕН ОТСТУП СНИЗУ ДЛЯ КНОПКИ */
+        .profile-content { padding: 20px 20px 100px 20px; }
         .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .photo-slot { background: rgba(255,255,255,0.6); border: 2px dashed rgba(143, 144, 166, 0.3); border-radius: 20px; aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; position: relative; }
@@ -103,7 +103,7 @@
         textarea.input-styled { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 18px; font-size: 15px; outline: none; resize: none; min-height: 100px; color: var(--text-main); }
         textarea.input-styled:focus { background: white; border-color: rgba(255, 65, 108, 0.4); }
         
-        /* КРАСИВЫЕ ИНТЕРЕСЫ (КАТЕГОРИИ И ЧИПЫ) */
+        /* КРАСИВЫЕ ИНТЕРЕСЫ */
         .interest-category-title { font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px; }
         .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
         .chip { padding: 10px 16px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 6px; }
@@ -304,12 +304,39 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Глобальные переменные (кэш пользователя)
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
     let profilesQueue = []; 
     let currentViewingProfile = null;
     let activeChatId = null;
     let chatUnsubscribe = null;
+
+    // --- ФУНКЦИЯ ОЧИСТКИ ЛОКАЛЬНЫХ ДАННЫХ ПРИ ВЫХОДЕ ---
+    function clearLocalState() {
+        currentUserData = {};
+        userPhotos = ["", "", "", "", ""];
+        profilesQueue = [];
+        currentViewingProfile = null;
+        if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
+        activeChatId = null;
+
+        // Очищаем форму профиля
+        document.getElementById('prof-name').value = "";
+        document.getElementById('prof-age').value = "";
+        document.getElementById('prof-city').value = "";
+        document.getElementById('prof-bio').value = "";
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        
+        // Очищаем фото в UI
+        renderPhotos();
+
+        // Очищаем списки и карточки
+        document.getElementById('chat-list-container').innerHTML = "";
+        document.getElementById('main-card').classList.add('hidden');
+        document.getElementById('action-bar').classList.add('hidden');
+        document.getElementById('empty-state').classList.remove('hidden');
+    }
 
     const loadingOverlay = document.getElementById('loading-overlay');
     function showLoading(text) { document.getElementById('loading-text').innerText = text; loadingOverlay.classList.add('active'); }
@@ -350,6 +377,8 @@
         if(isLogin) signInWithEmailAndPassword(auth, em, pw).catch(() => { hideLoading(); err.innerText = "Неверные данные"; });
         else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); err.innerText = e.message; });
     };
+    
+    // ВЫХОД ИЗ АККАУНТА
     document.getElementById('btn-logout').onclick = () => signOut(auth);
 
     onAuthStateChanged(auth, async (user) => {
@@ -376,7 +405,10 @@
             }
             hideLoading();
         } else {
-            switchMainScreen('screen-auth'); hideLoading();
+            // КОГДА ВЫШЛИ: Очищаем всё и переводим на экран входа
+            clearLocalState();
+            switchMainScreen('screen-auth'); 
+            hideLoading();
         }
     });
 
@@ -384,7 +416,6 @@
     async function loadProfilesFromCity() {
         if(!currentUserData.cityLower) return;
         
-        // 1. Ищем людей из того же города
         const q = query(collection(db, "users"), where("cityLower", "==", currentUserData.cityLower));
         const snaps = await getDocs(q);
         
@@ -397,7 +428,6 @@
                 const data = s.data();
                 let sharedCount = 0;
                 
-                // 2. Считаем количество общих интересов
                 if (data.interests && myInterests.length > 0) {
                     sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
                 }
@@ -405,9 +435,7 @@
             }
         });
 
-        // 3. Сортируем: сначала те, у кого больше всего общих интересов с пользователем!
         profilesQueue.sort((a, b) => b.sharedCount - a.sharedCount);
-
         renderNextProfile();
     }
 
@@ -424,13 +452,10 @@
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
             card.style.backgroundImage = `url('${currentViewingProfile.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
             
-            // Визуализация общих интересов
             const tags = document.getElementById('card-tags'); tags.innerHTML = '';
-            
             if (currentViewingProfile.sharedCount > 0) {
                 tags.innerHTML += `<div class="card-tag" style="background: var(--primary); color: white; border-color: transparent; box-shadow: 0 4px 10px rgba(255,65,108,0.3);">🔥 Совпадений: ${currentViewingProfile.sharedCount}</div>`;
             }
-
             if(currentViewingProfile.interests) {
                 currentViewingProfile.interests.forEach(i => {
                     const isShared = currentUserData.interests && currentUserData.interests.includes(i);
