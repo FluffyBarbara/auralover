@@ -54,7 +54,7 @@
         .btn-glow { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s; }
         .btn-glow:active { transform: translateY(2px) scale(0.98); }
 
-        /* ГЛАВНЫЙ ЭКРАН (С ВКЛАДКАМИ) */
+        /* ГЛАВНЫЙ ЭКРАН */
         .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; }
         .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); }
@@ -71,9 +71,9 @@
         .card-age { font-size: 24px; font-weight: 400; opacity: 0.9; }
         .card-city { font-size: 14px; opacity: 0.8; margin-bottom: 10px; display: block; }
         .card-bio { font-size: 15px; line-height: 1.4; opacity: 0.9; margin-bottom: 15px; font-weight: 300; }
-        .card-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+        .card-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; flex-wrap: wrap;}
         .card-tags::-webkit-scrollbar { display: none; }
-        .card-tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .card-tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;}
         
         .action-bar { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 15px 0; z-index: 10; }
         .circle-btn { width: 65px; height: 65px; border-radius: 50%; background: white; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-size: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
@@ -81,7 +81,7 @@
         .btn-nope { color: #FF416C; } .btn-star { width: 50px; height: 50px; font-size: 22px; color: #00C9FF; } .btn-like { color: #00E676; }
 
         /* VIEW: MESSAGES (Чат) */
-        .chat-list { padding: 10px 20px 100px 20px; }
+        .chat-list { padding: 10px 20px 100px 20px; } /* ДОБАВЛЕН ОТСТУП СНИЗУ */
         .chat-item { display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 20px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .chat-item:active { transform: scale(0.98); }
         .chat-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -92,8 +92,8 @@
         .empty-state span { font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.5; }
 
         /* VIEW: PROFILE (Настройка) */
-        .profile-content { padding: 20px 20px 100px 20px; }
-        .section-title { font-size: 18px; font-weight: 700; margin: 20px 0 15px; color: var(--text-main); }
+        .profile-content { padding: 20px 20px 100px 20px; } /* ИСПРАВЛЕН ОТСТУП СНИЗУ ДЛЯ КНОПКИ */
+        .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .photo-slot { background: rgba(255,255,255,0.6); border: 2px dashed rgba(143, 144, 166, 0.3); border-radius: 20px; aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; position: relative; }
         .photo-slot.main { grid-column: span 2; grid-row: span 2; border-radius: 28px; }
@@ -102,9 +102,13 @@
         .photo-slot:hover .delete-photo-btn { display: block; }
         textarea.input-styled { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 18px; font-size: 15px; outline: none; resize: none; min-height: 100px; color: var(--text-main); }
         textarea.input-styled:focus { background: white; border-color: rgba(255, 65, 108, 0.4); }
-        .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-        .chip { padding: 10px 16px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8); border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
-        .chip.active { background: var(--text-main); color: white; border-color: var(--text-main); transform: translateY(-2px); }
+        
+        /* КРАСИВЫЕ ИНТЕРЕСЫ (КАТЕГОРИИ И ЧИПЫ) */
+        .interest-category-title { font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px; }
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 5px; }
+        .chip { padding: 10px 16px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 6px; }
+        .chip:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); }
+        .chip.active { background: linear-gradient(135deg, rgba(255, 65, 108, 0.08), rgba(233, 64, 87, 0.08)); color: var(--primary); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 65, 108, 0.15); }
 
         /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -121,15 +125,12 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* BOTTOM NAV (Нижняя панель как на скрине) */
+        /* BOTTOM NAV */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
         .nav-item { font-size: 26px; color: #D1D1D6; cursor: pointer; transition: 0.3s; position: relative; padding: 10px 20px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { filter: grayscale(0%); opacity: 1; transform: translateY(-2px); }
         .nav-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
-        /* Эмодзи как иконки */
-        .icon-fire::before { content: '🔥'; }
-        .icon-chat::before { content: '💬'; }
-        .icon-user::before { content: '👤'; }
+        .icon-fire::before { content: '🔥'; } .icon-chat::before { content: '💬'; } .icon-user::before { content: '👤'; }
 
         .hidden { display: none !important; }
         #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--glass-bg); backdrop-filter: blur(20px); z-index: 999; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: 0.3s; }
@@ -171,7 +172,7 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: ГЛАВНОЕ ПРИЛОЖЕНИЕ (СОДЕРЖИТ 3 ВКЛАДКИ) -->
+    <!-- ЭКРАН 2: ГЛАВНОЕ ПРИЛОЖЕНИЕ (3 ВКЛАДКИ) -->
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" id="main-header-title">Aura</div>
@@ -206,9 +207,7 @@
 
             <!-- ВКЛАДКА 2: СООБЩЕНИЯ -->
             <div id="view-chats" class="view">
-                <div class="chat-list" id="chat-list-container">
-                    <!-- Список диалогов генерируется через JS -->
-                </div>
+                <div class="chat-list" id="chat-list-container"></div>
             </div>
 
             <!-- ВКЛАДКА 3: ВАШ ПРОФИЛЬ -->
@@ -222,21 +221,39 @@
                         <label class="photo-slot" data-index="3"><input type="file" class="photo-input" accept="image/*" hidden></label>
                         <label class="photo-slot" data-index="4"><input type="file" class="photo-input" accept="image/*" hidden></label>
                     </div>
+                    
                     <div class="section-title">О себе</div>
                     <div class="input-box"><input type="text" id="prof-name" placeholder=" " required><label>Имя</label></div>
                     <div class="input-box"><input type="number" id="prof-age" placeholder=" " required><label>Возраст</label></div>
                     <div class="input-box"><input type="text" id="prof-city" placeholder=" " required><label>Город (например, Хабаровск)</label></div>
                     <textarea id="prof-bio" class="input-styled" placeholder="Пару слов о себе..."></textarea>
                     
-                    <div class="section-title">Интересы</div>
-                    <div class="chips" id="interests-container">
-                        <div class="chip" data-value="Музыка (emo-rap)">Музыка (emo-rap)</div>
-                        <div class="chip" data-value="Разработка игр">Разработка игр</div>
-                        <div class="chip" data-value="GTA 5 RP">GTA 5 RP</div>
-                        <div class="chip" data-value="Спорт (ГТО)">Спорт (ГТО)</div>
-                        <div class="chip" data-value="Twitch Стриминг">Twitch Стриминг</div>
-                        <div class="chip" data-value="Тусовки">Тусовки</div>
+                    <div class="section-title">Твой вайб и интересы (до 5)</div>
+                    
+                    <div class="interest-category-title">🎮 Игры и Разработка</div>
+                    <div class="chips">
+                        <div class="chip" data-value="GTA 5 RP">🚗 GTA 5 RP</div>
+                        <div class="chip" data-value="Создание игр (Unity)">👾 Создание игр (Unity)</div>
+                        <div class="chip" data-value="Web-разработка">💻 Web-разработка</div>
+                        <div class="chip" data-value="Twitch Стриминг">🎥 Twitch Стриминг</div>
                     </div>
+
+                    <div class="interest-category-title">🎵 Творчество и Вайб</div>
+                    <div class="chips">
+                        <div class="chip" data-value="Музыка (emo-rap)">🎸 Музыка (emo-rap)</div>
+                        <div class="chip" data-value="Эстетика">✨ Эстетика</div>
+                        <div class="chip" data-value="Тусовки до утра">🪩 Тусовки до утра</div>
+                        <div class="chip" data-value="Ночные поездки">🌃 Ночные поездки</div>
+                        <div class="chip" data-value="Кино">🍿 Кино</div>
+                    </div>
+
+                    <div class="interest-category-title">💪 Активность</div>
+                    <div class="chips">
+                        <div class="chip" data-value="Спорт (ГТО)">🏅 Спорт (ГТО)</div>
+                        <div class="chip" data-value="Машины">🏎️ Машины</div>
+                        <div class="chip" data-value="Прогулки">🚶 Прогулки</div>
+                    </div>
+
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
                 </div>
             </div>
@@ -251,16 +268,14 @@
         </div>
     </div>
 
-    <!-- ВСПЛЫВАЮЩИЙ ЧАТ (Поверх всего) -->
+    <!-- ВСПЛЫВАЮЩИЙ ЧАТ -->
     <div id="chat-room" class="chat-room">
         <div class="chat-room-header">
             <button class="icon-btn" id="btn-close-chat">←</button>
             <img src="" class="chat-room-avatar" id="chat-active-avatar">
             <div class="chat-room-name" id="chat-active-name">Имя</div>
         </div>
-        <div class="chat-messages" id="chat-messages">
-            <!-- Сообщения -->
-        </div>
+        <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-area">
             <input type="text" id="chat-message-input" placeholder="Написать сообщение...">
             <button id="btn-send-message">➤</button>
@@ -289,15 +304,13 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Глобальные переменные
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
     let profilesQueue = []; 
     let currentViewingProfile = null;
     let activeChatId = null;
-    let chatUnsubscribe = null; // Для остановки прослушивания чата
+    let chatUnsubscribe = null;
 
-    // Утилиты UI
     const loadingOverlay = document.getElementById('loading-overlay');
     function showLoading(text) { document.getElementById('loading-text').innerText = text; loadingOverlay.classList.add('active'); }
     function hideLoading() { loadingOverlay.classList.remove('active'); }
@@ -306,18 +319,15 @@
         document.getElementById(screenId).classList.add('active');
     }
 
-    // --- НАВИГАЦИЯ (НИЖНЯЯ ПАНЕЛЬ) ---
+    // --- НАВИГАЦИЯ ---
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
 
     function openTab(targetId, btnElement) {
-        // Если профиль не заполнен, не даем уйти с вкладки профиля
         if (!currentUserData.name && targetId !== 'view-profile') return alert("Сначала заполните и сохраните профиль!");
-        
         navItems.forEach(nav => nav.classList.remove('active'));
         if(btnElement) btnElement.classList.add('active');
-        
         views.forEach(v => v.classList.remove('active'));
         document.getElementById(targetId).classList.add('active');
         
@@ -325,10 +335,7 @@
         if (targetId === 'view-chats') headerTitle.innerText = 'Сообщения';
         if (targetId === 'view-profile') headerTitle.innerText = 'Профиль';
     }
-
-    navItems.forEach(item => {
-        item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item));
-    });
+    navItems.forEach(item => { item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item)); });
 
     // --- АВТОРИЗАЦИЯ ---
     let isLogin = true;
@@ -343,17 +350,14 @@
         if(isLogin) signInWithEmailAndPassword(auth, em, pw).catch(() => { hideLoading(); err.innerText = "Неверные данные"; });
         else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); err.innerText = e.message; });
     };
-    
     document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-    // --- СОСТОЯНИЕ ВХОДА ---
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
             const snap = await getDoc(doc(db, "users", user.uid));
             if (snap.exists()) {
                 currentUserData = snap.data();
-                // Заполняем форму профиля
                 document.getElementById('prof-name').value = currentUserData.name || "";
                 document.getElementById('prof-age').value = currentUserData.age || "";
                 document.getElementById('prof-city').value = currentUserData.city || "";
@@ -364,11 +368,11 @@
                 
                 await loadProfilesFromCity();
                 switchMainScreen('screen-main');
-                openTab('view-discovery', navItems[0]); // Идем на свайпы
-                loadChatsList(); // Грузим список чатов в фоне
+                openTab('view-discovery', navItems[0]); 
+                loadChatsList();
             } else {
                 switchMainScreen('screen-main');
-                openTab('view-profile', navItems[2]); // Заставляем заполнить профиль
+                openTab('view-profile', navItems[2]); 
             }
             hideLoading();
         } else {
@@ -376,16 +380,34 @@
         }
     });
 
-    // --- ЛОГИКА АНКЕТ И СВАЙПОВ ---
+    // --- УМНЫЙ АЛГОРИТМ ПОДБОРА (MATCHING) ---
     async function loadProfilesFromCity() {
         if(!currentUserData.cityLower) return;
+        
+        // 1. Ищем людей из того же города
         const q = query(collection(db, "users"), where("cityLower", "==", currentUserData.cityLower));
         const snaps = await getDocs(q);
+        
         const swiped = currentUserData.swiped || [];
+        const myInterests = currentUserData.interests || [];
         profilesQueue = [];
+
         snaps.forEach(s => {
-            if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) profilesQueue.push({ id: s.id, ...s.data() });
+            if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) {
+                const data = s.data();
+                let sharedCount = 0;
+                
+                // 2. Считаем количество общих интересов
+                if (data.interests && myInterests.length > 0) {
+                    sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
+                }
+                profilesQueue.push({ id: s.id, sharedCount: sharedCount, ...data });
+            }
         });
+
+        // 3. Сортируем: сначала те, у кого больше всего общих интересов с пользователем!
+        profilesQueue.sort((a, b) => b.sharedCount - a.sharedCount);
+
         renderNextProfile();
     }
 
@@ -401,8 +423,21 @@
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
             card.style.backgroundImage = `url('${currentViewingProfile.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
+            
+            // Визуализация общих интересов
             const tags = document.getElementById('card-tags'); tags.innerHTML = '';
-            if(currentViewingProfile.interests) currentViewingProfile.interests.forEach(i => tags.innerHTML += `<div class="card-tag">${i}</div>`);
+            
+            if (currentViewingProfile.sharedCount > 0) {
+                tags.innerHTML += `<div class="card-tag" style="background: var(--primary); color: white; border-color: transparent; box-shadow: 0 4px 10px rgba(255,65,108,0.3);">🔥 Совпадений: ${currentViewingProfile.sharedCount}</div>`;
+            }
+
+            if(currentViewingProfile.interests) {
+                currentViewingProfile.interests.forEach(i => {
+                    const isShared = currentUserData.interests && currentUserData.interests.includes(i);
+                    const style = isShared ? 'border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.9);' : '';
+                    tags.innerHTML += `<div class="card-tag" style="${style}">${i}</div>`;
+                });
+            }
         }
     }
 
@@ -415,17 +450,12 @@
         const card = document.getElementById('main-card');
         card.style.transform = `translate(${isLike ? 350 : -350}px, 0px) rotate(${isLike ? 25 : -25}deg)`; card.style.opacity = '0';
         
-        // Запись в историю свайпов
         updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: arrayUnion(targetId) });
         if(!currentUserData.swiped) currentUserData.swiped = []; currentUserData.swiped.push(targetId);
 
-        // ЕСЛИ ЛАЙК - СОЗДАЕМ ЧАТ!
         if (isLike) {
-            // Генерируем уникальный ID чата (сортируем ID, чтобы он был одинаковым для обоих)
             const chatId = [auth.currentUser.uid, targetId].sort().join('_');
             const chatRef = doc(db, "chats", chatId);
-            
-            // Записываем данные для списка чатов
             setDoc(chatRef, {
                 users: [auth.currentUser.uid, targetId],
                 userInfo: {
@@ -434,7 +464,7 @@
                 },
                 lastMessage: "Новая симпатия! Напишите привет ✨",
                 timestamp: serverTimestamp()
-            }, { merge: true }); // merge не перезапишет старые сообщения, если чат уже был
+            }, { merge: true });
         }
 
         setTimeout(() => {
@@ -446,40 +476,26 @@
     document.getElementById('btn-pass').onclick = () => handleSwipe(false);
     document.getElementById('btn-like').onclick = () => handleSwipe(true);
 
-
-    // --- СИСТЕМА ЧАТОВ (ВКЛАДКА 2) ---
+    // --- СИСТЕМА ЧАТОВ ---
     function loadChatsList() {
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
-        
-        // onSnapshot дает обновления в реальном времени!
         onSnapshot(q, (snapshot) => {
             const container = document.getElementById('chat-list-container');
             if (snapshot.empty) {
-                container.innerHTML = `<div class="empty-state"><span>💬</span><h3>Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
+                container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
                 return;
             }
-            
             let html = "";
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
-                // Находим ID собеседника
                 const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                 const otherUser = data.userInfo[otherUserId];
-                
-                html += `
-                <div class="chat-item" onclick="openChat('${docSnap.id}', '${otherUser.name}', '${otherUser.photo}')">
-                    <img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}">
-                    <div class="chat-info">
-                        <div class="chat-name">${otherUser.name}</div>
-                        <div class="chat-last-msg">${data.lastMessage || ""}</div>
-                    </div>
-                </div>`;
+                html += `<div class="chat-item" onclick="openChat('${docSnap.id}', '${otherUser.name}', '${otherUser.photo}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${data.lastMessage || ""}</div></div></div>`;
             });
             container.innerHTML = html;
         });
     }
 
-    // Открытие окна конкретного чата
     window.openChat = (chatId, name, photoUrl) => {
         activeChatId = chatId;
         document.getElementById('chat-active-name').innerText = name;
@@ -488,13 +504,10 @@
         document.getElementById('chat-message-input').value = "";
         
         const messagesDiv = document.getElementById('chat-messages');
-        messagesDiv.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>Загрузка сообщений...</div>";
-
-        // Читаем сообщения в реальном времени
+        messagesDiv.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>Загрузка...</div>";
         const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
         
-        if (chatUnsubscribe) chatUnsubscribe(); // Отписываемся от старого чата
-        
+        if (chatUnsubscribe) chatUnsubscribe(); 
         chatUnsubscribe = onSnapshot(q, (snapshot) => {
             messagesDiv.innerHTML = "";
             snapshot.forEach(docSnap => {
@@ -502,42 +515,18 @@
                 const isMe = msg.senderId === auth.currentUser.uid;
                 messagesDiv.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">${msg.text}</div>`;
             });
-            // Прокрутка вниз
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         });
     };
-
-    // Закрытие окна чата
-    document.getElementById('btn-close-chat').onclick = () => {
-        document.getElementById('chat-room').classList.remove('active');
-        if (chatUnsubscribe) chatUnsubscribe();
-        activeChatId = null;
-    };
-
-    // Отправка сообщения
+    document.getElementById('btn-close-chat').onclick = () => { document.getElementById('chat-room').classList.remove('active'); if (chatUnsubscribe) chatUnsubscribe(); activeChatId = null; };
     document.getElementById('btn-send-message').onclick = async () => {
-        const input = document.getElementById('chat-message-input');
-        const text = input.value.trim();
-        if (!text || !activeChatId) return;
-        
-        input.value = ""; // Очищаем поле сразу
-        
-        // Пишем в коллекцию сообщений
-        await addDoc(collection(db, `chats/${activeChatId}/messages`), {
-            text: text,
-            senderId: auth.currentUser.uid,
-            timestamp: serverTimestamp()
-        });
-        
-        // Обновляем последнее сообщение в самом диалоге (для списка)
-        await updateDoc(doc(db, "chats", activeChatId), {
-            lastMessage: text,
-            timestamp: serverTimestamp()
-        });
+        const input = document.getElementById('chat-message-input'); const text = input.value.trim();
+        if (!text || !activeChatId) return; input.value = ""; 
+        await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
+        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, timestamp: serverTimestamp() });
     };
 
-
-    // --- ПРОФИЛЬ (ВКЛАДКА 3) ---
+    // --- ПРОФИЛЬ ---
     function compressImage(file, maxW=500) { return new Promise(res => { const r=new FileReader(); r.readAsDataURL(file); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'); const rat=maxW/i.width; c.width=maxW; c.height=i.height*rat; c.getContext('2d').drawImage(i,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',0.6));};};});}
     function renderPhotos() { document.querySelectorAll('.photo-slot').forEach((s, i) => { const oI=s.querySelector('img'), oB=s.querySelector('.delete-photo-btn'); if(oI)oI.remove(); if(oB)oB.remove(); if(userPhotos[i]) { const img=document.createElement('img'); img.src=userPhotos[i]; const dB=document.createElement('button'); dB.className='delete-photo-btn'; dB.innerHTML='✖'; dB.onclick=(e)=>{e.preventDefault();userPhotos[i]="";renderPhotos();}; s.appendChild(img); s.appendChild(dB); }}); }
     
@@ -557,8 +546,6 @@
             await setDoc(doc(db, "users", auth.currentUser.uid), updatedData);
             currentUserData = updatedData;
             await loadProfilesFromCity();
-            
-            // Если сохранили успешно, перекидываем на свайпы и открываем нижнее меню
             openTab('view-discovery', navItems[0]);
         } catch(e) { alert("Ошибка: " + e.message); } 
         finally { btn.innerText = "Сохранить профиль"; btn.disabled = false; }
