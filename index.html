@@ -141,14 +141,16 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS) */
-        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
-        .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 20px; padding: 15px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideDown 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; }
-        .toast-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
-        .toast-body { font-size: 14px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; }
-        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .toast.hiding { animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        @keyframes slideUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-50px); opacity: 0; } }
+        /* ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS) СПРАВА СВЕРХУ */
+        .toast-container { position: fixed; top: 20px; right: 20px; left: auto; transform: none; z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 300px; max-width: 90vw; pointer-events: none; align-items: flex-end; }
+        .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; width: 100%; position: relative; overflow: hidden; }
+        .toast::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
+        .toast-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; padding-left: 5px;}
+        .toast-body { font-size: 14px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; padding-left: 5px;}
+        
+        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.hiding { animation: slideOutRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
         /* BOTTOM NAV И БЕЙДЖИ УВЕДОМЛЕНИЙ */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
@@ -182,7 +184,7 @@
         <div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div>
     </div>
 
-    <!-- Всплывающие In-App Уведомления -->
+    <!-- Всплывающие In-App Уведомления (справа сверху) -->
     <div id="toast-container" class="toast-container"></div>
 
     <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
@@ -304,7 +306,6 @@
         <!-- НИЖНЯЯ НАВИГАЦИЯ -->
         <div class="bottom-nav" id="bottom-nav">
             <div class="nav-item icon-fire" data-target="view-discovery"></div>
-            <!-- БЕЙДЖИ ДЛЯ УВЕДОМЛЕНИЙ -->
             <div class="nav-item icon-heart" data-target="view-likes">
                 <div class="nav-badge" id="likes-badge"></div>
             </div>
@@ -358,7 +359,17 @@
     let activeChatId = null;
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
-    let isInitialChatsLoad = true; // Для контроля уведомлений при первом входе
+    let isInitialChatsLoad = true;
+
+    // --- ЗВУКОВОЕ УВЕДОМЛЕНИЕ ---
+    // Короткий и приятный "Pop" звук для сообщений
+    const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
+    notificationSound.volume = 0.5;
+
+    function playNotificationSound() {
+        // Запускаем звук с обработкой ошибки (на случай если браузер заблокировал автовоспроизведение до первого клика)
+        notificationSound.play().catch((e) => console.log('Аудио заблокировано браузером до первого клика', e));
+    }
 
     function clearLocalState() {
         currentUserData = {}; userPhotos = ["", "", "", "", ""]; profilesQueue = []; currentViewingProfile = null;
@@ -386,9 +397,10 @@
         document.getElementById(screenId).classList.add('active');
     }
 
-    // --- ФУНКЦИЯ ПОКАЗА УВЕДОМЛЕНИЙ (TOASTS) И PUSH ---
+    // --- ФУНКЦИЯ ПОКАЗА УВЕДОМЛЕНИЙ И ЗВУКА ---
     window.showToast = (title, body, onClickCallback) => {
-        // Внутриигровой Toast
+        playNotificationSound(); // ПРОИГРЫВАЕМ ЗВУК
+
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -399,7 +411,6 @@
         }
         container.appendChild(toast);
         
-        // Авто-удаление через 4 секунды
         setTimeout(() => {
             if(toast.parentElement) {
                 toast.classList.add('hiding');
@@ -407,13 +418,12 @@
             }
         }, 4000);
 
-        // Браузерный Push (если вкладка свернута)
         if ("Notification" in window && Notification.permission === "granted" && document.visibilityState !== "visible") {
             new Notification(title, { body: body, icon: '/favicon.ico' });
         }
     }
 
-    // --- НАВИГАЦИЯ И СБРОС БЕЙДЖЕЙ ---
+    // --- НАВИГАЦИЯ ---
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -426,14 +436,8 @@
         document.getElementById(targetId).classList.add('active');
         
         if (targetId === 'view-discovery') headerTitle.innerText = 'Aura';
-        if (targetId === 'view-likes') {
-            headerTitle.innerText = 'Симпатии';
-            document.getElementById('likes-badge').classList.remove('active'); // Сброс бейджа
-        }
-        if (targetId === 'view-chats') {
-            headerTitle.innerText = 'Сообщения';
-            document.getElementById('chat-badge').classList.remove('active'); // Сброс бейджа
-        }
+        if (targetId === 'view-likes') { headerTitle.innerText = 'Симпатии'; document.getElementById('likes-badge').classList.remove('active'); }
+        if (targetId === 'view-chats') { headerTitle.innerText = 'Сообщения'; document.getElementById('chat-badge').classList.remove('active'); }
         if (targetId === 'view-profile') headerTitle.innerText = 'Профиль';
     }
     navItems.forEach(item => { item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item)); });
@@ -456,8 +460,6 @@
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
-            
-            // Запрос разрешения на браузерные уведомления (если еще не давали)
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
                 Notification.requestPermission();
             }
@@ -480,7 +482,6 @@
                     if(currentUserData.photos) userPhotos = currentUserData.photos;
                     renderPhotos();
                     
-                    // Проверка на новые лайки для уведомления
                     const newLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
                     if (!isFirstLoad && newLikedMeCount > oldLikedMeCount) {
                         showToast("💖 Новая симпатия!", "Кому-то понравилась ваша анкета. Зайдите в Симпатии, чтобы посмотреть!", () => openTab('view-likes', navItems[1]));
@@ -558,7 +559,7 @@
                     [targetId]: { name: targetName, photo: targetPhoto }
                 },
                 lastMessage: "Aura: Взаимная симпатия! ✨",
-                lastMessageSenderId: "system", // Для правильной логики уведомлений
+                lastMessageSenderId: "system", 
                 timestamp: serverTimestamp()
             }, { merge: true });
             
@@ -728,20 +729,16 @@
         onSnapshot(q, (snapshot) => {
             const container = document.getElementById('chat-list-container');
             
-            // Обработка уведомлений о новых сообщениях/мэтчах
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
                     
-                    // Если это новый чат (взаимный лайк)
                     if (change.type === "added" && data.lastMessageSenderId === "system") {
                         showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
                         document.getElementById('chat-badge').classList.add('active');
                     }
                     
-                    // Если это новое сообщение от другого человека
                     if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
-                        // Показываем уведомление ТОЛЬКО если у нас не открыт этот же самый диалог прямо сейчас
                         if (activeChatId !== change.doc.id) {
                             const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                             const otherUser = data.userInfo[otherUserId];
@@ -757,14 +754,12 @@
             });
             isInitialChatsLoad = false;
 
-            // Отрисовка списка диалогов
             if (snapshot.empty) {
                 container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
                 return;
             }
             
             let html = "";
-            // Сортируем локально по убыванию времени
             const docs = [];
             snapshot.forEach(docSnap => docs.push({ id: docSnap.id, ...docSnap.data() }));
             docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
@@ -805,7 +800,6 @@
                     messagesDiv.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">${msg.text}</div>`;
                 }
             });
-            // Прокрутка чата вниз
             setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
     };
@@ -817,7 +811,6 @@
         if (!text || !activeChatId) return; input.value = ""; 
         
         await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
-        // ДОБАВЛЕНО: lastMessageSenderId для работы уведомлений
         await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, lastMessageSenderId: auth.currentUser.uid, timestamp: serverTimestamp() });
     };
 
