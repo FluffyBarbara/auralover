@@ -20,234 +20,141 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: #f4f5f7;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            color: var(--text-main);
-            position: relative;
+            background-color: #f4f5f7; height: 100vh; display: flex; justify-content: center;
+            align-items: center; overflow: hidden; color: var(--text-main); position: relative;
         }
 
-        /* =========================================
-           АНИМИРОВАННЫЙ ФОН "ЖИВАЯ АУРА"
-           ========================================= */
-        .aura-background {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            overflow: hidden; z-index: 0; background: #fafcff;
-        }
-        .orb {
-            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8;
-            animation: float 15s infinite alternate ease-in-out;
-        }
+        /* АНИМИРОВАННЫЙ ФОН */
+        .aura-background { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; z-index: 0; background: #fafcff; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8; animation: float 15s infinite alternate ease-in-out; }
         .orb:nth-child(1) { width: 400px; height: 400px; background: #FF416C; top: -10%; left: -10%; animation-delay: 0s; }
         .orb:nth-child(2) { width: 500px; height: 500px; background: #8A2387; bottom: -20%; right: -10%; animation-delay: -5s; }
         .orb:nth-child(3) { width: 350px; height: 350px; background: #F27121; top: 40%; left: 40%; animation-delay: -10s; }
         .orb:nth-child(4) { width: 300px; height: 300px; background: #00C9FF; top: 10%; right: 10%; animation-duration: 20s; }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } 100% { transform: translate(0, 0) scale(1); } }
 
-        /* --- КОНТЕЙНЕР ПРИЛОЖЕНИЯ --- */
-        .app-container {
-            width: 100%; max-width: 420px; height: 100vh; max-height: 900px;
-            position: relative; z-index: 10; overflow: hidden;
-            background: transparent;
-        }
+        /* КОНТЕЙНЕР ПРИЛОЖЕНИЯ */
+        .app-container { width: 100%; max-width: 420px; height: 100vh; max-height: 900px; position: relative; z-index: 10; overflow: hidden; background: transparent; }
         @media (min-width: 421px) {
             .app-container { height: 92vh; border-radius: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.15); border: 8px solid rgba(255,255,255,0.8); background: var(--glass-bg); backdrop-filter: blur(20px); }
             .aura-background { border-radius: 32px; }
         }
 
-        /* --- ЭКРАНЫ И ПЕРЕХОДЫ --- */
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0; pointer-events: none; transform: scale(0.95) translateY(20px); z-index: 1;
-        }
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; pointer-events: none; transform: scale(0.95) translateY(20px); z-index: 1; }
         .screen.active { opacity: 1; pointer-events: all; transform: scale(1) translateY(0); z-index: 10; }
 
-        /* =========================================
-           ЭКРАН АВТОРИЗАЦИИ (GLASSMORPHISM)
-           ========================================= */
-        .auth-wrapper {
-            flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30px;
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-        }
+        /* ЭКРАН АВТОРИЗАЦИИ */
+        .auth-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
         .logo-container { text-align: center; margin-bottom: 40px; }
         .logo-icon { font-size: 50px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 10px 15px rgba(255,65,108,0.3)); margin-bottom: 10px; }
         .logo-text { font-size: 42px; font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
         .logo-sub { font-size: 16px; color: var(--text-muted); font-weight: 400; }
-
-        .auth-card {
-            background: rgba(255, 255, 255, 0.6); border: 1px solid var(--glass-border);
-            border-radius: 32px; padding: 30px 25px; box-shadow: var(--glass-shadow);
-        }
-
+        .auth-card { background: rgba(255, 255, 255, 0.6); border: 1px solid var(--glass-border); border-radius: 32px; padding: 30px 25px; box-shadow: var(--glass-shadow); }
         .tabs { display: flex; background: rgba(0,0,0,0.05); border-radius: 20px; padding: 5px; margin-bottom: 25px; position: relative; }
         .tab { flex: 1; text-align: center; padding: 12px; font-weight: 600; font-size: 15px; color: var(--text-muted); cursor: pointer; z-index: 2; transition: 0.3s; }
         .tab.active { color: var(--text-main); }
         .tab-slider { position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px); background: white; border-radius: 15px; transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 1; }
-
         .input-box { position: relative; margin-bottom: 20px; }
-        .input-box input {
-            width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent;
-            border-radius: 18px; font-size: 16px; font-weight: 500; color: var(--text-main); outline: none; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
+        .input-box input { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 18px; font-size: 16px; font-weight: 500; color: var(--text-main); outline: none; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .input-box input:focus { background: white; border-color: rgba(255, 65, 108, 0.4); box-shadow: 0 8px 20px rgba(255, 65, 108, 0.1); }
         .input-box input::placeholder { color: transparent; }
-        .input-box label {
-            position: absolute; top: 18px; left: 20px; color: var(--text-muted); font-weight: 500; pointer-events: none; transition: 0.2s ease all;
-        }
-        .input-box input:focus ~ label, .input-box input:not(:placeholder-shown) ~ label {
-            top: -10px; left: 15px; font-size: 12px; background: var(--text-main); color: white; padding: 2px 10px; border-radius: 8px;
-        }
-
-        .btn-glow {
-            width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s;
-        }
+        .input-box label { position: absolute; top: 18px; left: 20px; color: var(--text-muted); font-weight: 500; pointer-events: none; transition: 0.2s ease all; }
+        .input-box input:focus ~ label, .input-box input:not(:placeholder-shown) ~ label { top: -10px; left: 15px; font-size: 12px; background: var(--text-main); color: white; padding: 2px 10px; border-radius: 8px; }
+        .btn-glow { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s; }
         .btn-glow:active { transform: translateY(2px) scale(0.98); box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3); }
+        .btn-glow:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        /* =========================================
-           ОБЩИЕ ЭЛЕМЕНТЫ ПРИЛОЖЕНИЯ
-           ========================================= */
-        .app-header {
-            padding: 20px 25px; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.4); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100;
-        }
+        /* ОБЩИЕ ЭЛЕМЕНТЫ */
+        .app-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.4); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; }
         .header-title { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); transition: 0.2s; }
         .icon-btn:hover { background: var(--primary); color: white; }
 
-        /* =========================================
-           ЭКРАН НАСТРОЙКИ ПРОФИЛЯ
-           ========================================= */
+        /* ЭКРАН ПРОФИЛЯ */
         .scroll-area { flex: 1; overflow-y: auto; padding: 20px 25px 100px; scroll-behavior: smooth; }
         .scroll-area::-webkit-scrollbar { width: 0; }
-        
         .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
-        
-        /* Сетка фото 2.0 */
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .photo-slot {
-            background: rgba(255,255,255,0.6); border: 2px dashed rgba(143, 144, 166, 0.3); border-radius: 20px;
-            aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; cursor: pointer;
-            overflow: hidden; position: relative; transition: 0.3s; backdrop-filter: blur(10px);
-        }
+        .photo-slot { background: rgba(255,255,255,0.6); border: 2px dashed rgba(143, 144, 166, 0.3); border-radius: 20px; aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; position: relative; transition: 0.3s; backdrop-filter: blur(10px); }
         .photo-slot.main { grid-column: span 2; grid-row: span 2; border-radius: 28px; }
         .photo-slot:hover { border-color: var(--primary); background: rgba(255,255,255,0.9); }
         .photo-slot::before { content: '+'; font-size: 32px; color: var(--text-muted); transition: 0.3s; font-weight: 300; }
         .photo-slot:hover::before { color: var(--primary); transform: scale(1.1); }
         .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: inherit; }
+        
+        /* Кнопка удаления фото */
+        .delete-photo-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 12px; cursor: pointer; z-index: 10; display: none; }
+        .photo-slot:hover .delete-photo-btn { display: block; }
 
-        textarea.input-styled { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.6); border: 2px solid transparent; border-radius: 18px; font-size: 15px; outline: none; resize: none; min-height: 100px; color: var(--text-main); }
+        textarea.input-styled { width: 100%; padding: 18px 20px; background: rgba(255,255,255,0.8); border: 2px solid transparent; border-radius: 18px; font-size: 15px; outline: none; resize: none; min-height: 100px; color: var(--text-main); transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         textarea.input-styled:focus { background: white; border-color: rgba(255, 65, 108, 0.4); }
-
         .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-        .chip {
-            padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer;
-            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
+        .chip { padding: 10px 18px; background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8); border-radius: 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .chip.active { background: var(--text-main); color: white; border-color: var(--text-main); transform: translateY(-2px); box-shadow: 0 8px 15px rgba(28, 28, 40, 0.2); }
 
-        /* =========================================
-           ЭКРАН DISCOVERY (СВАЙПЫ)
-           ========================================= */
+        /* ЭКРАН DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px; perspective: 1000px; }
-        .swipe-card {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; border-radius: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-            overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
-            background-size: cover; background-position: center; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        /* Демо-картинка */
+        .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; border-radius: 32px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border: 1px solid rgba(255,255,255,0.2); }
         .swipe-card { background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
-        
-        .card-info {
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
-            padding: 40px 25px 25px; color: white;
-        }
+        .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%); padding: 40px 25px 25px; color: white; }
         .card-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
         .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .card-age { font-size: 24px; font-weight: 400; opacity: 0.9; }
         .card-status { width: 10px; height: 10px; background: #00E676; border-radius: 50%; box-shadow: 0 0 12px #00E676; margin-bottom: 5px; }
-        
         .card-bio { font-size: 15px; line-height: 1.5; opacity: 0.9; margin-bottom: 15px; font-weight: 300; }
         .card-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
         .card-tags::-webkit-scrollbar { display: none; }
-        .card-tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid rgba(255,255,255,0.3); }
-
+        .card-tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid rgba(255,255,255,0.3); }
         .action-bar { display: flex; justify-content: center; align-items: center; gap: 20px; padding: 0 0 20px; }
-        .circle-btn {
-            width: 65px; height: 65px; border-radius: 50%; background: white; border: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); font-size: 28px; cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .circle-btn { width: 65px; height: 65px; border-radius: 50%; background: white; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.1); font-size: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .circle-btn:active { transform: scale(0.85); }
         .btn-nope { color: #FF416C; }
         .btn-star { width: 50px; height: 50px; font-size: 22px; color: #00C9FF; }
         .btn-like { color: #00E676; }
-        
         .circle-btn:hover { transform: translateY(-5px); }
         .btn-nope:hover { box-shadow: 0 15px 35px rgba(255, 65, 108, 0.2); }
         .btn-like:hover { box-shadow: 0 15px 35px rgba(0, 230, 118, 0.2); }
-
-        /* =========================================
-           BOTTOM NAVIGATION (NATIVE FEEL)
-           ========================================= */
-        .bottom-nav {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 80px;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.5);
-            display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; z-index: 100;
-        }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.5); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; z-index: 100; }
         .nav-item { font-size: 24px; color: var(--text-muted); cursor: pointer; transition: 0.3s; padding: 10px; position: relative; }
         .nav-item.active { color: var(--primary); transform: translateY(-3px); }
         .nav-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--primary); border-radius: 50%; }
 
+        /* Экран загрузки */
+        #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--glass-bg); backdrop-filter: blur(20px); z-index: 999; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: 0.3s; }
+        #loading-overlay.active { opacity: 1; pointer-events: all; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255, 65, 108, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<!-- Анимированный фон (работает независимо от экранов) -->
 <div class="aura-background">
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
-    <div class="orb"></div>
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div>
 </div>
 
 <div class="app-container">
+    
+    <!-- Экран загрузки (показывается при проверке базы) -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div style="font-weight: 600; color: var(--primary);">Загрузка профиля...</div>
+    </div>
 
-    <!-- ==========================================
-         ЭКРАН 1: АВТОРИЗАЦИЯ
-         ========================================== -->
-    <div id="screen-auth" class="screen active">
+    <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
+    <div id="screen-auth" class="screen">
         <div class="auth-wrapper">
             <div class="logo-container">
                 <div class="logo-icon">🔥</div>
                 <div class="logo-text">AuraLover</div>
                 <div class="logo-sub">Почувствуй свою искру</div>
             </div>
-
             <div class="auth-card">
                 <div class="tabs">
                     <div class="tab-slider" id="tab-slider"></div>
                     <div class="tab active" id="btn-tab-login">Вход</div>
                     <div class="tab" id="btn-tab-register">Регистрация</div>
                 </div>
-
                 <form id="auth-form" onsubmit="return false;">
                     <div class="input-box">
                         <input type="email" id="auth-email" placeholder=" " required>
@@ -264,9 +171,7 @@
         </div>
     </div>
 
-    <!-- ==========================================
-         ЭКРАН 2: НАСТРОЙКА ПРОФИЛЯ
-         ========================================== -->
+    <!-- ЭКРАН 2: НАСТРОЙКА ПРОФИЛЯ -->
     <div id="screen-setup" class="screen">
         <div class="app-header">
             <div class="header-title">Твой профиль</div>
@@ -276,48 +181,40 @@
         <div class="scroll-area">
             <div class="section-title" style="margin-top: 0;">Фотографии (до 5)</div>
             <div class="photo-grid" id="photo-grid">
-                <label class="photo-slot main"><input type="file" class="photo-input" accept="image/*" hidden></label>
-                <label class="photo-slot"><input type="file" class="photo-input" accept="image/*" hidden></label>
-                <label class="photo-slot"><input type="file" class="photo-input" accept="image/*" hidden></label>
-                <label class="photo-slot"><input type="file" class="photo-input" accept="image/*" hidden></label>
-                <label class="photo-slot"><input type="file" class="photo-input" accept="image/*" hidden></label>
+                <label class="photo-slot main" data-index="0"><input type="file" class="photo-input" accept="image/*" hidden></label>
+                <label class="photo-slot" data-index="1"><input type="file" class="photo-input" accept="image/*" hidden></label>
+                <label class="photo-slot" data-index="2"><input type="file" class="photo-input" accept="image/*" hidden></label>
+                <label class="photo-slot" data-index="3"><input type="file" class="photo-input" accept="image/*" hidden></label>
+                <label class="photo-slot" data-index="4"><input type="file" class="photo-input" accept="image/*" hidden></label>
             </div>
 
             <div class="section-title">О себе</div>
-            <div class="input-box">
-                <input type="text" id="prof-name" placeholder=" " required>
-                <label>Твое имя</label>
-            </div>
-            <div class="input-box">
-                <input type="number" id="prof-age" placeholder=" " required>
-                <label>Возраст</label>
-            </div>
+            <div class="input-box"><input type="text" id="prof-name" placeholder=" " required><label>Твое имя</label></div>
+            <div class="input-box"><input type="number" id="prof-age" placeholder=" " required><label>Возраст</label></div>
             <textarea id="prof-bio" class="input-styled" placeholder="Расскажи пару слов, чтобы зацепить внимание..."></textarea>
 
             <div class="section-title">Твой вайб (выбери до 5)</div>
-            <div class="chips">
-                <div class="chip">Музыка (emo-rap)</div>
-                <div class="chip">Разработка игр</div>
-                <div class="chip">GTA 5 RP</div>
-                <div class="chip">Спорт (ГТО)</div>
-                <div class="chip">Web-программирование</div>
-                <div class="chip">Тусовки до утра</div>
-                <div class="chip">Twitch Стриминг</div>
-                <div class="chip">Эстетика</div>
-                <div class="chip">Ночные поездки</div>
+            <div class="chips" id="interests-container">
+                <div class="chip" data-value="Музыка (emo-rap)">Музыка (emo-rap)</div>
+                <div class="chip" data-value="Разработка игр">Разработка игр</div>
+                <div class="chip" data-value="GTA 5 RP">GTA 5 RP</div>
+                <div class="chip" data-value="Спорт (ГТО)">Спорт (ГТО)</div>
+                <div class="chip" data-value="Web-программирование">Web-программирование</div>
+                <div class="chip" data-value="Тусовки до утра">Тусовки до утра</div>
+                <div class="chip" data-value="Twitch Стриминг">Twitch Стриминг</div>
+                <div class="chip" data-value="Эстетика">Эстетика</div>
+                <div class="chip" data-value="Ночные поездки">Ночные поездки</div>
             </div>
 
             <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить и начать</button>
         </div>
     </div>
 
-    <!-- ==========================================
-         ЭКРАН 3: ГЛАВНЫЙ (СВАЙПЫ)
-         ========================================== -->
+    <!-- ЭКРАН 3: ГЛАВНЫЙ (СВАЙПЫ) -->
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" style="font-size: 24px;">Aura</div>
-            <button class="icon-btn">⚙️</button>
+            <button class="icon-btn" id="btn-edit-profile" title="Редактировать профиль">⚙️</button>
         </div>
 
         <div class="card-container">
@@ -343,21 +240,21 @@
             <button class="circle-btn btn-like" id="btn-like">♥</button>
         </div>
 
-        <!-- Нижняя навигация -->
         <div class="bottom-nav">
             <div class="nav-item active">🔥</div>
             <div class="nav-item">💬</div>
             <div class="nav-item">👤</div>
         </div>
     </div>
-
 </div>
 
-<!-- FIREBASE & ЛОГИКА -->
+<!-- ПОДКЛЮЧЕНИЕ FIREBASE (ВКЛЮЧАЯ FIRESTORE ДЛЯ БАЗЫ ДАННЫХ) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+    // Ваши ключи
     const firebaseConfig = {
         apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
         authDomain: "auralover.firebaseapp.com",
@@ -371,43 +268,26 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Система экранов
+    // Управление экранами
     const screens = {
         auth: document.getElementById('screen-auth'),
         setup: document.getElementById('screen-setup'),
         main: document.getElementById('screen-main')
     };
+    const loadingOverlay = document.getElementById('loading-overlay');
 
     function showScreen(screenName) {
         Object.values(screens).forEach(s => s.classList.remove('active'));
         setTimeout(() => screens[screenName].classList.add('active'), 50);
     }
 
-    // --- ЛОГИКА АВТОРИЗАЦИИ (Вкладки) ---
+    // --- ЛОГИКА АВТОРИЗАЦИИ ---
     let isLogin = true;
-    const tabSlider = document.getElementById('tab-slider');
-    const btnLogin = document.getElementById('btn-tab-login');
-    const btnRegister = document.getElementById('btn-tab-register');
-    const submitBtn = document.getElementById('auth-submit-btn');
+    document.getElementById('btn-tab-login').addEventListener('click', () => { isLogin = true; document.getElementById('tab-slider').style.left = '5px'; document.getElementById('btn-tab-login').classList.add('active'); document.getElementById('btn-tab-register').classList.remove('active'); document.getElementById('auth-submit-btn').innerText = 'Войти'; });
+    document.getElementById('btn-tab-register').addEventListener('click', () => { isLogin = false; document.getElementById('tab-slider').style.left = '50%'; document.getElementById('btn-tab-register').classList.add('active'); document.getElementById('btn-tab-login').classList.remove('active'); document.getElementById('auth-submit-btn').innerText = 'Создать аккаунт'; });
 
-    btnLogin.addEventListener('click', () => {
-        isLogin = true;
-        tabSlider.style.left = '5px';
-        btnLogin.classList.add('active');
-        btnRegister.classList.remove('active');
-        submitBtn.innerText = 'Войти';
-    });
-
-    btnRegister.addEventListener('click', () => {
-        isLogin = false;
-        tabSlider.style.left = '50%';
-        btnRegister.classList.add('active');
-        btnLogin.classList.remove('active');
-        submitBtn.innerText = 'Создать аккаунт';
-    });
-
-    // --- FIREBASE АВТОРИЗАЦИЯ ---
     document.getElementById('auth-form').addEventListener('submit', () => {
         const email = document.getElementById('auth-email').value;
         const password = document.getElementById('auth-password').value;
@@ -415,84 +295,181 @@
         errorMsg.innerText = "";
 
         if (isLogin) {
-            signInWithEmailAndPassword(auth, email, password)
-                .catch(err => errorMsg.innerText = "Неверный Email или пароль");
+            signInWithEmailAndPassword(auth, email, password).catch(err => errorMsg.innerText = "Неверный Email или пароль");
         } else {
-            createUserWithEmailAndPassword(auth, email, password)
-                .catch(err => errorMsg.innerText = "Ошибка: " + err.message);
+            createUserWithEmailAndPassword(auth, email, password).catch(err => errorMsg.innerText = "Ошибка: " + err.message);
         }
     });
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            showScreen('setup'); // Переход после входа
-            document.getElementById('auth-password').value = "";
-        } else {
-            showScreen('auth');
-        }
+    // --- МАГИЯ СОХРАНЕНИЯ ДАННЫХ (ФУНКЦИЯ ЗАГРУЗКИ ПРОФИЛЯ) ---
+    let userPhotos = ["", "", "", "", ""]; // Массив для хранения 5 фото
+
+    // Функция для сжатия фото (чтобы не переполнить базу данных)
+    function compressImage(file, maxWidth = 500) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ratio = maxWidth / img.width;
+                    canvas.width = maxWidth; canvas.height = img.height * ratio;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.6)); // Сжимаем в JPEG 60%
+                };
+            };
+        });
+    }
+
+    // Отрисовка фото в сетке
+    function renderPhotos() {
+        const slots = document.querySelectorAll('.photo-slot');
+        slots.forEach((slot, index) => {
+            const oldImg = slot.querySelector('img');
+            const oldBtn = slot.querySelector('.delete-photo-btn');
+            if(oldImg) oldImg.remove();
+            if(oldBtn) oldBtn.remove();
+            
+            if(userPhotos[index]) {
+                const img = document.createElement('img');
+                img.src = userPhotos[index];
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-photo-btn';
+                deleteBtn.innerHTML = '✖';
+                deleteBtn.onclick = (e) => { e.preventDefault(); userPhotos[index] = ""; renderPhotos(); };
+                
+                slot.appendChild(img);
+                slot.appendChild(deleteBtn);
+            }
+        });
+    }
+
+    // Обработка загрузки нового фото
+    document.querySelectorAll('.photo-input').forEach(input => {
+        input.addEventListener('change', async function() {
+            if (this.files && this.files[0]) {
+                const slotIndex = this.parentElement.getAttribute('data-index');
+                const compressedBase64 = await compressImage(this.files[0]);
+                userPhotos[slotIndex] = compressedBase64;
+                renderPhotos();
+            }
+            this.value = ""; // Сброс инпута
+        });
     });
 
-    document.getElementById('btn-logout-setup').addEventListener('click', () => signOut(auth));
-
-    // --- НАСТРОЙКА ПРОФИЛЯ ---
-    // Логика интересов (эффект при нажатии)
+    // Обработка интересов
     document.querySelectorAll('.chip').forEach(chip => {
         chip.addEventListener('click', () => {
             const activeCount = document.querySelectorAll('.chip.active').length;
             if (!chip.classList.contains('active') && activeCount >= 5) {
-                chip.style.transform = "translateX(5px)"; setTimeout(() => chip.style.transform = "translateX(-5px)", 100); setTimeout(() => chip.style.transform = "translateX(0)", 200);
-                return;
+                chip.style.transform = "translateX(5px)"; setTimeout(() => chip.style.transform = "translateX(-5px)", 100); setTimeout(() => chip.style.transform = "translateX(0)", 200); return;
             }
             chip.classList.toggle('active');
         });
     });
 
-    // Загрузка фото с предпросмотром
-    document.querySelectorAll('.photo-input').forEach(input => {
-        input.addEventListener('change', function(e) {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const label = this.parentElement;
-                    const oldImg = label.querySelector('img');
-                    if(oldImg) oldImg.remove();
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    label.appendChild(img);
+    // --- ПРОВЕРКА СОСТОЯНИЯ ПРИ ВХОДЕ ---
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            loadingOverlay.classList.add('active'); // Показываем загрузку
+            
+            // Пытаемся получить данные пользователя из Firestore
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                // Заполняем поля
+                document.getElementById('prof-name').value = data.name || "";
+                document.getElementById('prof-age').value = data.age || "";
+                document.getElementById('prof-bio').value = data.bio || "";
+                
+                // Восстанавливаем интересы
+                document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('active'));
+                if(data.interests) {
+                    data.interests.forEach(interest => {
+                        const chip = document.querySelector(`.chip[data-value="${interest}"]`);
+                        if(chip) chip.classList.add('active');
+                    });
                 }
-                reader.readAsDataURL(this.files[0]);
+
+                // Восстанавливаем фото
+                if(data.photos) userPhotos = data.photos;
+                renderPhotos();
+
+                showScreen('main'); // Анкета есть - идем к свайпам!
+            } else {
+                showScreen('setup'); // Анкеты нет - показываем настройку
             }
-        });
+            loadingOverlay.classList.remove('active');
+            document.getElementById('auth-password').value = "";
+        } else {
+            showScreen('auth'); // Не авторизован - на экран входа
+        }
     });
 
-    document.getElementById('btn-save-profile').addEventListener('click', () => {
+    // --- СОХРАНЕНИЕ ПРОФИЛЯ В БАЗУ ДАННЫХ ---
+    document.getElementById('btn-save-profile').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-save-profile');
         const name = document.getElementById('prof-name').value;
+        const age = document.getElementById('prof-age').value;
+        const bio = document.getElementById('prof-bio').value;
+        
+        // Собираем выбранные интересы
+        const interests = Array.from(document.querySelectorAll('.chip.active')).map(chip => chip.getAttribute('data-value'));
+
         if(name.trim().length < 2) return alert("Введите имя!");
-        showScreen('main');
+        if(!userPhotos[0]) return alert("Загрузите хотя бы одно главное фото!");
+
+        btn.innerText = "Сохраняем...";
+        btn.disabled = true;
+
+        try {
+            // Записываем данные в Firestore в коллекцию "users" под ID пользователя
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                age: age,
+                bio: bio,
+                interests: interests,
+                photos: userPhotos // Массив со сжатыми фотографиями
+            });
+            showScreen('main');
+        } catch(e) {
+            alert("Ошибка сохранения: " + e.message);
+        } finally {
+            btn.innerText = "Сохранить и начать";
+            btn.disabled = false;
+        }
     });
+
+    // Кнопки навигации
+    document.getElementById('btn-logout-setup').addEventListener('click', () => signOut(auth));
+    document.getElementById('btn-edit-profile').addEventListener('click', () => showScreen('setup'));
 
     // --- АНИМАЦИИ СВАЙПОВ ---
-    const card = document.getElementById('main-card');
-    
+    const mainCard = document.getElementById('main-card');
     function animateSwipe(direction) {
-        if(!card) return;
+        if(!mainCard) return;
         const x = direction === 'left' ? -350 : (direction === 'right' ? 350 : 0);
         const y = direction === 'up' ? -350 : 0;
         const rotate = direction === 'left' ? -25 : (direction === 'right' ? 25 : 0);
         
-        card.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
-        card.style.opacity = '0';
+        mainCard.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+        mainCard.style.opacity = '0';
         
-        // Возврат новой карточки
         setTimeout(() => {
-            card.style.transition = 'none';
-            card.style.transform = 'translate(0px, 0px) rotate(0deg) scale(0.9)';
-            card.style.opacity = '0';
-            
+            mainCard.style.transition = 'none';
+            mainCard.style.transform = 'translate(0px, 0px) rotate(0deg) scale(0.9)';
+            mainCard.style.opacity = '0';
             setTimeout(() => {
-                card.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s';
-                card.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
-                card.style.opacity = '1';
+                mainCard.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s';
+                mainCard.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+                mainCard.style.opacity = '1';
             }, 50);
         }, 300);
     }
