@@ -124,8 +124,8 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ПАНЕЛЬ АДМИНИСТРАТОРА (СТИЛИ) */
-        .admin-panel-card { background: linear-gradient(135deg, rgba(138, 35, 135, 0.08), rgba(255, 65, 108, 0.08)); border: 2px solid rgba(138, 35, 135, 0.2); border-radius: 24px; padding: 20px; margin-top: 25px; box-shadow: 0 10px 30px rgba(138, 35, 135, 0.05); }
+        /* ПАНЕЛЬ АДМИНИСТРАТОРА */
+        .admin-panel-card { background: linear-gradient(135deg, rgba(138, 35, 135, 0.08), rgba(255, 65, 108, 0.08)); border: 2px solid rgba(138, 35, 135, 0.2); border-radius: 24px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(138, 35, 135, 0.05); }
         .admin-title { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         .admin-btn { width: 100%; padding: 14px; background: white; color: var(--text-main); border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 10px; transition: 0.2s; text-align: left; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .admin-btn:hover { background: var(--secondary); color: white; border-color: transparent; }
@@ -269,18 +269,18 @@
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     
-                    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА (ВИДНА ТОЛЬКО ВЛАДЕЛЬЦУ) -->
+                    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА (ВЫВОДИТСЯ ТОЛЬКО ДЛЯ ВАС) -->
                     <div id="admin-panel-section" class="admin-panel-card hidden">
                         <div class="admin-title">🛡️ Панель Администратора</div>
                         <button class="admin-btn" onclick="openAdminModal('modal-broadcast')">📢 Системная рассылка <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-ban')">🚫 Заблокировать / Разблокировать <span>→</span></button>
+                        <button class="admin-btn" onclick="openAdminModal('modal-ban')">🚫 Бан / Разбан пользователя <span>→</span></button>
                         <button class="admin-btn" onclick="openAdminModal('modal-logs')">📋 Просмотр логов по UID <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-msgs')">💬 Сообщения пользователя по UID <span>→</span></button>
-                        <button class="admin-btn" onclick="openAdminModal('modal-photos')">🖼️ Удалить фотографии по UID <span>→</span></button>
+                        <button class="admin-btn" onclick="openAdminModal('modal-msgs')">💬 Сообщения по UID <span>→</span></button>
+                        <button class="admin-btn" onclick="openAdminModal('modal-photos')">🖼️ Удалить фото по UID <span>→</span></button>
                         <button class="admin-btn" onclick="openAdminModal('modal-edit-user')">✏️ Изменить анкету по UID <span>→</span></button>
                     </div>
 
-                    <div class="section-title" style="margin-top: 25px;">Фотографии (до 5)</div>
+                    <div class="section-title" style="margin-top: 15px;">Фотографии (до 5)</div>
                     <div class="photo-grid" id="photo-grid">
                         <label class="photo-slot main" data-index="0"><input type="file" class="photo-input" accept="image/*" hidden></label>
                         <label class="photo-slot" data-index="1"><input type="file" class="photo-input" accept="image/*" hidden></label>
@@ -316,13 +316,11 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА АДМИН-ПАНЕЛИ -->
-    
-    <!-- 1. Рассылка -->
+    <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ -->
     <div id="modal-broadcast" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">📢 Рассылка уведомления</div>
-            <textarea id="broadcast-text" class="admin-textarea" placeholder="Введите текст системного уведомления для всех пользователей..."></textarea>
+            <div class="admin-modal-title">📢 Рассылка всем</div>
+            <textarea id="broadcast-text" class="admin-textarea" placeholder="Текст системного уведомления..."></textarea>
             <div class="admin-modal-actions">
                 <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Отправить</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-broadcast')">Отмена</button>
@@ -330,54 +328,49 @@
         </div>
     </div>
 
-    <!-- 2. Бан / Разбан -->
     <div id="modal-ban" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">🚫 Блокировка аккаунта</div>
-            <input type="text" id="ban-uid" class="admin-input" placeholder="Введите UID пользователя...">
+            <div class="admin-modal-title">🚫 Бан аккаунта</div>
+            <input type="text" id="ban-uid" class="admin-input" placeholder="UID пользователя...">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="toggleUserBan(true)">Заблокировать</button>
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #00E676;" onclick="toggleUserBan(false)">Разблокировать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="toggleUserBan(true)">Заблокировать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #00E676;" onclick="toggleUserBan(false)">Разблокировать</button>
             </div>
             <button class="btn-reset" style="margin-top:10px; padding: 12px;" onclick="closeAdminModal('modal-ban')">Закрыть</button>
         </div>
     </div>
 
-    <!-- 3. Логи по UID -->
     <div id="modal-logs" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">📋 Логи пользователя</div>
-            <input type="text" id="logs-uid" class="admin-input" placeholder="Введите UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserLogs()">Загрузить логи</button>
-            <div id="logs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 150px; overflow-y: auto; margin-bottom: 12px; white-space: pre-wrap;"></div>
+            <div class="admin-modal-title">📋 Логи по UID</div>
+            <input type="text" id="logs-uid" class="admin-input" placeholder="UID пользователя...">
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserLogs()">Получить логи</button>
+            <div id="logs-result" style="font-size: 11px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 140px; overflow-y: auto; margin-bottom: 12px; white-space: pre-wrap;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-logs')">Закрыть</button>
         </div>
     </div>
 
-    <!-- 4. Сообщения по UID -->
     <div id="modal-msgs" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">💬 Сообщения по UID</div>
-            <input type="text" id="msgs-uid" class="admin-input" placeholder="Введите UID пользователя...">
+            <input type="text" id="msgs-uid" class="admin-input" placeholder="UID пользователя...">
             <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Найти чаты</button>
-            <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 150px; overflow-y: auto; margin-bottom: 12px;"></div>
+            <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 140px; overflow-y: auto; margin-bottom: 12px;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-msgs')">Закрыть</button>
         </div>
     </div>
 
-    <!-- 5. Удаление фото по UID -->
     <div id="modal-photos" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">🖼️ Удаление фото</div>
-            <input type="text" id="photos-uid" class="admin-input" placeholder="Введите UID пользователя...">
+            <div class="admin-modal-title">🖼️ Удалить фото</div>
+            <input type="text" id="photos-uid" class="admin-input" placeholder="UID пользователя...">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteUserPhotos()">Учистить фото</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteUserPhotos()">Очистить фото</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-photos')">Отмена</button>
             </div>
         </div>
     </div>
 
-    <!-- 6. Изменение анкеты по UID -->
     <div id="modal-edit-user" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">✏️ Изменить анкету</div>
@@ -494,28 +487,20 @@
     function hideLoading() { loadingOverlay.classList.remove('active'); }
     function switchMainScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
 
-    // --- УПРАВЛЕНИЕ МОДАЛКАМИ АДМИНКИ ---
-    window.openAdminModal = (modalId) => document.getElementById(modalId).classList.add('active');
-    window.closeAdminModal = (modalId) => document.getElementById(modalId).classList.remove('active');
-
-    // 1. Рассылка системного уведомления
+    // --- ФУНКЦИИ ПАНЕЛИ АДМИНИСТРАТОРА ---
     window.sendBroadcast = async () => {
         const text = document.getElementById('broadcast-text').value.trim();
-        if(!text) return alert("Введите текст уведомления!");
-        if(!confirm("Отправить это уведомление всем пользователям платформы?")) return;
+        if(!text) return alert("Введите текст!");
+        if(!confirm("Отправить системное уведомление всем пользователям?")) return;
         
         try {
             const allUsersSnap = await getDocs(collection(db, "users"));
             const promises = [];
-            
             allUsersSnap.forEach((userDoc) => {
                 const targetId = userDoc.id;
                 if(targetId === auth.currentUser.uid) return;
-                
                 const chatId = [auth.currentUser.uid, targetId].sort().join('_');
-                const chatRef = doc(db, "chats", chatId);
-                
-                promises.push(setDoc(chatRef, {
+                promises.push(setDoc(doc(db, "chats", chatId), {
                     users: [auth.currentUser.uid, targetId],
                     userInfo: {
                         [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
@@ -525,98 +510,80 @@
                     lastMessageSenderId: "system",
                     timestamp: serverTimestamp()
                 }, { merge: true }));
-
                 promises.push(addDoc(collection(db, `chats/${chatId}/messages`), {
-                    text: "📢 Системное уведомление: " + text,
-                    senderId: "system",
-                    timestamp: serverTimestamp()
+                    text: "📢 Системное уведомление: " + text, senderId: "system", timestamp: serverTimestamp()
                 }));
             });
-
             await Promise.all(promises);
-            alert("Системная рассылка успешно выполнена!");
+            alert("Рассылка успешно выполнена!");
             document.getElementById('broadcast-text').value = "";
             closeAdminModal('modal-broadcast');
-        } catch(e) {
-            alert("Ошибка рассылки: " + e.message);
-        }
+        } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // 2. Блокировка / Разблокировка
     window.toggleUserBan = async (isBanned) => {
         const uid = document.getElementById('ban-uid').value.trim();
-        if(!uid) return alert("Введите UID пользователя!");
+        if(!uid) return alert("Введите UID!");
         try {
             await updateDoc(doc(db, "users", uid), { isBanned: isBanned });
-            alert(isBanned ? "Пользователь успешно заблокирован!" : "Пользователь разблокирован!");
+            alert(isBanned ? "Пользователь заблокирован!" : "Пользователь разблокирован!");
             document.getElementById('ban-uid').value = "";
             closeAdminModal('modal-ban');
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // 3. Логи пользователя по UID
     window.fetchUserLogs = async () => {
         const uid = document.getElementById('logs-uid').value.trim();
-        const resultBox = document.getElementById('logs-result');
+        const resBox = document.getElementById('logs-result');
         if(!uid) return alert("Введите UID!");
-        resultBox.innerText = "Загрузка...";
+        resBox.innerText = "Загрузка...";
         try {
             const snap = await getDoc(doc(db, "users", uid));
-            if(!snap.exists()) { resultBox.innerText = "Пользователь не найден в базе данных."; return; }
-            const data = snap.data();
-            resultBox.innerText = JSON.stringify(data, null, 2);
-        } catch(e) { resultBox.innerText = "Ошибка: " + e.message; }
+            if(!snap.exists()) { resBox.innerText = "Не найдено."; return; }
+            resBox.innerText = JSON.stringify(snap.data(), null, 2);
+        } catch(e) { resBox.innerText = "Ошибка: " + e.message; }
     };
 
-    // 4. Просмотр сообщений пользователя по UID
     window.fetchUserMessages = async () => {
         const uid = document.getElementById('msgs-uid').value.trim();
-        const resultBox = document.getElementById('msgs-result');
+        const resBox = document.getElementById('msgs-result');
         if(!uid) return alert("Введите UID!");
-        resultBox.innerText = "Поиск чатов...";
+        resBox.innerText = "Поиск...";
         try {
             const q = query(collection(db, "chats"), where("users", "array-contains", uid));
             const snaps = await getDocs(q);
-            if(snaps.empty) { resultBox.innerText = "У пользователя нет активных чатов."; return; }
-            
+            if(snaps.empty) { resBox.innerText = "Чатов нет."; return; }
             let txt = "";
-            snaps.forEach(s => {
-                const d = s.data();
-                txt += `💬 Чат ID: ${s.id}\nПоследнее: ${d.lastMessage || "нет"}\n\n`;
-            });
-            resultBox.innerText = txt;
-        } catch(e) { resultBox.innerText = "Ошибка: " + e.message; }
+            snaps.forEach(s => { txt += `💬 ID: ${s.id}\nПоследнее: ${s.data().lastMessage}\n\n`; });
+            resBox.innerText = txt;
+        } catch(e) { resBox.innerText = "Ошибка: " + e.message; }
     };
 
-    // 5. Удаление фотографий по UID
     window.deleteUserPhotos = async () => {
         const uid = document.getElementById('photos-uid').value.trim();
         if(!uid) return alert("Введите UID!");
-        if(!confirm("Удалить все фотографии этого пользователя?")) return;
+        if(!confirm("Очистить все фото пользователя?")) return;
         try {
             await updateDoc(doc(db, "users", uid), { photos: ["", "", "", "", ""] });
-            alert("Фотографии успешно очищены!");
+            alert("Фото удалены!");
             document.getElementById('photos-uid').value = "";
             closeAdminModal('modal-photos');
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // 6. Изменение анкеты по UID
     window.saveEditedUser = async () => {
         const uid = document.getElementById('edit-uid').value.trim();
         const name = document.getElementById('edit-name').value.trim();
         const age = document.getElementById('edit-age').value.trim();
         const city = document.getElementById('edit-city').value.trim();
         if(!uid) return alert("Введите UID!");
-        
-        const updateObj = {};
-        if(name) updateObj.name = name;
-        if(age) updateObj.age = age;
-        if(city) { updateObj.city = city; updateObj.cityLower = city.toLowerCase().trim(); }
-        
+        const obj = {};
+        if(name) obj.name = name;
+        if(age) obj.age = age;
+        if(city) { obj.city = city; obj.cityLower = city.toLowerCase().trim(); }
         try {
-            await updateDoc(doc(db, "users", uid), updateObj);
-            alert("Анкета пользователя успешно обновлена!");
+            await updateDoc(doc(db, "users", uid), obj);
+            alert("Анкета обновлена!");
             closeAdminModal('modal-edit-user');
         } catch(e) { alert("Ошибка: " + e.message); }
     };
@@ -665,7 +632,6 @@
 
             setMyPresence(true); 
 
-            // Проверка на бан при входе
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             if(checkSnap.exists() && checkSnap.data().isBanned) {
                 alert("Ваш аккаунт был заблокирован администратором платформы.");
@@ -674,7 +640,7 @@
                 return;
             }
 
-            // ПРОВЕРКА НА ВЛАДЕЛЬЦА
+            // ПРОВЕРКА ВЛАДЕЛЬЦА ДЛЯ АДМИН ПАНЕЛИ
             if (user.uid === OWNER_UID) {
                 document.getElementById('admin-panel-section').classList.remove('hidden');
             } else {
@@ -768,7 +734,7 @@
         snaps.forEach(s => {
             if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) {
                 const data = s.data(); 
-                if(data.isBanned) return; // Пропускаем заблокированных
+                if(data.isBanned) return; 
                 let sharedCount = 0;
                 if (data.interests && myInterests.length > 0) sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
                 profilesQueue.push({ id: s.id, sharedCount: sharedCount, ...data });
