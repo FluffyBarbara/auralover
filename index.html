@@ -63,10 +63,18 @@
         .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
-        /* VIEW: DISCOVERY */
+        /* VIEW: DISCOVERY (КАРТОЧКИ + ФОТО ИНДИКАТОРЫ) */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
-        .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; }
-        .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; width: 100%; }
+        .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; cursor: pointer; }
+        
+        .photo-indicators { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 5; pointer-events: none; }
+        .photo-dot { flex: 1; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; }
+        .photo-dot.active { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+
+        .card-report-btn { position: absolute; top: 25px; right: 15px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; cursor: pointer; z-index: 10; transition: 0.2s; }
+        .card-report-btn:active { transform: scale(0.95); }
+
+        .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; width: 100%; pointer-events: none; }
         .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
         .card-age { font-size: 24px; font-weight: 400; opacity: 0.9; }
         .card-city { font-size: 14px; opacity: 0.8; margin-bottom: 10px; display: block; }
@@ -144,10 +152,17 @@
         .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ЧАТ-КОМНАТА */
+        /* ЧАТ-КОМНАТА И МЕНЮ В ЧАТЕ */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        .chat-dropdown-container { position: relative; }
+        .chat-dropdown { position: absolute; top: 40px; right: 0; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); padding: 5px; width: 220px; z-index: 300; transform-origin: top right; transition: 0.2s; opacity: 0; pointer-events: none; transform: scale(0.95); }
+        .chat-dropdown.active { opacity: 1; pointer-events: all; transform: scale(1); }
+        .dropdown-item { padding: 12px 15px; font-size: 14px; font-weight: 500; color: var(--text-main); cursor: pointer; border-radius: 10px; transition: 0.2s; }
+        .dropdown-item:active { background: #f4f5f7; }
+
         .chat-room-avatar { width: 42px; height: 42px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
         .chat-header-info { display: flex; flex-direction: column; justify-content: center; }
         .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2;}
@@ -156,7 +171,7 @@
         .chat-room-status.typing { color: var(--primary); font-style: italic; animation: pulseTyping 1.5s infinite; }
         @keyframes pulseTyping { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         .msg { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: popIn 0.3s; }
         @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .msg.received { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -236,10 +251,13 @@
         </div>
 
         <div class="main-views-container">
-            <!-- ВКЛАДКА 1: DISCOVERY -->
+            <!-- ВКЛАДКА 1: DISCOVERY (МНОГО ФОТО + ЖАЛОБА) -->
             <div id="view-discovery" class="view">
                 <div class="card-container">
-                    <div class="swipe-card hidden" id="main-card">
+                    <div class="swipe-card hidden" id="main-card" onclick="handleCardTap(event, 'main-card', 'main')">
+                        <div class="photo-indicators" id="main-card-indicators"></div>
+                        <button class="card-report-btn" onclick="event.stopPropagation(); openUserReportModal(currentViewingProfile.id)">⚠️ Пожаловаться</button>
+                        
                         <div class="card-info">
                             <div class="card-name" id="card-name">Имя, <span class="card-age" id="card-age">20</span></div>
                             <span class="card-city" id="card-city">📍 Город</span>
@@ -303,9 +321,9 @@
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 10px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                     
-                    <!-- СИСТЕМА ЖАЛОБ -->
+                    <!-- СИСТЕМА ЖАЛОБ (ОБЩАЯ) -->
                     <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка</div>
-                    <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-user-report')">🐞 Сообщить о баге / Предложение</button>
+                    <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-generic-report')">🐞 Сообщить о баге / Предложение</button>
                 </div>
             </div>
         </div>
@@ -332,7 +350,7 @@
             <div class="admin-card" onclick="openAdminModal('modal-admin-reports')">
                 <div class="admin-badge hidden" id="admin-reports-badge">0</div>
                 <div class="admin-card-icon">🐞</div>
-                <div class="admin-card-title">Отчеты и Баги</div>
+                <div class="admin-card-title">Отчеты и Жалобы</div>
             </div>
             <div class="admin-card" onclick="fetchAdminUsersList()">
                 <div class="admin-card-icon">👥</div>
@@ -363,29 +381,47 @@
 
     <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ И ДОП. ФУНКЦИОНАЛА -->
     
-    <!-- ПРОСМОТР АНКЕТЫ ИЗ ЧАТА -->
+    <!-- ПРОСМОТР АНКЕТЫ ИЗ ЧАТА (МНОГО ФОТО + ЖАЛОБА) -->
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
         <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
-            <div class="swipe-card" id="view-profile-card" style="position:relative; transform:none; height:70vh; max-height:600px; display:flex;">
+            <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:70vh; max-height:600px; display:flex;">
+                
+                <div class="photo-indicators" id="view-profile-card-indicators"></div>
+                <button class="card-report-btn" onclick="event.stopPropagation(); openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</button>
+                <button onclick="event.stopPropagation(); closeAdminModal('modal-view-profile')" class="circle-btn" style="position:absolute; top:20px; left:15px; width:40px; height:40px; font-size:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index: 10;">←</button>
+
                 <div class="card-info" style="border-radius: 0 0 32px 32px; width: 100%;">
                     <div class="card-name" id="vp-card-name">Имя, <span class="card-age" id="vp-card-age">20</span></div>
                     <span class="card-city" id="vp-card-city">📍 Город</span>
                     <div class="card-bio" id="vp-card-bio">Описание...</div>
                     <div class="card-tags" id="vp-card-tags"></div>
                 </div>
-                <button onclick="closeAdminModal('modal-view-profile')" class="circle-btn" style="position:absolute; top:15px; right:15px; width:45px; height:45px; font-size:18px; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index: 10;">✕</button>
             </div>
         </div>
     </div>
 
-    <div id="modal-user-report" class="admin-modal">
+    <!-- ОБЩИЙ БАГ РЕПОРТ -->
+    <div id="modal-generic-report" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🐞 Сообщить о баге</div>
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px; line-height:1.4;">Опишите проблему. Разработчики оперативно всё проверят!</p>
-            <textarea id="report-text-input" class="admin-textarea" placeholder="Подробно опишите баг или идею..."></textarea>
-            <input type="url" id="report-link-input" class="admin-input" placeholder="Ссылка на фото/видео (YouTube, imgur...)">
+            <textarea id="generic-report-text" class="admin-textarea" placeholder="Опишите проблему..."></textarea>
+            <input type="url" id="generic-report-link" class="admin-input" placeholder="Ссылка на фото/видео (YouTube, imgur...)">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="submitReport()">Отправить</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="submitReport('generic')">Отправить</button>
+                <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-generic-report')">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЖАЛОБА НА ПОЛЬЗОВАТЕЛЯ -->
+    <div id="modal-user-report" class="admin-modal" style="z-index: 700;">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">⚠️ Пожаловаться</div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Укажите причину жалобы на данного пользователя.</p>
+            <textarea id="user-report-text" class="admin-textarea" placeholder="Причина жалобы..."></textarea>
+            <input type="url" id="user-report-link" class="admin-input" placeholder="Доказательства (ссылка на скрин/видео)">
+            <div class="admin-modal-actions">
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="submitReport('user')">Отправить жалобу</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-user-report')">Отмена</button>
             </div>
         </div>
@@ -393,7 +429,7 @@
 
     <div id="modal-admin-reports" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">🐞 Отчеты от пользователей</div>
+            <div class="admin-modal-title">🐞 Отчеты и Жалобы</div>
             <div id="admin-reports-list" style="max-height: 400px; overflow-y: auto;"></div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-reports')">Закрыть</button>
         </div>
@@ -476,11 +512,22 @@
             </div>
         </div>
     </div>
+    
+    <!-- МОДАЛКА ПРОСМОТРА МЕДИА ИЗ ЧАТА -->
+    <div id="modal-chat-media" class="admin-modal" style="z-index: 500;">
+        <div class="admin-modal-content" style="text-align:center;">
+            <div style="font-size:40px; margin-bottom:10px;">📁</div>
+            <div class="admin-modal-title" style="margin-bottom:5px;">Медиа и Ссылки</div>
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">В данном чате пока нет прикрепленных медиафайлов, ссылок или музыки.</p>
+            <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-chat-media')">Закрыть</button>
+        </div>
+    </div>
 
-    <!-- ВСПЛЫВАЮЩИЙ ЧАТ -->
+    <!-- ВСПЛЫВАЮЩИЙ ЧАТ С НОВЫМ МЕНЮ -->
     <div id="chat-room" class="chat-room">
         <div class="chat-room-header">
             <button class="icon-btn" id="btn-close-chat" style="margin-right:10px; box-shadow:none;">←</button>
+            
             <div style="display:flex; align-items:center; flex:1; cursor:pointer;" onclick="viewUserProfile(window.activeTargetId)">
                 <img src="" class="chat-room-avatar" id="chat-active-avatar">
                 <div class="chat-header-info">
@@ -488,6 +535,19 @@
                     <div class="chat-room-status" id="chat-active-status">Не в сети ⚪</div>
                 </div>
             </div>
+            
+            <!-- МЕНЮ ТРОЕТОЧИЯ -->
+            <div style="position:relative;" id="chat-menu-container">
+                <button class="icon-btn" style="box-shadow:none; font-size:22px; font-weight:bold; color:var(--text-muted);" onclick="toggleChatDropdown()">⋮</button>
+                <div class="chat-dropdown" id="chat-dropdown">
+                    <div class="dropdown-item" style="color:var(--text-main);" onclick="scrollToStart()">⬆️ Начало диалога</div>
+                    <div class="dropdown-item" style="color:var(--text-main);" onclick="viewChatMedia()">📁 Медиа/Ссылки/Музыка</div>
+                    <div class="dropdown-item" style="color:var(--text-main);" id="dropdown-mute-text" onclick="toggleMuteChat()">🔕 Заглушить уведомления</div>
+                    <div class="dropdown-item" style="color:#FF416C;" onclick="openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</div>
+                    <div class="dropdown-item" style="color:#FF416C; font-weight:bold;" onclick="leaveChat()">🚪 Покинуть чат</div>
+                </div>
+            </div>
+
         </div>
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-area" id="chat-input-area">
@@ -528,7 +588,12 @@
     let currentViewingProfile = null;
     let activeChatId = null;
     window.activeTargetId = null; 
+    window.reportingUid = null;
     
+    // Переменные для просмотра фотографий (карусель)
+    let cardPhotosMain = []; let cardIndexMain = 0;
+    let cardPhotosView = []; let cardIndexView = 0;
+
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
     let targetUserUnsubscribe = null; 
@@ -598,6 +663,47 @@
     window.openAdminModal = (modalId) => document.getElementById(modalId).classList.add('active');
     window.closeAdminModal = (modalId) => document.getElementById(modalId).classList.remove('active');
 
+    // --- ФОТО-КАРУСЕЛЬ НА КАРТОЧКАХ ---
+    function updateCardPhotoUI(type) {
+        const cardId = type === 'main' ? 'main-card' : 'view-profile-card';
+        const card = document.getElementById(cardId);
+        const photos = type === 'main' ? cardPhotosMain : cardPhotosView;
+        const index = type === 'main' ? cardIndexMain : cardIndexView;
+        
+        if(photos.length === 0) return;
+        
+        card.style.backgroundImage = `url('${photos[index]}')`;
+        const inds = document.getElementById(`${cardId}-indicators`);
+        if(inds) {
+            inds.innerHTML = '';
+            if(photos.length > 1) {
+                photos.forEach((p, i) => {
+                    inds.innerHTML += `<div class="photo-dot ${i === index ? 'active' : ''}"></div>`;
+                });
+            }
+        }
+    }
+
+    window.handleCardTap = (e, cardId, type) => {
+        if(e.target.closest('.card-report-btn') || e.target.closest('.circle-btn')) return;
+        
+        const photos = type === 'main' ? cardPhotosMain : cardPhotosView;
+        if(photos.length <= 1) return;
+        
+        const rect = document.getElementById(cardId).getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        
+        if(x < rect.width / 2) {
+            if(type === 'main' && cardIndexMain > 0) cardIndexMain--;
+            else if(type === 'view' && cardIndexView > 0) cardIndexView--;
+        } else {
+            if(type === 'main' && cardIndexMain < photos.length - 1) cardIndexMain++;
+            else if(type === 'view' && cardIndexView < photos.length - 1) cardIndexView++;
+        }
+        updateCardPhotoUI(type);
+    };
+
+
     // --- ЛОГИКА КАСТОМНЫХ ИНТЕРЕСОВ ---
     const interestInput = document.getElementById('interest-input');
     const customInterestsContainer = document.getElementById('custom-interests-container');
@@ -625,23 +731,38 @@
         }
     });
 
-    // --- СИСТЕМА ЖАЛОБ ---
-    window.submitReport = async () => {
-        const text = document.getElementById('report-text-input').value.trim();
-        const link = document.getElementById('report-link-input').value.trim();
-        if (!text) return alert("Пожалуйста, опишите проблему.");
+    // --- СИСТЕМА ЖАЛОБ (ДВА ТИПА: ОБЩИЙ И НА ЮЗЕРА) ---
+    window.openUserReportModal = (uid) => {
+        if(!uid || uid === 'system') return alert("Невозможно выполнить действие.");
+        window.reportingUid = uid;
+        openAdminModal('modal-user-report');
+    };
+
+    window.submitReport = async (type) => {
+        const isUser = type === 'user';
+        const textId = isUser ? 'user-report-text' : 'generic-report-text';
+        const linkId = isUser ? 'user-report-link' : 'generic-report-link';
+        
+        const text = document.getElementById(textId).value.trim();
+        const link = document.getElementById(linkId).value.trim();
+        
+        if (!text) return alert("Пожалуйста, опишите причину/проблему.");
+        
         try {
-            await addDoc(collection(db, "reports"), { 
+            const payload = { 
                 uid: auth.currentUser.uid, 
                 name: currentUserData.name || "Без имени", 
-                text: text, 
+                text: isUser ? `Жалоба на пользователя (UID: ${window.reportingUid}): ${text}` : `Баг/Идея: ${text}`, 
                 link: link || null, 
                 timestamp: serverTimestamp() 
-            });
-            alert("Спасибо! Ваше сообщение отправлено разработчикам.");
-            document.getElementById('report-text-input').value = "";
-            document.getElementById('report-link-input').value = "";
-            closeAdminModal('modal-user-report');
+            };
+            if(isUser) payload.reportedUid = window.reportingUid;
+
+            await addDoc(collection(db, "reports"), payload);
+            alert("Ваше сообщение отправлено. Спасибо!");
+            
+            document.getElementById(textId).value = ""; document.getElementById(linkId).value = "";
+            closeAdminModal(isUser ? 'modal-user-report' : 'modal-generic-report');
         } catch(e) { alert("Ошибка при отправке: " + e.message); }
     };
 
@@ -649,6 +770,68 @@
         if(!confirm("Пометить проблему как решенную и удалить?")) return;
         try { await deleteDoc(doc(db, "reports", id)); } catch(e) { alert("Ошибка: " + e.message); }
     };
+
+    // --- МЕНЮ В ЧАТЕ (ТРОЕТОЧИЕ) ---
+    window.toggleChatDropdown = () => {
+        document.getElementById('chat-dropdown').classList.toggle('active');
+    };
+    
+    // Закрыть дропдаун при клике вне него
+    document.addEventListener('click', (e) => {
+        const dd = document.getElementById('chat-dropdown');
+        if(dd && dd.classList.contains('active') && !e.target.closest('#chat-menu-container')) {
+            dd.classList.remove('active');
+        }
+    });
+
+    window.leaveChat = async () => {
+        if(!activeChatId || activeChatId === 'system_broadcast') return;
+        if(!confirm("Вы уверены, что хотите покинуть чат? История сообщений будет удалена.")) return;
+        try {
+            await deleteDoc(doc(db, "chats", activeChatId));
+            document.getElementById('chat-room').classList.remove('active');
+            activeChatId = null; window.activeTargetId = null;
+            document.getElementById('chat-dropdown').classList.remove('active');
+        } catch(e) { alert("Ошибка: " + e.message); }
+    };
+
+    window.toggleMuteChat = async () => {
+        if(!activeChatId) return;
+        const myRef = doc(db, "users", auth.currentUser.uid);
+        const muted = currentUserData.mutedChats || [];
+        
+        try {
+            if(muted.includes(activeChatId)) {
+                await updateDoc(myRef, { mutedChats: arrayRemove(activeChatId) });
+                alert("Уведомления для этого чата включены 🔔");
+            } else {
+                await updateDoc(myRef, { mutedChats: arrayUnion(activeChatId) });
+                alert("Уведомления для этого чата заглушены 🔕");
+            }
+            document.getElementById('chat-dropdown').classList.remove('active');
+            updateMuteBtnUI();
+        } catch(e) { alert(e.message); }
+    };
+
+    function updateMuteBtnUI() {
+        const btn = document.getElementById('dropdown-mute-text');
+        if(!btn || !activeChatId) return;
+        const muted = currentUserData.mutedChats || [];
+        if(muted.includes(activeChatId)) btn.innerText = "🔔 Включить уведомления";
+        else btn.innerText = "🔕 Заглушить уведомления";
+    }
+
+    window.scrollToStart = () => {
+        const msgs = document.getElementById('chat-messages');
+        if(msgs) msgs.scrollTo({top: 0, behavior: 'smooth'});
+        document.getElementById('chat-dropdown').classList.remove('active');
+    };
+
+    window.viewChatMedia = () => {
+        openAdminModal('modal-chat-media');
+        document.getElementById('chat-dropdown').classList.remove('active');
+    };
+
 
     // --- АДМИН ПАНЕЛЬ ---
     window.fetchAdminUsersList = async () => {
@@ -678,15 +861,10 @@
         const text = document.getElementById('broadcast-text').value.trim();
         if(!text) return alert("Введите текст!");
         if(!confirm("Опубликовать новость в глобальный системный канал?")) return;
-        
         try {
             const chatId = 'system_broadcast';
-            await setDoc(doc(db, "chats", chatId), {
-                lastMessage: text, lastMessageSenderId: "system", timestamp: serverTimestamp(), isSystemChat: true
-            }, { merge: true });
-
+            await setDoc(doc(db, "chats", chatId), { lastMessage: text, lastMessageSenderId: "system", timestamp: serverTimestamp(), isSystemChat: true }, { merge: true });
             await addDoc(collection(db, `chats/${chatId}/messages`), { text: text, senderId: "system", timestamp: serverTimestamp() });
-
             alert("Новость успешно опубликована!"); document.getElementById('broadcast-text').value = ""; closeAdminModal('modal-broadcast');
         } catch(e) { alert("Ошибка: " + e.message); }
     };
@@ -727,7 +905,6 @@
             for (let s of snaps.docs) {
                 const chatData = s.data();
                 if(chatData.isSystemChat || s.id.startsWith('system_')) continue;
-
                 const otherUid = chatData.users.find(id => id !== uid) || "Неизвестно";
                 const otherName = chatData.userInfo?.[otherUid]?.name || "Собеседник";
                 
@@ -738,9 +915,8 @@
                 const msgSnaps = await getDocs(msgQ);
                 const msgs = msgSnaps.docs.map(m => m.data()).reverse();
                 
-                if(msgs.length === 0) {
-                    html += `<em style="color:gray;">Сообщений нет.</em>`;
-                } else {
+                if(msgs.length === 0) { html += `<em style="color:gray;">Сообщений нет.</em>`; } 
+                else {
                     msgs.forEach(m => {
                         const sender = m.senderId === uid ? "Он(а)" : (m.senderId === "system" ? "Система" : "Собеседник");
                         const color = m.senderId === uid ? "#FF416C" : "#1C1C28";
@@ -749,7 +925,7 @@
                 }
                 html += `</div>`;
             }
-            if(html === "") html = "Обычных чатов нет (только системные).";
+            if(html === "") html = "Обычных чатов нет.";
             resBox.innerHTML = html;
         } catch(e) { resBox.innerHTML = "Ошибка: " + e.message; }
     };
@@ -799,10 +975,7 @@
         if(!confirm("Очистить ВСЕ фото пользователя?")) return;
         try {
             await updateDoc(doc(db, "users", uid), { photos: ["", "", "", "", ""] });
-            if(window.adminTempUid === uid) {
-                window.adminTempPhotos = ["", "", "", "", ""];
-                renderAdminPhotos();
-            }
+            if(window.adminTempUid === uid) { window.adminTempPhotos = ["", "", "", "", ""]; renderAdminPhotos(); }
             alert("Все фото удалены!");
         } catch(e) { alert("Ошибка: " + e.message); }
     };
@@ -824,7 +997,6 @@
         } catch(e) { alert("Ошибка: " + e.message); }
     };
 
-    // Навигация
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -869,10 +1041,7 @@
 
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             if(checkSnap.exists() && checkSnap.data().isBanned) {
-                alert("Ваш аккаунт был заблокирован администратором платформы.");
-                signOut(auth);
-                hideLoading();
-                return;
+                alert("Ваш аккаунт был заблокирован администратором платформы."); signOut(auth); hideLoading(); return;
             }
 
             if (user.uid === OWNER_UID) {
@@ -897,26 +1066,20 @@
                             <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                 <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
                                 <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text} ${linkHtml}</div>
-                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid}</div>
+                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid} ${d.reportedUid ? '| Нарушитель: ' + d.reportedUid : ''}</div>
                                 <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Решено</button>
                             </div>`;
                         });
                         list.innerHTML = html;
                     }
                 });
-            } else {
-                document.getElementById('owner-secret-section').classList.add('hidden');
-            }
+            } else { document.getElementById('owner-secret-section').classList.add('hidden'); }
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    if(data.isBanned) {
-                        alert("Ваш аккаунт был заблокирован администратором платформы.");
-                        signOut(auth);
-                        return;
-                    }
+                    if(data.isBanned) { alert("Ваш аккаунт заблокирован."); signOut(auth); return; }
 
                     const isFirstLoad = !currentUserData.name;
                     const oldLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
@@ -927,8 +1090,7 @@
                     document.getElementById('prof-city').value = currentUserData.city || "";
                     document.getElementById('prof-bio').value = currentUserData.bio || "";
                     
-                    if(currentUserData.interests) myCustomInterests = [...currentUserData.interests];
-                    else myCustomInterests = [];
+                    if(currentUserData.interests) myCustomInterests = [...currentUserData.interests]; else myCustomInterests = [];
                     renderCustomInterests();
 
                     if(currentUserData.photos) userPhotos = currentUserData.photos;
@@ -936,6 +1098,8 @@
                     
                     const newLikedMeCount = currentUserData.likedMe ? currentUserData.likedMe.length : 0;
                     if (!isFirstLoad && newLikedMeCount > oldLikedMeCount) {
+                        const muted = currentUserData.mutedChats || [];
+                        // Показываем уведомление о мэтче (оно не привязано к конкретному чату)
                         showToast("💖 Новая симпатия!", "Кому-то понравилась ваша анкета. Зайдите в Симпатии!", () => openTab('view-likes', navItems[1]));
                         document.getElementById('likes-badge').classList.add('active');
                     }
@@ -948,9 +1112,7 @@
                     if(!currentUserData.name) { switchMainScreen('screen-main'); openTab('view-profile', navItems[3]); hideLoading(); }
                 }
             });
-        } else {
-            clearLocalState(); switchMainScreen('screen-auth'); hideLoading();
-        }
+        } else { clearLocalState(); switchMainScreen('screen-auth'); hideLoading(); }
     });
 
     async function renderLikesTab() {
@@ -1018,10 +1180,15 @@
         } else {
             empty.classList.add('hidden'); actions.classList.remove('hidden'); card.classList.remove('hidden');
             currentViewingProfile = profilesQueue.shift();
+            
             document.getElementById('card-name').innerHTML = `${currentViewingProfile.name}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
-            card.style.backgroundImage = `url('${currentViewingProfile.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
+            
+            cardPhotosMain = (currentViewingProfile.photos || []).filter(p => p !== "");
+            cardIndexMain = 0;
+            updateCardPhotoUI('main');
+            
             const tags = document.getElementById('card-tags'); tags.innerHTML = '';
             if (currentViewingProfile.sharedCount > 0) tags.innerHTML += `<div class="card-tag" style="background: var(--primary); color: white; border-color: transparent; box-shadow: 0 4px 10px rgba(255,65,108,0.3);">🔥 Совпадений: ${currentViewingProfile.sharedCount}</div>`;
             if(currentViewingProfile.interests) {
@@ -1098,6 +1265,7 @@
     function renderCombinedChats() {
         const container = document.getElementById('chat-list-container');
         let html = "";
+        const muted = currentUserData.mutedChats || [];
 
         if (systemChatData) {
             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
@@ -1124,12 +1292,13 @@
                 const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                 const otherUser = data.userInfo[otherUserId];
                 const safePhoto = otherUser.photo || 'https://via.placeholder.com/150';
+                const isMuted = muted.includes(data.id);
                 
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
                 html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${safePhoto}', '${otherUserId}')">
                     <img class="chat-avatar" src="${safePhoto}">
                     <div class="chat-info">
-                        <div class="chat-name">${otherUser.name}</div>
+                        <div class="chat-name">${otherUser.name} ${isMuted ? '<span style="font-size:12px;opacity:0.5;">🔕</span>' : ''}</div>
                         <div class="chat-last-msg">${msgPreview || ""}</div>
                     </div>
                 </div>`;
@@ -1155,17 +1324,21 @@
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         if (chatUnsubscribe) chatUnsubscribe();
         chatUnsubscribe = onSnapshot(q, (snapshot) => {
+            const muted = currentUserData.mutedChats || [];
+            
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
                     if (data.isSystemChat || change.doc.id.startsWith('system_') || data.users.includes("system")) return;
                     
                     if (change.type === "added" && data.lastMessageSenderId === "system" && !data.isSystemChat) {
-                        showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
-                        document.getElementById('chat-badge').classList.add('active');
+                        if(!muted.includes(change.doc.id)) {
+                            showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
+                            document.getElementById('chat-badge').classList.add('active');
+                        }
                     }
                     else if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
-                        if (activeChatId !== change.doc.id) {
+                        if (activeChatId !== change.doc.id && !muted.includes(change.doc.id)) {
                             const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                             const otherUser = data.userInfo[otherUserId];
                             showToast(`💬 Сообщение от ${otherUser.name}`, data.lastMessage, () => { openTab('view-chats', navItems[2]); window.openChat(change.doc.id, otherUser.name, otherUser.photo, otherUserId); });
@@ -1208,9 +1381,19 @@
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
         
+        document.getElementById('chat-dropdown').classList.remove('active');
+        updateMuteBtnUI();
+        
+        const menuContainer = document.getElementById('chat-menu-container');
         const isSys = chatId === 'system_broadcast';
-        if (isSys && auth.currentUser.uid !== OWNER_UID) document.getElementById('chat-input-area').style.display = 'none';
-        else document.getElementById('chat-input-area').style.display = 'flex';
+        if (isSys) {
+            menuContainer.style.display = 'none';
+            if (auth.currentUser.uid !== OWNER_UID) document.getElementById('chat-input-area').style.display = 'none';
+            else document.getElementById('chat-input-area').style.display = 'flex';
+        } else {
+            menuContainer.style.display = 'block';
+            document.getElementById('chat-input-area').style.display = 'flex';
+        }
 
         activeTargetOnline = false; activeTargetTyping = false; updateChatStatusUI();
 
@@ -1235,8 +1418,7 @@
             targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
                 if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
             });
-            // Не слушаем typing у системного чата
-            onSnapshot(doc(db, "chats", chatId), (snap) => {
+            chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
                 if(snap.exists() && activeChatId === chatId) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
             });
         }
@@ -1253,7 +1435,10 @@
                 document.getElementById('vp-card-name').innerHTML = `${data.name}, <span class="card-age" id="vp-card-age">${data.age}</span>`;
                 document.getElementById('vp-card-city').innerText = "📍 " + (data.city || "");
                 document.getElementById('vp-card-bio').innerText = data.bio || "";
-                document.getElementById('view-profile-card').style.backgroundImage = `url('${data.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
+                
+                cardPhotosView = (data.photos || []).filter(p => p !== "");
+                cardIndexView = 0;
+                updateCardPhotoUI('view');
                 
                 const tags = document.getElementById('vp-card-tags'); tags.innerHTML = '';
                 if(data.interests) {
@@ -1274,6 +1459,7 @@
     
     document.getElementById('btn-close-chat').onclick = () => { 
         document.getElementById('chat-room').classList.remove('active'); 
+        document.getElementById('chat-dropdown').classList.remove('active');
         if (chatDocUnsubscribe) chatDocUnsubscribe(); 
         if (targetUserUnsubscribe) targetUserUnsubscribe();
         activeChatId = null; window.activeTargetId = null;
@@ -1333,7 +1519,6 @@
             await setDoc(doc(db, "users", auth.currentUser.uid), updatedData, {merge: true});
             currentUserData = { ...currentUserData, ...updatedData };
             
-            // ДИНАМИЧЕСКОЕ ОБНОВЛЕНИЕ ДАННЫХ ВО ВСЕХ ЧАТАХ ДЛЯ ИСПРАВЛЕНИЯ "БИТЫХ" КАРТИНОК И ИМЕН
             const qChats = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
             const chatsSnap = await getDocs(qChats);
             const updatePromises = [];
