@@ -146,7 +146,7 @@
         .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
+        /* ЧАТ-КОМНАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -418,16 +418,18 @@
         </div>
     </div>
 
+    <!-- Улучшенный просмотр чатов -->
     <div id="modal-msgs" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">💬 Сообщения по UID</div>
             <input type="text" id="msgs-uid" class="admin-input" placeholder="UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Загрузить историю</button>
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Найти чаты</button>
             <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 12px;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-msgs')">Закрыть</button>
         </div>
     </div>
 
+    <!-- Умное удаление фото -->
     <div id="modal-photos" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🖼️ Управление фото</div>
@@ -437,7 +439,7 @@
             <div id="admin-photos-grid" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px; min-height:80px;"></div>
             
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Удалить все</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Очистить все</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-photos')">Отмена</button>
             </div>
         </div>
@@ -655,8 +657,12 @@
             let html = "";
             for (let s of snaps.docs) {
                 const chatData = s.data();
+                
+                // Игнорируем устаревшие системные рассылки при просмотре логов
+                if(chatData.isSystemChat || s.id.startsWith('system_')) continue;
+
                 const otherUid = chatData.users.find(id => id !== uid) || "Неизвестно";
-                const otherName = chatData.userInfo?.[otherUid]?.name || "Собеседник/Система";
+                const otherName = chatData.userInfo?.[otherUid]?.name || "Собеседник";
                 
                 html += `<div style="background:white; padding:10px; border-radius:10px; margin-bottom:10px; border: 1px solid #e2e2e2;">
                     <strong style="color:var(--primary)">Чат: ${otherName} (ID: ${otherUid})</strong><br><br>`;
@@ -676,11 +682,11 @@
                 }
                 html += `</div>`;
             }
+            if(html === "") html = "Обычных чатов нет (только системные).";
             resBox.innerHTML = html;
         } catch(e) { resBox.innerHTML = "Ошибка: " + e.message; }
     };
 
-    // Обновленное удаление фото
     window.loadUserPhotosForAdmin = async () => {
         const uid = document.getElementById('photos-uid').value.trim();
         if(!uid) return alert("Введите UID!");
@@ -818,7 +824,8 @@
                         snap.forEach(doc => {
                             const d = doc.data();
                             const date = d.timestamp ? new Date(d.timestamp.toDate()).toLocaleString() : "";
-                            html += `<div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
+                            html += `
+                            <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                 <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
                                 <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text}</div>
                                 <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid}</div>
@@ -1011,7 +1018,6 @@
         catch(e) { alert("Ошибка при очистке: " + e.message); } finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
     };
 
-    // --- ОБНОВЛЕННАЯ СИСТЕМА ЧАТОВ И СИСТЕМНОГО КАНАЛА ---
     function renderCombinedChats() {
         const container = document.getElementById('chat-list-container');
         let html = "";
@@ -1025,7 +1031,6 @@
                 </div>
             </div>`;
         } else {
-            // Системный чат есть всегда по умолчанию в UI
              html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
@@ -1055,7 +1060,6 @@
     }
 
     function loadChatsList() {
-        // Слушаем системный чат отдельно
         if (sysChatUnsubscribe) sysChatUnsubscribe();
         sysChatUnsubscribe = onSnapshot(doc(db, "chats", "system_broadcast"), (snap) => {
             if(snap.exists()) {
@@ -1069,13 +1073,15 @@
             renderCombinedChats();
         });
 
-        // Слушаем обычные чаты
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         if (chatUnsubscribe) chatUnsubscribe();
         chatUnsubscribe = onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
+                    
+                    // ИГНОРИРУЕМ СТАРЫЕ СИСТЕМНЫЕ ЧАТЫ ИЗ БАЗЫ ДАННЫХ В УВЕДОМЛЕНИЯХ
+                    if (data.isSystemChat || change.doc.id.startsWith('system_') || data.users.includes("system")) return;
                     
                     if (change.type === "added" && data.lastMessageSenderId === "system" && !data.isSystemChat) {
                         showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
@@ -1094,7 +1100,12 @@
             isInitialChatsLoad = false;
 
             userChats = [];
-            snapshot.forEach(docSnap => userChats.push({ id: docSnap.id, ...docSnap.data() }));
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                // ФИЛЬТР: Убираем старые системные чаты из обычной ленты
+                if (data.isSystemChat || docSnap.id.startsWith('system_') || data.users.includes("system")) return; 
+                userChats.push({ id: docSnap.id, ...data });
+            });
             userChats.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
             
             renderCombinedChats();
@@ -1121,7 +1132,6 @@
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
         
-        // Скрываем поле ввода, если это системный чат и вы НЕ владелец
         const isSys = chatId === 'system_broadcast';
         if (isSys && auth.currentUser.uid !== OWNER_UID) {
             document.getElementById('chat-input-area').style.display = 'none';
