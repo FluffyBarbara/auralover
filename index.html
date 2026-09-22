@@ -63,7 +63,7 @@
         .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
-        /* VIEW: DISCOVERY (Огонек) */
+        /* VIEW: DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; }
         .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; }
@@ -127,9 +127,17 @@
         /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
-        .chat-room-header { padding: 15px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .chat-room-avatar { width: 40px; height: 40px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
-        .chat-room-name { font-size: 18px; font-weight: 700; }
+        .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .chat-room-avatar { width: 42px; height: 42px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
+        
+        /* ИЗМЕНЕНИЯ ШАПКИ ЧАТА ДЛЯ СТАТУСОВ */
+        .chat-header-info { display: flex; flex-direction: column; justify-content: center; }
+        .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2;}
+        .chat-room-status { font-size: 12px; font-weight: 500; color: var(--text-muted); transition: 0.3s; margin-top: 2px; }
+        .chat-room-status.online { color: #00E676; }
+        .chat-room-status.typing { color: var(--primary); font-style: italic; animation: pulseTyping 1.5s infinite; }
+        @keyframes pulseTyping { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         .msg { max-width: 75%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: popIn 0.3s; }
         @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -161,11 +169,7 @@
         .nav-badge { position: absolute; top: 5px; right: 15px; width: 12px; height: 12px; background: #FF416C; border-radius: 50%; border: 2px solid white; display: none; box-shadow: 0 2px 5px rgba(255,65,108,0.4); }
         .nav-badge.active { display: block; animation: popIn 0.3s; }
 
-        .icon-fire::before { content: '🔥'; } 
-        .icon-heart::before { content: '💖'; }
-        .icon-chat::before { content: '💬'; } 
-        .icon-user::before { content: '👤'; }
-
+        .icon-fire::before { content: '🔥'; } .icon-heart::before { content: '💖'; } .icon-chat::before { content: '💬'; } .icon-user::before { content: '👤'; }
         .hidden { display: none !important; }
         #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: var(--glass-bg); backdrop-filter: blur(20px); z-index: 999; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: 0.3s; }
         #loading-overlay.active { opacity: 1; pointer-events: all; }
@@ -180,9 +184,7 @@
 </div>
 
 <div class="app-container">
-    <div id="loading-overlay">
-        <div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div>
-    </div>
+    <div id="loading-overlay"><div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div></div>
 
     <!-- Всплывающие In-App Уведомления (справа сверху) -->
     <div id="toast-container" class="toast-container"></div>
@@ -209,7 +211,7 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: ГЛАВНОЕ ПРИЛОЖЕНИЕ (4 ВКЛАДКИ) -->
+    <!-- ЭКРАН 2: ГЛАВНОЕ ПРИЛОЖЕНИЕ -->
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" id="main-header-title">Aura</div>
@@ -217,8 +219,7 @@
         </div>
 
         <div class="main-views-container">
-            
-            <!-- ВКЛАДКА 1: DISCOVERY (СВАЙПЫ) -->
+            <!-- ВКЛАДКА 1: DISCOVERY -->
             <div id="view-discovery" class="view">
                 <div class="card-container">
                     <div class="swipe-card hidden" id="main-card">
@@ -242,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА 2: ЛАЙКИ (СИМПАТИИ) -->
+            <!-- ВКЛАДКА 2: ЛАЙКИ -->
             <div id="view-likes" class="view">
                 <div class="likes-grid" id="likes-container"></div>
             </div>
@@ -252,7 +253,7 @@
                 <div class="chat-list" id="chat-list-container"></div>
             </div>
 
-            <!-- ВКЛАДКА 4: ВАШ ПРОФИЛЬ -->
+            <!-- ВКЛАДКА 4: ПРОФИЛЬ -->
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     <div class="section-title" style="margin-top: 0;">Фотографии (до 5)</div>
@@ -263,7 +264,6 @@
                         <label class="photo-slot" data-index="3"><input type="file" class="photo-input" accept="image/*" hidden></label>
                         <label class="photo-slot" data-index="4"><input type="file" class="photo-input" accept="image/*" hidden></label>
                     </div>
-                    
                     <div class="section-title">О себе</div>
                     <div class="input-box"><input type="text" id="prof-name" placeholder=" " required><label>Имя</label></div>
                     <div class="input-box"><input type="number" id="prof-age" placeholder=" " required><label>Возраст</label></div>
@@ -271,47 +271,23 @@
                     <textarea id="prof-bio" class="input-styled" placeholder="Пару слов о себе..."></textarea>
                     
                     <div class="section-title">Твой вайб и интересы (до 5)</div>
-                    
                     <div class="interest-category-title">🎮 Игры и Разработка</div>
-                    <div class="chips">
-                        <div class="chip" data-value="GTA 5 RP">🚗 GTA 5 RP</div>
-                        <div class="chip" data-value="Создание игр (Unity)">👾 Создание игр (Unity)</div>
-                        <div class="chip" data-value="Web-разработка">💻 Web-разработка</div>
-                        <div class="chip" data-value="Twitch Стриминг">🎥 Twitch Стриминг</div>
-                    </div>
-
+                    <div class="chips"><div class="chip" data-value="GTA 5 RP">🚗 GTA 5 RP</div><div class="chip" data-value="Создание игр (Unity)">👾 Создание игр (Unity)</div><div class="chip" data-value="Web-разработка">💻 Web-разработка</div><div class="chip" data-value="Twitch Стриминг">🎥 Twitch Стриминг</div></div>
                     <div class="interest-category-title">🎵 Творчество и Вайб</div>
-                    <div class="chips">
-                        <div class="chip" data-value="Музыка (emo-rap)">🎸 Музыка (emo-rap)</div>
-                        <div class="chip" data-value="Эстетика">✨ Эстетика</div>
-                        <div class="chip" data-value="Тусовки до утра">🪩 Тусовки до утра</div>
-                        <div class="chip" data-value="Ночные поездки">🌃 Ночные поездки</div>
-                        <div class="chip" data-value="Кино">🍿 Кино</div>
-                    </div>
-
+                    <div class="chips"><div class="chip" data-value="Музыка (emo-rap)">🎸 Музыка (emo-rap)</div><div class="chip" data-value="Эстетика">✨ Эстетика</div><div class="chip" data-value="Тусовки до утра">🪩 Тусовки до утра</div><div class="chip" data-value="Ночные поездки">🌃 Ночные поездки</div><div class="chip" data-value="Кино">🍿 Кино</div></div>
                     <div class="interest-category-title">💪 Активность</div>
-                    <div class="chips">
-                        <div class="chip" data-value="Спорт (ГТО)">🏅 Спорт (ГТО)</div>
-                        <div class="chip" data-value="Машины">🏎️ Машины</div>
-                        <div class="chip" data-value="Прогулки">🚶 Прогулки</div>
-                    </div>
+                    <div class="chips"><div class="chip" data-value="Спорт (ГТО)">🏅 Спорт (ГТО)</div><div class="chip" data-value="Машины">🏎️ Машины</div><div class="chip" data-value="Прогулки">🚶 Прогулки</div></div>
 
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 30px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                 </div>
             </div>
-
         </div>
 
-        <!-- НИЖНЯЯ НАВИГАЦИЯ -->
         <div class="bottom-nav" id="bottom-nav">
             <div class="nav-item icon-fire" data-target="view-discovery"></div>
-            <div class="nav-item icon-heart" data-target="view-likes">
-                <div class="nav-badge" id="likes-badge"></div>
-            </div>
-            <div class="nav-item icon-chat" data-target="view-chats">
-                <div class="nav-badge" id="chat-badge"></div>
-            </div>
+            <div class="nav-item icon-heart" data-target="view-likes"><div class="nav-badge" id="likes-badge"></div></div>
+            <div class="nav-item icon-chat" data-target="view-chats"><div class="nav-badge" id="chat-badge"></div></div>
             <div class="nav-item icon-user" data-target="view-profile"></div>
         </div>
     </div>
@@ -321,7 +297,10 @@
         <div class="chat-room-header">
             <button class="icon-btn" id="btn-close-chat">←</button>
             <img src="" class="chat-room-avatar" id="chat-active-avatar">
-            <div class="chat-room-name" id="chat-active-name">Имя</div>
+            <div class="chat-header-info">
+                <div class="chat-room-name" id="chat-active-name">Имя</div>
+                <div class="chat-room-status" id="chat-active-status">Не в сети ⚪</div>
+            </div>
         </div>
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-area">
@@ -357,25 +336,50 @@
     let profilesQueue = []; 
     let currentViewingProfile = null;
     let activeChatId = null;
+    let activeTargetId = null; // ID собеседника открытого чата
+    
+    // Слушатели Firebase
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
+    let targetUserUnsubscribe = null; // Для прослушивания статуса "в сети" собеседника
+    let chatDocUnsubscribe = null;    // Для прослушивания "печатает..."
+    
     let isInitialChatsLoad = true;
 
-    // --- ЗВУКОВОЕ УВЕДОМЛЕНИЕ ---
-    // Короткий и приятный "Pop" звук для сообщений
+    // --- ЗВУК И УВЕДОМЛЕНИЯ ---
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
     notificationSound.volume = 0.5;
 
-    function playNotificationSound() {
-        // Запускаем звук с обработкой ошибки (на случай если браузер заблокировал автовоспроизведение до первого клика)
-        notificationSound.play().catch((e) => console.log('Аудио заблокировано браузером до первого клика', e));
+    window.showToast = (title, body, onClickCallback) => {
+        notificationSound.play().catch(e => console.log('Аудио заблокировано браузером', e));
+
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<div class="toast-title">${title}</div><div class="toast-body">${body}</div>`;
+        
+        if (onClickCallback) toast.onclick = () => { onClickCallback(); toast.remove(); };
+        container.appendChild(toast);
+        
+        setTimeout(() => { if(toast.parentElement) { toast.classList.add('hiding'); setTimeout(() => toast.remove(), 300); } }, 4000);
+        if ("Notification" in window && Notification.permission === "granted" && document.visibilityState !== "visible") new Notification(title, { body: body, icon: '/favicon.ico' });
     }
 
+    // --- ОНЛАЙН СТАТУС ПОЛЬЗОВАТЕЛЯ (PRESENCE) ---
+    function setMyPresence(isOnline) {
+        if (auth.currentUser) updateDoc(doc(db, "users", auth.currentUser.uid), { isOnline: isOnline }).catch(()=>{});
+    }
+    window.addEventListener('visibilitychange', () => setMyPresence(document.visibilityState === 'visible'));
+    window.addEventListener('beforeunload', () => setMyPresence(false));
+
     function clearLocalState() {
+        if(auth.currentUser) setMyPresence(false);
         currentUserData = {}; userPhotos = ["", "", "", "", ""]; profilesQueue = []; currentViewingProfile = null;
         if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } 
         if (userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; } 
-        activeChatId = null; isInitialChatsLoad = true;
+        if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
+        if (chatDocUnsubscribe) { chatDocUnsubscribe(); chatDocUnsubscribe = null; }
+        activeChatId = null; activeTargetId = null; isInitialChatsLoad = true;
         
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
         document.getElementById('prof-city').value = ""; document.getElementById('prof-bio').value = "";
@@ -392,36 +396,7 @@
     const loadingOverlay = document.getElementById('loading-overlay');
     function showLoading(text) { document.getElementById('loading-text').innerText = text; loadingOverlay.classList.add('active'); }
     function hideLoading() { loadingOverlay.classList.remove('active'); }
-    function switchMainScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(screenId).classList.add('active');
-    }
-
-    // --- ФУНКЦИЯ ПОКАЗА УВЕДОМЛЕНИЙ И ЗВУКА ---
-    window.showToast = (title, body, onClickCallback) => {
-        playNotificationSound(); // ПРОИГРЫВАЕМ ЗВУК
-
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `<div class="toast-title">${title}</div><div class="toast-body">${body}</div>`;
-        
-        if (onClickCallback) {
-            toast.onclick = () => { onClickCallback(); toast.remove(); };
-        }
-        container.appendChild(toast);
-        
-        setTimeout(() => {
-            if(toast.parentElement) {
-                toast.classList.add('hiding');
-                setTimeout(() => toast.remove(), 300);
-            }
-        }, 4000);
-
-        if ("Notification" in window && Notification.permission === "granted" && document.visibilityState !== "visible") {
-            new Notification(title, { body: body, icon: '/favicon.ico' });
-        }
-    }
+    function switchMainScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
 
     // --- НАВИГАЦИЯ ---
     const navItems = document.querySelectorAll('.nav-item');
@@ -442,7 +417,6 @@
     }
     navItems.forEach(item => { item.addEventListener('click', () => openTab(item.getAttribute('data-target'), item)); });
 
-    // Авторизация
     let isLogin = true;
     document.getElementById('btn-tab-login').onclick = () => { isLogin=true; document.getElementById('tab-slider').style.left='5px'; document.getElementById('btn-tab-login').classList.add('active'); document.getElementById('btn-tab-register').classList.remove('active'); document.getElementById('auth-submit-btn').innerText='Войти'; };
     document.getElementById('btn-tab-register').onclick = () => { isLogin=false; document.getElementById('tab-slider').style.left='50%'; document.getElementById('btn-tab-register').classList.add('active'); document.getElementById('btn-tab-login').classList.remove('active'); document.getElementById('auth-submit-btn').innerText='Создать аккаунт'; };
@@ -455,17 +429,20 @@
         if(isLogin) signInWithEmailAndPassword(auth, em, pw).catch(() => { hideLoading(); err.innerText = "Неверные данные"; });
         else createUserWithEmailAndPassword(auth, em, pw).catch(e => { hideLoading(); err.innerText = e.message; });
     };
-    document.getElementById('btn-logout').onclick = () => signOut(auth);
+    
+    document.getElementById('btn-logout').onclick = async () => {
+        if(auth.currentUser) await updateDoc(doc(db, "users", auth.currentUser.uid), { isOnline: false });
+        signOut(auth);
+    };
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
-            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
+            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
+
+            setMyPresence(true); // Зашли в приложение = онлайн
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
-            
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const isFirstLoad = !currentUserData.name;
@@ -487,56 +464,33 @@
                         showToast("💖 Новая симпатия!", "Кому-то понравилась ваша анкета. Зайдите в Симпатии, чтобы посмотреть!", () => openTab('view-likes', navItems[1]));
                         document.getElementById('likes-badge').classList.add('active');
                     }
-
                     renderLikesTab();
 
                     if(isFirstLoad) {
-                        await loadProfilesFromCity();
-                        switchMainScreen('screen-main');
-                        openTab('view-discovery', navItems[0]); 
-                        loadChatsList();
-                        hideLoading();
+                        await loadProfilesFromCity(); switchMainScreen('screen-main'); openTab('view-discovery', navItems[0]); loadChatsList(); hideLoading();
                     }
                 } else {
-                    if(!currentUserData.name) {
-                        switchMainScreen('screen-main');
-                        openTab('view-profile', navItems[3]); 
-                        hideLoading();
-                    }
+                    if(!currentUserData.name) { switchMainScreen('screen-main'); openTab('view-profile', navItems[3]); hideLoading(); }
                 }
             });
         } else {
-            clearLocalState();
-            switchMainScreen('screen-auth'); 
-            hideLoading();
+            clearLocalState(); switchMainScreen('screen-auth'); hideLoading();
         }
     });
 
     async function renderLikesTab() {
         const container = document.getElementById('likes-container');
         const likedMe = currentUserData.likedMe || [];
-        
         if(likedMe.length === 0) {
             container.innerHTML = `<div class="empty-state" style="grid-column: span 2;"><span>💖</span><h3 style="color:var(--text-main); margin-bottom:10px;">Пока нет симпатий</h3><p>Продолжайте смотреть анкеты и скоро здесь появятся те, кому вы понравились!</p></div>`;
             return;
         }
-
         let html = "";
         for(let uid of likedMe) {
             const uSnap = await getDoc(doc(db, "users", uid));
             if(uSnap.exists()) {
                 const u = uSnap.data();
-                html += `
-                <div class="like-card">
-                    <img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}">
-                    <div class="like-card-info">
-                        <div class="like-card-name">${u.name}, ${u.age}</div>
-                    </div>
-                    <div class="like-card-actions">
-                        <button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button>
-                        <button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button>
-                    </div>
-                </div>`;
+                html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
             }
         }
         container.innerHTML = html;
@@ -544,59 +498,36 @@
 
     window.handleLikeResponse = async (targetId, isAccept, targetName, targetPhoto) => {
         const myRef = doc(db, "users", auth.currentUser.uid);
-        
-        await updateDoc(myRef, {
-            likedMe: arrayRemove(targetId),
-            swiped: arrayUnion(targetId)
-        });
+        await updateDoc(myRef, { likedMe: arrayRemove(targetId), swiped: arrayUnion(targetId) });
         
         if(isAccept) {
             const chatId = [auth.currentUser.uid, targetId].sort().join('_');
             await setDoc(doc(db, "chats", chatId), {
                 users: [auth.currentUser.uid, targetId],
-                userInfo: {
-                    [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
-                    [targetId]: { name: targetName, photo: targetPhoto }
-                },
-                lastMessage: "Aura: Взаимная симпатия! ✨",
-                lastMessageSenderId: "system", 
-                timestamp: serverTimestamp()
+                userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
+                lastMessage: "Aura: Взаимная симпатия! ✨", lastMessageSenderId: "system", timestamp: serverTimestamp()
             }, { merge: true });
             
-            await addDoc(collection(db, `chats/${chatId}/messages`), {
-                text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨",
-                senderId: "system",
-                timestamp: serverTimestamp()
-            });
+            await addDoc(collection(db, `chats/${chatId}/messages`), { text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨", senderId: "system", timestamp: serverTimestamp() });
             
-            openTab('view-chats', navItems[2]);
-            window.openChat(chatId, targetName, targetPhoto);
+            openTab('view-chats', navItems[2]); window.openChat(chatId, targetName, targetPhoto, targetId);
         }
     };
-
 
     async function loadProfilesFromCity() {
         if(!currentUserData.cityLower) return;
         const q = query(collection(db, "users"), where("cityLower", "==", currentUserData.cityLower));
         const snaps = await getDocs(q);
-        
-        const swiped = currentUserData.swiped || [];
-        const myInterests = currentUserData.interests || [];
+        const swiped = currentUserData.swiped || [], myInterests = currentUserData.interests || [];
         profilesQueue = [];
-
         snaps.forEach(s => {
             if (s.id !== auth.currentUser.uid && !swiped.includes(s.id)) {
-                const data = s.data();
-                let sharedCount = 0;
-                if (data.interests && myInterests.length > 0) {
-                    sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
-                }
+                const data = s.data(); let sharedCount = 0;
+                if (data.interests && myInterests.length > 0) sharedCount = data.interests.filter(i => myInterests.includes(i)).length;
                 profilesQueue.push({ id: s.id, sharedCount: sharedCount, ...data });
             }
         });
-
-        profilesQueue.sort((a, b) => b.sharedCount - a.sharedCount);
-        renderNextProfile();
+        profilesQueue.sort((a, b) => b.sharedCount - a.sharedCount); renderNextProfile();
     }
 
     function renderNextProfile() {
@@ -606,16 +537,12 @@
         } else {
             empty.classList.add('hidden'); actions.classList.remove('hidden'); card.classList.remove('hidden');
             currentViewingProfile = profilesQueue.shift();
-            
             document.getElementById('card-name').innerHTML = `${currentViewingProfile.name}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
             card.style.backgroundImage = `url('${currentViewingProfile.photos?.[0] || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800'}')`;
-            
             const tags = document.getElementById('card-tags'); tags.innerHTML = '';
-            if (currentViewingProfile.sharedCount > 0) {
-                tags.innerHTML += `<div class="card-tag" style="background: var(--primary); color: white; border-color: transparent; box-shadow: 0 4px 10px rgba(255,65,108,0.3);">🔥 Совпадений: ${currentViewingProfile.sharedCount}</div>`;
-            }
+            if (currentViewingProfile.sharedCount > 0) tags.innerHTML += `<div class="card-tag" style="background: var(--primary); color: white; border-color: transparent; box-shadow: 0 4px 10px rgba(255,65,108,0.3);">🔥 Совпадений: ${currentViewingProfile.sharedCount}</div>`;
             if(currentViewingProfile.interests) {
                 currentViewingProfile.interests.forEach(i => {
                     const isShared = currentUserData.interests && currentUserData.interests.includes(i);
@@ -628,15 +555,11 @@
 
     async function handleSwipe(isLike) {
         if(!currentViewingProfile) return;
-        const targetId = currentViewingProfile.id;
-        const targetName = currentViewingProfile.name;
-        const targetPhoto = currentViewingProfile.photos?.[0] || "";
-        
+        const targetId = currentViewingProfile.id, targetName = currentViewingProfile.name, targetPhoto = currentViewingProfile.photos?.[0] || "";
         const card = document.getElementById('main-card');
         card.style.transform = `translate(${isLike ? 350 : -350}px, 0px) rotate(${isLike ? 25 : -25}deg)`; card.style.opacity = '0';
         
         const myRef = doc(db, "users", auth.currentUser.uid);
-        
         updateDoc(myRef, { swiped: arrayUnion(targetId) });
         if(!currentUserData.swiped) currentUserData.swiped = []; currentUserData.swiped.push(targetId);
 
@@ -646,84 +569,51 @@
                 const chatId = [auth.currentUser.uid, targetId].sort().join('_');
                 setDoc(doc(db, "chats", chatId), {
                     users: [auth.currentUser.uid, targetId],
-                    userInfo: {
-                        [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
-                        [targetId]: { name: targetName, photo: targetPhoto }
-                    },
-                    lastMessage: "Aura: Взаимная симпатия! ✨",
-                    lastMessageSenderId: "system",
-                    timestamp: serverTimestamp()
+                    userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
+                    lastMessage: "Aura: Взаимная симпатия! ✨", lastMessageSenderId: "system", timestamp: serverTimestamp()
                 }, { merge: true });
-                
-                addDoc(collection(db, `chats/${chatId}/messages`), {
-                    text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨",
-                    senderId: "system",
-                    timestamp: serverTimestamp()
-                });
+                addDoc(collection(db, `chats/${chatId}/messages`), { text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨", senderId: "system", timestamp: serverTimestamp() });
             }
-        } 
-        else if (isLike) {
+        } else if (isLike) {
             updateDoc(doc(db, "users", targetId), { likedMe: arrayUnion(auth.currentUser.uid) });
         }
 
         setTimeout(() => {
-            card.style.transition = 'none'; card.style.transform = 'translate(0px, 0px) scale(0.9)';
-            renderNextProfile();
+            card.style.transition = 'none'; card.style.transform = 'translate(0px, 0px) scale(0.9)'; renderNextProfile();
             setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
         }, 300);
     }
     
-    document.getElementById('btn-pass').onclick = () => handleSwipe(false);
-    document.getElementById('btn-like').onclick = () => handleSwipe(true);
+    document.getElementById('btn-pass').onclick = () => handleSwipe(false); document.getElementById('btn-like').onclick = () => handleSwipe(true);
 
     document.getElementById('btn-direct-msg').onclick = async () => {
         if(!currentViewingProfile) return;
-        const targetId = currentViewingProfile.id;
-        const targetName = currentViewingProfile.name;
-        const targetPhoto = currentViewingProfile.photos?.[0] || "";
-
+        const targetId = currentViewingProfile.id, targetName = currentViewingProfile.name, targetPhoto = currentViewingProfile.photos?.[0] || "";
         const myRef = doc(db, "users", auth.currentUser.uid);
         if (currentUserData.likedMe && currentUserData.likedMe.includes(targetId)) updateDoc(myRef, { likedMe: arrayRemove(targetId) });
-        
         updateDoc(myRef, { swiped: arrayUnion(targetId) });
         if(!currentUserData.swiped) currentUserData.swiped = []; currentUserData.swiped.push(targetId);
 
         const chatId = [auth.currentUser.uid, targetId].sort().join('_');
         await setDoc(doc(db, "chats", chatId), {
             users: [auth.currentUser.uid, targetId],
-            userInfo: {
-                [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" },
-                [targetId]: { name: targetName, photo: targetPhoto }
-            },
+            userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
             timestamp: serverTimestamp()
         }, { merge: true });
 
-        window.openChat(chatId, targetName, targetPhoto);
-
-        const card = document.getElementById('main-card');
-        card.style.transform = `translate(0px, -350px) scale(0.8)`; card.style.opacity = '0';
-        
-        setTimeout(() => {
-            card.style.transition = 'none'; card.style.transform = 'translate(0px, 0px) scale(0.9)';
-            renderNextProfile(); 
-            setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
-        }, 300);
+        window.openChat(chatId, targetName, targetPhoto, targetId);
+        const card = document.getElementById('main-card'); card.style.transform = `translate(0px, -350px) scale(0.8)`; card.style.opacity = '0';
+        setTimeout(() => { card.style.transition = 'none'; card.style.transform = 'translate(0px, 0px) scale(0.9)'; renderNextProfile(); setTimeout(() => { card.style.transition = '0.3s ease-out'; card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50); }, 300);
     };
 
     document.getElementById('btn-reset-swipes').onclick = async () => {
         if(!confirm("Хотите очистить историю просмотренных анкет?")) return;
-        const btn = document.getElementById('btn-reset-swipes');
-        btn.innerText = "Сброс..."; btn.disabled = true;
-        try {
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: [] });
-            currentUserData.swiped = [];
-            await loadProfilesFromCity();
-            alert("История очищена!");
-        } catch(e) { alert("Ошибка при очистке: " + e.message); } 
-        finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
+        const btn = document.getElementById('btn-reset-swipes'); btn.innerText = "Сброс..."; btn.disabled = true;
+        try { await updateDoc(doc(db, "users", auth.currentUser.uid), { swiped: [] }); currentUserData.swiped = []; await loadProfilesFromCity(); alert("История очищена!"); } 
+        catch(e) { alert("Ошибка при очистке: " + e.message); } finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
     };
 
-    // --- ЛОГИКА ЧАТОВ И УВЕДОМЛЕНИЙ ---
+    // --- ЛОГИКА ЧАТОВ И СТАТУСОВ (ONLINE / TYPING) ---
     function loadChatsList() {
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         onSnapshot(q, (snapshot) => {
@@ -732,21 +622,15 @@
             snapshot.docChanges().forEach((change) => {
                 if (!isInitialChatsLoad) {
                     const data = change.doc.data();
-                    
                     if (change.type === "added" && data.lastMessageSenderId === "system") {
                         showToast("✨ Новый Мэтч!", "У вас новая взаимная симпатия, зайдите в чаты!", () => openTab('view-chats', navItems[2]));
                         document.getElementById('chat-badge').classList.add('active');
                     }
-                    
                     if (change.type === "modified" && data.lastMessageSenderId !== auth.currentUser.uid && data.lastMessageSenderId !== "system") {
                         if (activeChatId !== change.doc.id) {
                             const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                             const otherUser = data.userInfo[otherUserId];
-                            
-                            showToast(`💬 Сообщение от ${otherUser.name}`, data.lastMessage, () => {
-                                openTab('view-chats', navItems[2]);
-                                window.openChat(change.doc.id, otherUser.name, otherUser.photo);
-                            });
+                            showToast(`💬 Сообщение от ${otherUser.name}`, data.lastMessage, () => { openTab('view-chats', navItems[2]); window.openChat(change.doc.id, otherUser.name, otherUser.photo, otherUserId); });
                             document.getElementById('chat-badge').classList.add('active');
                         }
                     }
@@ -754,13 +638,8 @@
             });
             isInitialChatsLoad = false;
 
-            if (snapshot.empty) {
-                container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`;
-                return;
-            }
-            
-            let html = "";
-            const docs = [];
+            if (snapshot.empty) { container.innerHTML = `<div class="empty-state"><span>💬</span><h3 style="color:var(--text-main); margin-bottom:10px;">Нет диалогов</h3><p>Ставьте лайки, чтобы начать общение!</p></div>`; return; }
+            let html = ""; const docs = [];
             snapshot.forEach(docSnap => docs.push({ id: docSnap.id, ...docSnap.data() }));
             docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
@@ -768,50 +647,99 @@
                 const otherUserId = data.users.find(id => id !== auth.currentUser.uid);
                 const otherUser = data.userInfo[otherUserId];
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
-                
-                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${msgPreview || ""}</div></div></div>`;
+                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${otherUser.photo}', '${otherUserId}')"><img class="chat-avatar" src="${otherUser.photo || 'https://via.placeholder.com/150'}"><div class="chat-info"><div class="chat-name">${otherUser.name}</div><div class="chat-last-msg">${msgPreview || ""}</div></div></div>`;
             });
             container.innerHTML = html;
         });
     }
 
-    window.openChat = (chatId, name, photoUrl) => {
-        activeChatId = chatId;
+    // Локальные переменные для статуса открытого чата
+    let activeTargetOnline = false;
+    let activeTargetTyping = false;
+
+    function updateChatStatusUI() {
+        const statusEl = document.getElementById('chat-active-status');
+        if (!activeChatId) return;
+        if (activeTargetTyping) { statusEl.innerText = "Печатает... ✏️"; statusEl.className = "chat-room-status typing"; } 
+        else if (activeTargetOnline) { statusEl.innerText = "В сети 🟢"; statusEl.className = "chat-room-status online"; } 
+        else { statusEl.innerText = "Не в сети ⚪"; statusEl.className = "chat-room-status"; }
+    }
+
+    window.openChat = (chatId, name, photoUrl, targetId) => {
+        activeChatId = chatId; activeTargetId = targetId;
         document.getElementById('chat-active-name').innerText = name;
         document.getElementById('chat-active-avatar').src = photoUrl || 'https://via.placeholder.com/150';
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
         
+        activeTargetOnline = false; activeTargetTyping = false; updateChatStatusUI();
+
         const messagesDiv = document.getElementById('chat-messages');
         messagesDiv.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>Загрузка...</div>";
-        const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
         
         if (chatUnsubscribe) chatUnsubscribe(); 
+        if (targetUserUnsubscribe) targetUserUnsubscribe();
+        if (chatDocUnsubscribe) chatDocUnsubscribe();
+
+        // 1. Слушаем сообщения
+        const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
         chatUnsubscribe = onSnapshot(q, (snapshot) => {
             messagesDiv.innerHTML = "";
             snapshot.forEach(docSnap => {
                 const msg = docSnap.data();
-                const isSystem = msg.senderId === "system";
-                
-                if (isSystem) {
-                    messagesDiv.innerHTML += `<div class="msg system">${msg.text}</div>`;
-                } else {
-                    const isMe = msg.senderId === auth.currentUser.uid;
-                    messagesDiv.innerHTML += `<div class="msg ${isMe ? 'sent' : 'received'}">${msg.text}</div>`;
-                }
+                if (msg.senderId === "system") messagesDiv.innerHTML += `<div class="msg system">${msg.text}</div>`;
+                else messagesDiv.innerHTML += `<div class="msg ${msg.senderId === auth.currentUser.uid ? 'sent' : 'received'}">${msg.text}</div>`;
             });
             setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
+
+        // 2. Слушаем статус "В сети" у собеседника
+        targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
+            if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
+        });
+
+        // 3. Слушаем статус "Печатает" в самом чате
+        chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
+            if(snap.exists()) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
+        });
     };
     
-    document.getElementById('btn-close-chat').onclick = () => { document.getElementById('chat-room').classList.remove('active'); if (chatUnsubscribe) chatUnsubscribe(); activeChatId = null; };
+    document.getElementById('btn-close-chat').onclick = () => { 
+        document.getElementById('chat-room').classList.remove('active'); 
+        if (chatUnsubscribe) chatUnsubscribe(); 
+        if (targetUserUnsubscribe) targetUserUnsubscribe();
+        if (chatDocUnsubscribe) chatDocUnsubscribe();
+        activeChatId = null; activeTargetId = null;
+    };
     
+    // ЛОГИКА "ПЕЧАТАЕТ..."
+    let typingTimeout = null;
+    let isTypingRef = false;
+    document.getElementById('chat-message-input').addEventListener('input', () => {
+        if(!activeChatId || !auth.currentUser) return;
+        const val = document.getElementById('chat-message-input').value;
+        
+        if (val.length > 0 && !isTypingRef) {
+            isTypingRef = true; updateDoc(doc(db, "chats", activeChatId), { [`typing.${auth.currentUser.uid}`]: true });
+        } else if (val.length === 0 && isTypingRef) {
+            isTypingRef = false; updateDoc(doc(db, "chats", activeChatId), { [`typing.${auth.currentUser.uid}`]: false });
+        }
+
+        if(typingTimeout) clearTimeout(typingTimeout);
+        if (val.length > 0) {
+            typingTimeout = setTimeout(() => { isTypingRef = false; updateDoc(doc(db, "chats", activeChatId), { [`typing.${auth.currentUser.uid}`]: false }); }, 3000);
+        }
+    });
+
     document.getElementById('btn-send-message').onclick = async () => {
         const input = document.getElementById('chat-message-input'); const text = input.value.trim();
         if (!text || !activeChatId) return; input.value = ""; 
         
+        if(typingTimeout) clearTimeout(typingTimeout);
+        isTypingRef = false;
+        
         await addDoc(collection(db, `chats/${activeChatId}/messages`), { text: text, senderId: auth.currentUser.uid, timestamp: serverTimestamp() });
-        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, lastMessageSenderId: auth.currentUser.uid, timestamp: serverTimestamp() });
+        await updateDoc(doc(db, "chats", activeChatId), { lastMessage: text, lastMessageSenderId: auth.currentUser.uid, timestamp: serverTimestamp(), [`typing.${auth.currentUser.uid}`]: false });
     };
 
     function compressImage(file, maxW=500) { return new Promise(res => { const r=new FileReader(); r.readAsDataURL(file); r.onload=e=>{ const i=new Image(); i.src=e.target.result; i.onload=()=>{ const c=document.createElement('canvas'); const rat=maxW/i.width; c.width=maxW; c.height=i.height*rat; c.getContext('2d').drawImage(i,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',0.6));};};});}
