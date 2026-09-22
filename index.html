@@ -124,13 +124,16 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
+        /* СЕКРЕТНАЯ ПАНЕЛЬ ВЛАДЕЛЬЦА (СКРЫТА ПО УМОЛЧАНИЮ) */
+        .owner-badge { background: linear-gradient(135deg, #FF416C, #8A2387); color: white; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 10px; }
+        .owner-panel { background: rgba(255, 65, 108, 0.05); border: 2px dashed rgba(255, 65, 108, 0.3); border-radius: 20px; padding: 20px; margin-top: 20px; }
+
         /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .chat-room-avatar { width: 42px; height: 42px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
         
-        /* ИЗМЕНЕНИЯ ШАПКИ ЧАТА ДЛЯ СТАТУСОВ */
         .chat-header-info { display: flex; flex-direction: column; justify-content: center; }
         .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2;}
         .chat-room-status { font-size: 12px; font-weight: 500; color: var(--text-muted); transition: 0.3s; margin-top: 2px; }
@@ -149,7 +152,7 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
 
-        /* ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS) СПРАВА СВЕРХУ */
+        /* TOASTS */
         .toast-container { position: fixed; top: 20px; right: 20px; left: auto; transform: none; z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 300px; max-width: 90vw; pointer-events: none; align-items: flex-end; }
         .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; width: 100%; position: relative; overflow: hidden; }
         .toast::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
@@ -160,7 +163,7 @@
         .toast.hiding { animation: slideOutRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
-        /* BOTTOM NAV И БЕЙДЖИ УВЕДОМЛЕНИЙ */
+        /* BOTTOM NAV */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
         .nav-item { font-size: 26px; color: #D1D1D6; cursor: pointer; transition: 0.3s; position: relative; padding: 10px 20px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { filter: grayscale(0%); opacity: 1; transform: translateY(-2px); }
@@ -186,7 +189,6 @@
 <div class="app-container">
     <div id="loading-overlay"><div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div></div>
 
-    <!-- Всплывающие In-App Уведомления (справа сверху) -->
     <div id="toast-container" class="toast-container"></div>
 
     <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
@@ -256,6 +258,11 @@
             <!-- ВКЛАДКА 4: ПРОФИЛЬ -->
             <div id="view-profile" class="view">
                 <div class="profile-content">
+                    <!-- ЭКСКЛЮЗИВНАЯ ПАНЕЛЬ ВЛАДЕЛЬЦА (ПОЯВИТСЯ ТОЛЬКО У ВАС) -->
+                    <div id="owner-secret-section" class="hidden">
+                        <div class="owner-badge">👑 Владелец приложения</div>
+                    </div>
+
                     <div class="section-title" style="margin-top: 0;">Фотографии (до 5)</div>
                     <div class="photo-grid" id="photo-grid">
                         <label class="photo-slot main" data-index="0"><input type="file" class="photo-input" accept="image/*" hidden></label>
@@ -331,22 +338,23 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // ВАШ УНИКАЛЬНЫЙ ID ВЛАДЕЛЬЦА ИЗ FIREBASE
+    const OWNER_UID = "AOMG79gW6zVVoEM9fcMnrpdHrxN2";
+
     let currentUserData = {}; 
     let userPhotos = ["", "", "", "", ""]; 
     let profilesQueue = []; 
     let currentViewingProfile = null;
     let activeChatId = null;
-    let activeTargetId = null; // ID собеседника открытого чата
+    let activeTargetId = null;
     
-    // Слушатели Firebase
     let chatUnsubscribe = null;
     let userDocUnsubscribe = null; 
-    let targetUserUnsubscribe = null; // Для прослушивания статуса "в сети" собеседника
-    let chatDocUnsubscribe = null;    // Для прослушивания "печатает..."
+    let targetUserUnsubscribe = null; 
+    let chatDocUnsubscribe = null;    
     
     let isInitialChatsLoad = true;
 
-    // --- ЗВУК И УВЕДОМЛЕНИЯ ---
     const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3');
     notificationSound.volume = 0.5;
 
@@ -365,7 +373,6 @@
         if ("Notification" in window && Notification.permission === "granted" && document.visibilityState !== "visible") new Notification(title, { body: body, icon: '/favicon.ico' });
     }
 
-    // --- ОНЛАЙН СТАТУС ПОЛЬЗОВАТЕЛЯ (PRESENCE) ---
     function setMyPresence(isOnline) {
         if (auth.currentUser) updateDoc(doc(db, "users", auth.currentUser.uid), { isOnline: isOnline }).catch(()=>{});
     }
@@ -391,6 +398,7 @@
         document.getElementById('empty-state').classList.remove('hidden');
         document.getElementById('chat-badge').classList.remove('active');
         document.getElementById('likes-badge').classList.remove('active');
+        document.getElementById('owner-secret-section').classList.add('hidden');
     }
 
     const loadingOverlay = document.getElementById('loading-overlay');
@@ -398,7 +406,6 @@
     function hideLoading() { loadingOverlay.classList.remove('active'); }
     function switchMainScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(screenId).classList.add('active'); }
 
-    // --- НАВИГАЦИЯ ---
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -440,7 +447,14 @@
             showLoading("Загрузка...");
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
 
-            setMyPresence(true); // Зашли в приложение = онлайн
+            setMyPresence(true); 
+
+            // ПРОВЕРКА НА ВЛАДЕЛЬЦА ПРИЛОЖЕНИЯ
+            if (user.uid === OWNER_UID) {
+                document.getElementById('owner-secret-section').classList.remove('hidden');
+            } else {
+                document.getElementById('owner-secret-section').classList.add('hidden');
+            }
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
@@ -467,14 +481,24 @@
                     renderLikesTab();
 
                     if(isFirstLoad) {
-                        await loadProfilesFromCity(); switchMainScreen('screen-main'); openTab('view-discovery', navItems[0]); loadChatsList(); hideLoading();
+                        await loadProfilesFromCity();
+                        switchMainScreen('screen-main');
+                        openTab('view-discovery', navItems[0]); 
+                        loadChatsList();
+                        hideLoading();
                     }
                 } else {
-                    if(!currentUserData.name) { switchMainScreen('screen-main'); openTab('view-profile', navItems[3]); hideLoading(); }
+                    if(!currentUserData.name) {
+                        switchMainScreen('screen-main');
+                        openTab('view-profile', navItems[3]); 
+                        hideLoading();
+                    }
                 }
             });
         } else {
-            clearLocalState(); switchMainScreen('screen-auth'); hideLoading();
+            clearLocalState();
+            switchMainScreen('screen-auth'); 
+            hideLoading();
         }
     });
 
@@ -613,7 +637,6 @@
         catch(e) { alert("Ошибка при очистке: " + e.message); } finally { btn.innerText = "🔄 Сбросить просмотренные анкеты"; btn.disabled = false; }
     };
 
-    // --- ЛОГИКА ЧАТОВ И СТАТУСОВ (ONLINE / TYPING) ---
     function loadChatsList() {
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
         onSnapshot(q, (snapshot) => {
@@ -653,7 +676,6 @@
         });
     }
 
-    // Локальные переменные для статуса открытого чата
     let activeTargetOnline = false;
     let activeTargetTyping = false;
 
@@ -681,7 +703,6 @@
         if (targetUserUnsubscribe) targetUserUnsubscribe();
         if (chatDocUnsubscribe) chatDocUnsubscribe();
 
-        // 1. Слушаем сообщения
         const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
         chatUnsubscribe = onSnapshot(q, (snapshot) => {
             messagesDiv.innerHTML = "";
@@ -693,12 +714,10 @@
             setTimeout(() => messagesDiv.scrollTop = messagesDiv.scrollHeight, 50);
         });
 
-        // 2. Слушаем статус "В сети" у собеседника
         targetUserUnsubscribe = onSnapshot(doc(db, "users", targetId), (snap) => {
             if(snap.exists()) { activeTargetOnline = !!snap.data().isOnline; updateChatStatusUI(); }
         });
 
-        // 3. Слушаем статус "Печатает" в самом чате
         chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
             if(snap.exists()) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
         });
@@ -712,7 +731,6 @@
         activeChatId = null; activeTargetId = null;
     };
     
-    // ЛОГИКА "ПЕЧАТАЕТ..."
     let typingTimeout = null;
     let isTypingRef = false;
     document.getElementById('chat-message-input').addEventListener('input', () => {
