@@ -261,7 +261,7 @@
         </div>
 
         <div class="main-views-container">
-            <!-- ВКЛАДКА 1: DISCOVERY -->
+            <!-- ВКЛАДКА 1: DISCOVERY (МНОГО ФОТО + ЖАЛОБА) -->
             <div id="view-discovery" class="view">
                 <div class="card-container">
                     <div class="swipe-card hidden" id="main-card" onclick="handleCardTap(event, 'main-card', 'main')">
@@ -302,6 +302,7 @@
             <div id="view-profile" class="view">
                 <div class="profile-content">
                     
+                    <!-- ПАНЕЛЬ АДМИНИСТРАТОРА -->
                     <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
                         <button class="btn-glow" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Войти в панель управления</button>
                     </div>
@@ -330,6 +331,7 @@
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 10px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                     
+                    <!-- СИСТЕМА ЖАЛОБ (ОБЩАЯ) -->
                     <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка</div>
                     <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-generic-report')">🐞 Сообщить о баге / Предложение</button>
                 </div>
@@ -389,10 +391,10 @@
 
     <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ И ДОП. ФУНКЦИОНАЛА -->
     
-    <!-- ПРОСМОТР АНКЕТЫ -->
+    <!-- ПРОСМОТР АНКЕТЫ ИЗ ЧАТА С КНОПКАМИ АДМИНА ВНУТРИ -->
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
         <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
-            <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:70vh; max-height:600px; display:flex; overflow:hidden;">
+            <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:75vh; max-height:650px; display:flex;">
                 
                 <!-- ПЛАШКА БАНА -->
                 <div id="vp-banned-banner" class="banned-banner" style="display:none;">Заблокирован администрацией</div>
@@ -406,10 +408,10 @@
                     <span class="card-city" id="vp-card-city">📍 Город</span>
                     <div class="card-bio" id="vp-card-bio">Описание...</div>
                     <div class="card-tags" id="vp-card-tags"></div>
+                    
+                    <!-- КНОПКИ АДМИНИСТРАТОРА ВСТРОЕНЫ В ПОТОК ДАННЫХ ПРОФИЛЯ -->
+                    <div id="vp-admin-controls" style="display:none; flex-direction:column; gap:10px; margin-top:15px; padding-top:15px; border-top: 1px solid rgba(255,255,255,0.2);"></div>
                 </div>
-
-                <!-- КНОПКИ АДМИНИСТРАТОРА (ВЛАДЕЛЬЦА) В ПРОФИЛЕ -->
-                <div id="vp-admin-controls" style="position:absolute; bottom: 15px; left: 15px; right: 15px; z-index: 20; display:none; flex-direction:column; gap:10px;"></div>
             </div>
         </div>
     </div>
@@ -610,6 +612,7 @@
     window.activeTargetId = null; 
     window.reportingUid = null;
     
+    // Переменные для просмотра фотографий (карусель)
     let cardPhotosMain = []; let cardIndexMain = 0;
     let cardPhotosView = []; let cardIndexView = 0;
 
@@ -872,8 +875,8 @@
         listDiv.innerHTML = html;
     };
 
-    // БЫСТРЫЙ БАН ИЗ ПРОФИЛЯ
     window.quickToggleBan = async (uid, isBanned) => {
+        if (uid === OWNER_UID) return alert("Владельца платформы невозможно заблокировать!");
         let reason = null;
         if(isBanned) {
             reason = prompt("Укажите причину блокировки (ее увидит пользователь):");
@@ -882,9 +885,9 @@
         try {
             await updateDoc(doc(db, "users", uid), { 
                 isBanned: isBanned,
-                banReason: isBanned ? (reason || "Нарушение правил сообщества") : null
+                banReason: isBanned ? (reason || "Нарушение правил") : null
             });
-            alert(isBanned ? "Пользователь заблокирован!" : "Пользователь разблокирован!");
+            alert(isBanned ? "Пользователь заблокирован!" : "Разблокирован!");
             viewUserProfile(uid); 
         } catch(e) { alert(e.message); }
     };
@@ -905,6 +908,7 @@
         const uid = document.getElementById('ban-uid').value.trim();
         const reason = document.getElementById('ban-reason').value.trim();
         if(!uid) return alert("Введите UID!");
+        if (uid === OWNER_UID) return alert("Владельца платформы невозможно заблокировать!");
         try {
             await updateDoc(doc(db, "users", uid), { 
                 isBanned: isBanned,
@@ -1079,19 +1083,15 @@
             setMyPresence(true); 
 
             const checkSnap = await getDoc(doc(db, "users", user.uid));
-            if(checkSnap.exists() && checkSnap.data().isBanned) {
-                const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
-                document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
-                document.getElementById('auth-ban-message').style.display = 'block';
-                await signOut(auth);
-                clearLocalState();
-                switchMainScreen('screen-auth');
-                hideLoading();
-                return;
-            }
-
+            
+            // ПРОВЕРКА НА ВЛАДЕЛЬЦА (СНИТИЕ СЛУЧАЙНОГО БАНА И ДОСТУП В АДМИНКУ)
             if (user.uid === OWNER_UID) {
                 document.getElementById('owner-secret-section').classList.remove('hidden');
+                
+                // АВТО-РАЗБАН: Если владелец по ошибке заблокирован, снимаем блок
+                if (checkSnap.exists() && checkSnap.data().isBanned) {
+                    await updateDoc(doc(db, "users", user.uid), { isBanned: false, banReason: null });
+                }
                 
                 if(reportsUnsubscribe) reportsUnsubscribe();
                 reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
@@ -1129,13 +1129,27 @@
                 });
             } else {
                 document.getElementById('owner-secret-section').classList.add('hidden');
+                
+                // БЛОКИРОВКА ОБЫЧНЫХ ПОЛЬЗОВАТЕЛЕЙ ПРИ ВХОДЕ
+                if(checkSnap.exists() && checkSnap.data().isBanned) {
+                    const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
+                    document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
+                    document.getElementById('auth-ban-message').style.display = 'block';
+                    await signOut(auth);
+                    clearLocalState();
+                    switchMainScreen('screen-auth');
+                    hideLoading();
+                    return;
+                }
             }
 
             if(userDocUnsubscribe) userDocUnsubscribe(); 
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    if(data.isBanned) {
+                    
+                    // БЛОКИРОВКА ОБЫЧНЫХ ПОЛЬЗОВАТЕЛЕЙ ПРЯМО ВО ВРЕМЯ РАБОТЫ (Исключая владельца)
+                    if(data.isBanned && user.uid !== OWNER_UID) {
                         const reason = data.banReason || "Нарушение правил платформы.";
                         document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
                         document.getElementById('auth-ban-message').style.display = 'block';
@@ -1429,7 +1443,7 @@
 
     let activeTargetOnline = false;
     let activeTargetTyping = false;
-    let activeTargetBanned = false; // НОВОЕ СВОЙСТВО
+    let activeTargetBanned = false; 
 
     function updateChatStatusUI() {
         const statusEl = document.getElementById('chat-active-status');
@@ -1440,7 +1454,6 @@
         
         const isSys = activeChatId === 'system_broadcast';
 
-        // 1. ПРОВЕРКА НА БАН СХОБЕСЕДНИКА
         if (activeTargetBanned && !isSys) {
             statusEl.innerText = "Заблокирован 🚫";
             statusEl.className = "chat-room-status";
@@ -1451,7 +1464,6 @@
             bannedOverlay.style.display = 'none';
         }
 
-        // 2. СИСТЕМНЫЙ ЧАТ
         if (isSys) { 
             statusEl.innerText = "Официальный канал 📢"; 
             statusEl.className = "chat-room-status online"; 
@@ -1460,7 +1472,6 @@
             return; 
         }
 
-        // 3. ОБЫЧНЫЙ ЧАТ
         inputArea.style.display = 'flex';
         if (activeTargetTyping) { statusEl.innerText = "Печатает... ✏️"; statusEl.className = "chat-room-status typing"; } 
         else if (activeTargetOnline) { statusEl.innerText = "В сети 🟢"; statusEl.className = "chat-room-status online"; } 
@@ -1530,15 +1541,13 @@
                 const data = snap.data();
                 const isBanned = data.isBanned;
 
-                // БАННЕР БАНА В ПРОФИЛЕ
                 document.getElementById('vp-banned-banner').style.display = isBanned ? 'block' : 'none';
 
-                // АДМИН-КНОПКИ В АНКЕТЕ
                 const adminControls = document.getElementById('vp-admin-controls');
                 if(auth.currentUser && auth.currentUser.uid === OWNER_UID) {
                     adminControls.style.display = 'flex';
                     if(isBanned) {
-                        adminControls.innerHTML = `<button class="btn-glow" style="background:#00E676; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickToggleBan('${uid}', false)">Разблокировать</button>`;
+                        adminControls.innerHTML = `<button class="btn-glow" style="background:#00E676; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickToggleBan('${uid}', false)">Разблокировать пользователя</button>`;
                     } else {
                         adminControls.innerHTML = `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickToggleBan('${uid}', true)">Заблокировать пользователя</button>`;
                     }
@@ -1571,23 +1580,6 @@
         finally { hideLoading(); }
     };
     
-    // БЫСТРЫЙ БАН ПРЯМО ИЗ АНКЕТЫ
-    window.quickToggleBan = async (uid, isBanned) => {
-        let reason = null;
-        if(isBanned) {
-            reason = prompt("Укажите причину блокировки (ее увидит пользователь):");
-            if(reason === null) return;
-        }
-        try {
-            await updateDoc(doc(db, "users", uid), { 
-                isBanned: isBanned,
-                banReason: isBanned ? (reason || "Нарушение правил") : null
-            });
-            alert(isBanned ? "Пользователь заблокирован!" : "Разблокирован!");
-            viewUserProfile(uid); 
-        } catch(e) { alert(e.message); }
-    };
-
     document.getElementById('btn-close-chat').onclick = () => { 
         document.getElementById('chat-room').classList.remove('active'); 
         document.getElementById('chat-dropdown').classList.remove('active');
