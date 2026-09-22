@@ -409,8 +409,8 @@
                     <div class="card-bio" id="vp-card-bio">Описание...</div>
                     <div class="card-tags" id="vp-card-tags"></div>
                     
-                    <!-- КНОПКИ АДМИНИСТРАТОРА ВСТРОЕНЫ В ПОТОК ДАННЫХ ПРОФИЛЯ -->
-                    <div id="vp-admin-controls" style="display:none; flex-direction:column; gap:10px; margin-top:15px; padding-top:15px; border-top: 1px solid rgba(255,255,255,0.2);"></div>
+                    <!-- КНОПКИ АДМИНИСТРАТОРА (ВЛАДЕЛЬЦА) - ТЕПЕРЬ ОТКРЫТЫ ДЛЯ КЛИКОВ -->
+                    <div id="vp-admin-controls" style="display:none; flex-direction:column; gap:10px; margin-top:15px; padding-top:15px; border-top: 1px solid rgba(255,255,255,0.2); pointer-events: auto;"></div>
                 </div>
             </div>
         </div>
@@ -885,7 +885,7 @@
         try {
             await updateDoc(doc(db, "users", uid), { 
                 isBanned: isBanned,
-                banReason: isBanned ? (reason || "Нарушение правил") : null
+                banReason: isBanned ? (reason || "Нарушение правил сообщества") : null
             });
             alert(isBanned ? "Пользователь заблокирован!" : "Разблокирован!");
             viewUserProfile(uid); 
@@ -1084,11 +1084,11 @@
 
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             
-            // ПРОВЕРКА НА ВЛАДЕЛЬЦА (СНИТИЕ СЛУЧАЙНОГО БАНА И ДОСТУП В АДМИНКУ)
+            // ПРОВЕРКА НА ВЛАДЕЛЬЦА (ИММУНИТЕТ)
             if (user.uid === OWNER_UID) {
                 document.getElementById('owner-secret-section').classList.remove('hidden');
                 
-                // АВТО-РАЗБАН: Если владелец по ошибке заблокирован, снимаем блок
+                // Автоматически снимаем ошибочный бан с владельца
                 if (checkSnap.exists() && checkSnap.data().isBanned) {
                     await updateDoc(doc(db, "users", user.uid), { isBanned: false, banReason: null });
                 }
@@ -1130,7 +1130,7 @@
             } else {
                 document.getElementById('owner-secret-section').classList.add('hidden');
                 
-                // БЛОКИРОВКА ОБЫЧНЫХ ПОЛЬЗОВАТЕЛЕЙ ПРИ ВХОДЕ
+                // Блокировка обычных юзеров
                 if(checkSnap.exists() && checkSnap.data().isBanned) {
                     const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
                     document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
@@ -1147,8 +1147,6 @@
             userDocUnsubscribe = onSnapshot(doc(db, "users", user.uid), async (snap) => {
                 if (snap.exists()) {
                     const data = snap.data();
-                    
-                    // БЛОКИРОВКА ОБЫЧНЫХ ПОЛЬЗОВАТЕЛЕЙ ПРЯМО ВО ВРЕМЯ РАБОТЫ (Исключая владельца)
                     if(data.isBanned && user.uid !== OWNER_UID) {
                         const reason = data.banReason || "Нарушение правил платформы.";
                         document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
