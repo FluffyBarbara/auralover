@@ -2,303 +2,471 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraLover - Знакомства</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AuraLover - Знакомства нового уровня</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff4b72;
-            --primary-hover: #e03a5f;
-            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --text-dark: #2d3436;
-            --text-gray: #636e72;
+            --primary: #FF416C;
+            --secondary: #FF4B2B;
+            --accent: #8A2387;
+            --bg-color: #f7f8fa;
+            --text-dark: #1e1e24;
+            --text-light: #757575;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-gradient);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-dark);
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: var(--text-dark);
         }
 
-        /* Утилиты */
-        .hidden { display: none !important; }
-        .btn {
-            width: 100%; padding: 14px; border: none; border-radius: 12px;
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        /* --- КОНТЕЙНЕР ПРИЛОЖЕНИЯ (Эмуляция мобильного устройства на ПК) --- */
+        .app-container {
+            width: 100%; max-width: 420px; height: 100vh; max-height: 900px;
+            background: #fff; position: relative; overflow: hidden;
+            box-shadow: var(--glass-shadow);
         }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .input-field {
-            width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd;
-            border-radius: 10px; box-sizing: border-box; font-size: 15px; background: rgba(255,255,255,0.9);
+        @media (min-width: 421px) {
+            .app-container { height: 90vh; border-radius: 40px; border: 8px solid #fff; }
         }
-        
-        /* Контейнеры экранов */
+
         .screen {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 90%; max-width: 420px;
-            padding: 30px;
-            box-sizing: border-box;
-            animation: fadeIn 0.4s ease-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; display: flex; flex-direction: column;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            opacity: 0; pointer-events: none; transform: translateY(20px); z-index: 1;
+        }
+        .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
+
+        /* --- ГРАДИЕНТНЫЙ ФОН ДЛЯ АВТОРИЗАЦИИ --- */
+        .auth-bg {
+            background: linear-gradient(-45deg, #FF416C, #FF4B2B, #E55D87, #5FC3E4);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            color: white; padding: 40px 20px; display: flex; flex-direction: column; justify-content: center;
+        }
+        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+
+        .logo-text { font-size: 42px; font-weight: 700; text-align: center; margin-bottom: 10px; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .subtitle { text-align: center; font-weight: 300; margin-bottom: 40px; opacity: 0.9; }
+
+        /* --- GLASSMORPHISM ПАНЕЛЬ АВТОРИЗАЦИИ --- */
+        .auth-card {
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.3); padding: 30px; box-shadow: 0 25px 45px rgba(0,0,0,0.1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .toggle-box {
+            display: flex; background: rgba(0,0,0,0.2); border-radius: 30px; position: relative; margin-bottom: 30px; padding: 5px;
         }
-
-        /* --- ЭКРАН АВТОРИЗАЦИИ --- */
-        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 2px solid #eee; }
-        .auth-tab {
-            flex: 1; text-align: center; padding: 10px; cursor: pointer;
-            color: var(--text-gray); font-weight: 600;
+        .toggle-btn {
+            flex: 1; text-align: center; padding: 12px; cursor: pointer; z-index: 2; font-weight: 500; font-size: 15px; color: white; transition: color 0.3s;
         }
-        .auth-tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
-        .error-text { color: #d63031; font-size: 14px; text-align: center; margin-top: 10px; }
+        .toggle-slider {
+            position: absolute; top: 5px; left: 5px; width: calc(50% - 5px); height: calc(100% - 10px);
+            background: white; border-radius: 25px; transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1;
+        }
+        .toggle-box.register .toggle-slider { left: 50%; }
+        .toggle-box.register .toggle-btn:nth-child(1) { color: rgba(255,255,255,0.7); }
+        .toggle-box.login .toggle-btn:nth-child(2) { color: rgba(255,255,255,0.7); }
+        .toggle-box .toggle-slider { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .toggle-box.login .toggle-btn:nth-child(1), .toggle-box.register .toggle-btn:nth-child(2) { color: var(--primary); }
 
-        /* --- ОСНОВНОЕ ПРИЛОЖЕНИЕ --- */
-        #app-screen { max-width: 480px; padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 90vh; }
+        /* --- FLOATING LABELS (КРАСИВЫЕ ИНПУТЫ) --- */
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group input, .input-group textarea {
+            width: 100%; padding: 15px 15px 15px 15px; background: rgba(255,255,255,0.9);
+            border: 2px solid transparent; border-radius: 15px; font-size: 16px; color: var(--text-dark);
+            transition: all 0.3s; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .auth-card .input-group input { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .auth-card .input-group input::placeholder { color: transparent; }
+        .auth-card .input-group label {
+            position: absolute; top: 15px; left: 15px; color: rgba(255,255,255,0.8); pointer-events: none;
+            transition: 0.2s ease all; font-size: 16px;
+        }
+        .auth-card .input-group input:focus ~ label, .auth-card .input-group input:not(:placeholder-shown) ~ label {
+            top: -10px; left: 10px; font-size: 12px; background: var(--primary); padding: 2px 8px; border-radius: 10px; color: white; font-weight: 500;
+        }
+        .auth-card .input-group input:focus { background: rgba(255,255,255,0.3); border-color: white; }
+
+        /* --- КНОПКИ --- */
+        .btn-main {
+            width: 100%; padding: 16px; background: white; color: var(--primary); border: none;
+            border-radius: 15px; font-size: 18px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-main:active { transform: scale(0.97); }
+        .btn-gradient { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; }
+
+        .error-msg { text-align: center; color: #ffeb3b; font-size: 14px; margin-top: 15px; min-height: 20px; font-weight: 500; }
+
+        /* --- HEADER ПРИЛОЖЕНИЯ --- */
         .app-header {
-            background: white; padding: 15px 20px; text-align: center;
-            font-size: 20px; font-weight: bold; color: var(--primary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); z-index: 100;
         }
-        .logout-btn { font-size: 14px; color: var(--text-gray); background: none; border: none; cursor: pointer; }
-        
-        /* --- НАСТРОЙКА ПРОФИЛЯ --- */
-        .profile-setup { padding: 20px; overflow-y: auto; flex: 1; }
-        .photo-upload-container { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-        .photo-slot {
-            width: 70px; height: 90px; background: #eee; border-radius: 12px;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            overflow: hidden; position: relative; border: 2px dashed #ccc;
-        }
-        .photo-slot img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-slot.add-btn::after { content: '+'; font-size: 24px; color: #888; }
-        
-        .interests-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-        .interest-tag {
-            padding: 8px 15px; background: white; border: 1px solid #ddd;
-            border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s;
-        }
-        .interest-tag.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .app-title { font-size: 24px; font-weight: 700; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .icon-btn { background: none; border: none; font-size: 24px; color: var(--text-light); cursor: pointer; transition: 0.2s; }
+        .icon-btn:hover { color: var(--primary); }
 
-        /* --- КАРТОЧКИ (СВАЙПЫ) --- */
-        .discovery-view { flex: 1; position: relative; background: #fafafa; overflow: hidden; padding: 20px; }
-        .dating-card {
-            position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
-            background: white; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            background-image: url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=400');
-            background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-end;
+        /* --- СОЗДАНИЕ ПРОФИЛЯ --- */
+        .profile-setup { padding: 0 20px 20px; overflow-y: auto; flex: 1; }
+        .profile-setup h2 { font-size: 22px; margin-bottom: 20px; color: var(--text-dark); }
+        .profile-setup .input-group input, .profile-setup .input-group textarea { border: 2px solid #eee; }
+        .profile-setup .input-group input:focus, .profile-setup .input-group textarea:focus { border-color: var(--primary); background: white; }
+        
+        /* Сетка фотографий (1 большая, 4 маленьких) */
+        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .photo-slot {
+            background: #f0f2f5; border-radius: 15px; position: relative; overflow: hidden; cursor: pointer;
+            aspect-ratio: 3/4; display: flex; justify-content: center; align-items: center; border: 2px dashed #ddd; transition: 0.2s;
         }
-        .card-info {
-            background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 30px 20px 20px;
-            color: white; border-radius: 0 0 20px 20px;
+        .photo-slot.main-photo { grid-column: span 2; grid-row: span 2; }
+        .photo-slot:hover { border-color: var(--primary); background: #ffe6eb; }
+        .photo-slot::after { content: '+'; font-size: 30px; color: #aaa; font-weight: 300; transition: 0.2s; }
+        .photo-slot:hover::after { color: var(--primary); transform: scale(1.2); }
+        .photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2; }
+        
+        /* Интересы - стильные теги */
+        .section-title { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: var(--text-dark); }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .chip {
+            padding: 10px 18px; background: white; border: 2px solid #eee; border-radius: 25px;
+            font-size: 14px; font-weight: 500; color: var(--text-light); cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card-info h2 { margin: 0 0 5px 0; font-size: 24px; }
-        .card-info p { margin: 0; font-size: 15px; opacity: 0.9; }
-        .card-actions { display: flex; justify-content: space-evenly; margin-top: 15px; padding-bottom: 10px; }
-        .action-btn { width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .btn-dislike { background: white; color: #ff4b4b; }
-        .btn-like { background: white; color: #4bffb3; }
+        .chip.active { background: linear-gradient(45deg, var(--primary), var(--secondary)); border-color: transparent; color: white; box-shadow: 0 5px 15px rgba(255, 65, 108, 0.3); transform: translateY(-2px); }
+
+        /* --- ЭКРАН СВАЙПОВ (DISCOVERY) --- */
+        .discovery-area { flex: 1; position: relative; background: #f7f8fa; padding: 10px 20px 30px; display: flex; flex-direction: column; overflow: hidden;}
+        .card-stack { flex: 1; position: relative; margin-bottom: 20px; }
+        .swipe-card {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden; background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            transition: transform 0.3s ease;
+        }
+        /* Временное фото для примера */
+        .swipe-card { background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        
+        .card-info-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+            padding: 40px 20px 20px; color: white; width: 100%;
+        }
+        .card-name { font-size: 28px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 8px;}
+        .card-name span { font-size: 22px; font-weight: 400; opacity: 0.9; }
+        .online-dot { width: 10px; height: 10px; background: #00e676; border-radius: 50%; box-shadow: 0 0 10px #00e676; }
+        .card-bio { font-size: 15px; opacity: 0.85; line-height: 1.4; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .card-interests { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
+        .card-interests::-webkit-scrollbar { display: none; }
+        .card-chip { background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; white-space: nowrap; border: 1px solid rgba(255,255,255,0.3); }
+
+        /* Кнопки действий */
+        .action-buttons { display: flex; justify-content: space-evenly; align-items: center; padding: 10px 0; }
+        .action-btn {
+            width: 65px; height: 65px; border-radius: 50%; border: none; background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); font-size: 28px; cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .action-btn:active { transform: scale(0.85); }
+        .btn-pass { color: #fd5c63; }
+        .btn-super { width: 50px; height: 50px; font-size: 20px; color: #00d2ff; }
+        .btn-like { color: #00e676; }
+        
+        .action-btn:hover.btn-pass { box-shadow: 0 10px 25px rgba(253, 92, 99, 0.3); }
+        .action-btn:hover.btn-like { box-shadow: 0 10px 25px rgba(0, 230, 118, 0.3); }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН АВТОРИЗАЦИИ (ВХОД И РЕГИСТРАЦИЯ) -->
-    <div id="auth-screen" class="screen">
-        <h2 style="text-align: center; margin-top:0;">AuraLover</h2>
-        
-        <div class="auth-tabs">
-            <div class="auth-tab active" id="tab-login">Вход</div>
-            <div class="auth-tab" id="tab-register">Регистрация</div>
-        </div>
+<div class="app-container">
 
-        <form id="auth-form" onsubmit="return false;">
-            <input type="email" id="auth-email" class="input-field" placeholder="Email" required>
-            <input type="password" id="auth-password" class="input-field" placeholder="Пароль" required>
-            <button type="submit" class="btn btn-primary" id="auth-submit-btn">Войти</button>
-        </form>
-        <div id="auth-error" class="error-text"></div>
+    <!-- 1. ЭКРАН АВТОРИЗАЦИИ (Dark Glassmorphism) -->
+    <div id="screen-auth" class="screen auth-bg active">
+        <div class="logo-text">AuraLover</div>
+        <div class="subtitle">Найди свою искру.</div>
+
+        <div class="auth-card">
+            <div class="toggle-box login" id="auth-toggle">
+                <div class="toggle-slider"></div>
+                <div class="toggle-btn" id="btn-show-login">Вход</div>
+                <div class="toggle-btn" id="btn-show-register">Регистрация</div>
+            </div>
+
+            <form id="auth-form" onsubmit="return false;">
+                <div class="input-group">
+                    <input type="email" id="auth-email" placeholder=" " required>
+                    <label for="auth-email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="auth-password" placeholder=" " required>
+                    <label for="auth-password">Пароль</label>
+                </div>
+                <button type="submit" class="btn-main" id="auth-submit-btn">Войти</button>
+            </form>
+            <div id="auth-error" class="error-msg"></div>
+        </div>
     </div>
 
-    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
-    <div id="app-screen" class="screen hidden">
+    <!-- 2. ЭКРАН НАСТРОЙКИ ПРОФИЛЯ -->
+    <div id="screen-setup" class="screen">
         <div class="app-header">
-            <span>AuraLover</span>
-            <button class="logout-btn" id="btn-logout">Выйти</button>
+            <div class="app-title">Профиль</div>
+            <button class="icon-btn" id="btn-logout-setup">✕</button>
         </div>
-
-        <!-- 1. Настройка профиля (Первый вход) -->
-        <div id="profile-setup-view" class="profile-setup hidden">
-            <h3>Создайте свой профиль</h3>
-            <input type="text" id="prof-name" class="input-field" placeholder="Ваше имя">
-            <input type="number" id="prof-age" class="input-field" placeholder="Возраст">
-            <textarea id="prof-bio" class="input-field" placeholder="О себе..." rows="3"></textarea>
-
-            <h4>Фотографии (до 5 шт.)</h4>
-            <div class="photo-upload-container" id="photo-grid">
-                <label class="photo-slot add-btn">
-                    <input type="file" id="photo-input" accept="image/*" multiple class="hidden">
+        
+        <div class="profile-setup">
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;">Заполни анкету, чтобы тебя заметили.</p>
+            
+            <div class="photo-grid" id="photo-grid">
+                <label class="photo-slot main-photo">
+                    <input type="file" class="photo-input" accept="image/*" hidden>
                 </label>
-                <!-- Сюда будут добавляться превью -->
+                <label class="photo-slot">
+                    <input type="file" class="photo-input" accept="image/*" hidden>
+                </label>
+                <label class="photo-slot">
+                    <input type="file" class="photo-input" accept="image/*" hidden>
+                </label>
+                <label class="photo-slot">
+                    <input type="file" class="photo-input" accept="image/*" hidden>
+                </label>
+                <label class="photo-slot">
+                    <input type="file" class="photo-input" accept="image/*" hidden>
+                </label>
             </div>
 
-            <h4>Интересы</h4>
-            <div class="interests-grid" id="interests-container">
-                <div class="interest-tag">Музыка</div>
-                <div class="interest-tag">Кино</div>
-                <div class="interest-tag">Игры</div>
-                <div class="interest-tag">Спорт</div>
-                <div class="interest-tag">Путешествия</div>
-                <div class="interest-tag">Книги</div>
-                <div class="interest-tag">Котики</div>
+            <div class="input-group">
+                <input type="text" id="prof-name" placeholder=" " required>
+                <label>Ваше имя</label>
+            </div>
+            <div class="input-group">
+                <input type="number" id="prof-age" placeholder=" " required>
+                <label>Возраст</label>
+            </div>
+            <div class="input-group">
+                <textarea id="prof-bio" placeholder=" " rows="3" required></textarea>
+                <label>О себе (пару слов)</label>
             </div>
 
-            <button class="btn btn-primary" id="btn-save-profile">Сохранить и начать</button>
+            <div class="section-title">Интересы (выбери до 5)</div>
+            <div class="chips-container" id="interests-container">
+                <div class="chip">Музыка (emo-rap)</div>
+                <div class="chip">GTA 5 RP</div>
+                <div class="chip">Создание игр</div>
+                <div class="chip">Unity</div>
+                <div class="chip">Спорт (ГТО)</div>
+                <div class="chip">Web-разработка</div>
+                <div class="chip">Тусовки</div>
+                <div class="chip">Кино</div>
+                <div class="chip">Стриминг (Twitch)</div>
+                <div class="chip">Машины</div>
+            </div>
+
+            <button class="btn-main btn-gradient" id="btn-save-profile">Готово, врываемся!</button>
+        </div>
+    </div>
+
+    <!-- 3. ГЛАВНЫЙ ЭКРАН (СВАЙПЫ) -->
+    <div id="screen-main" class="screen">
+        <div class="app-header">
+            <button class="icon-btn">👤</button>
+            <div class="app-title" style="font-size: 20px;">AuraLover</div>
+            <button class="icon-btn">💬</button>
         </div>
 
-        <!-- 2. Лента знакомств (Discovery) -->
-        <div id="discovery-view" class="discovery-view hidden">
-            <div class="dating-card">
-                <div class="card-info">
-                    <h2>Алиса, 21</h2>
-                    <p>Люблю гулять по ночному городу и пить кофе. Ищу компанию на вечер ✨</p>
-                    <div class="card-actions">
-                        <button class="action-btn btn-dislike">✖</button>
-                        <button class="action-btn btn-like">♥</button>
+        <div class="discovery-area">
+            <div class="card-stack">
+                <div class="swipe-card">
+                    <div class="card-info-overlay">
+                        <div class="card-name">
+                            Милана <span>20</span> <div class="online-dot"></div>
+                        </div>
+                        <div class="card-bio">Обожаю ночные поездки, хорошую музыку и искренних людей. Ищу с кем можно поболтать обо всём на свете до утра. 🌌</div>
+                        <div class="card-interests">
+                            <div class="card-chip">Музыка</div>
+                            <div class="card-chip">Кино</div>
+                            <div class="card-chip">Эстетика</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="action-buttons">
+                <button class="action-btn btn-pass" id="btn-pass">✖</button>
+                <button class="action-btn btn-super" id="btn-super">★</button>
+                <button class="action-btn btn-like" id="btn-like">♥</button>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
-            authDomain: "auralover.firebaseapp.com",
-            databaseURL: "https://auralover-default-rtdb.firebaseio.com",
-            projectId: "auralover",
-            storageBucket: "auralover.firebasestorage.app",
-            messagingSenderId: "626796547748",
-            appId: "1:626796547748:web:fd401e5985875c64fca031",
-            measurementId: "G-XV5YN3Z9KH"
-        };
+<!-- FIREBASE & ЛОГИКА -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    // Ваши ключи
+    const firebaseConfig = {
+        apiKey: "AIzaSyCT0YGzfb0Z2SHfafkMmuhbj0MdqkrRGDk",
+        authDomain: "auralover.firebaseapp.com",
+        databaseURL: "https://auralover-default-rtdb.firebaseio.com",
+        projectId: "auralover",
+        storageBucket: "auralover.firebasestorage.app",
+        messagingSenderId: "626796547748",
+        appId: "1:626796547748:web:fd401e5985875c64fca031",
+        measurementId: "G-XV5YN3Z9KH"
+    };
 
-        // UI Элементы
-        const authScreen = document.getElementById('auth-screen');
-        const appScreen = document.getElementById('app-screen');
-        const setupView = document.getElementById('profile-setup-view');
-        const discoveryView = document.getElementById('discovery-view');
-        
-        let isLoginMode = true;
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        // --- ЛОГИКА ИНТЕРФЕЙСА АВТОРИЗАЦИИ ---
-        document.getElementById('tab-login').addEventListener('click', (e) => {
-            isLoginMode = true;
-            e.target.classList.add('active');
-            document.getElementById('tab-register').classList.remove('active');
-            document.getElementById('auth-submit-btn').innerText = "Войти";
-        });
+    // Управление экранами
+    const screens = {
+        auth: document.getElementById('screen-auth'),
+        setup: document.getElementById('screen-setup'),
+        main: document.getElementById('screen-main')
+    };
 
-        document.getElementById('tab-register').addEventListener('click', (e) => {
-            isLoginMode = false;
-            e.target.classList.add('active');
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('auth-submit-btn').innerText = "Создать аккаунт";
-        });
+    function showScreen(screenName) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        screens[screenName].classList.add('active');
+    }
 
-        document.getElementById('auth-form').addEventListener('submit', () => {
-            const email = document.getElementById('auth-email').value;
-            const password = document.getElementById('auth-password').value;
-            const errorEl = document.getElementById('auth-error');
-            errorEl.innerText = "";
+    // --- ЛОГИКА АВТОРИЗАЦИИ (UI) ---
+    let isLogin = true;
+    const authToggle = document.getElementById('auth-toggle');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
 
-            if (isLoginMode) {
-                signInWithEmailAndPassword(auth, email, password).catch(err => errorEl.innerText = "Ошибка: " + err.message);
-            } else {
-                createUserWithEmailAndPassword(auth, email, password).catch(err => errorEl.innerText = "Ошибка: " + err.message);
+    document.getElementById('btn-show-login').addEventListener('click', () => {
+        isLogin = true;
+        authToggle.classList.remove('register');
+        authToggle.classList.add('login');
+        authSubmitBtn.innerText = "Войти";
+    });
+
+    document.getElementById('btn-show-register').addEventListener('click', () => {
+        isLogin = false;
+        authToggle.classList.remove('login');
+        authToggle.classList.add('register');
+        authSubmitBtn.innerText = "Создать аккаунт";
+    });
+
+    // --- FIREBASE АВТОРИЗАЦИЯ ---
+    document.getElementById('auth-form').addEventListener('submit', () => {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        const errorMsg = document.getElementById('auth-error');
+        errorMsg.innerText = "Загрузка...";
+
+        if (isLogin) {
+            signInWithEmailAndPassword(auth, email, password)
+                .catch(err => errorMsg.innerText = "Ошибка входа: Проверьте данные.");
+        } else {
+            createUserWithEmailAndPassword(auth, email, password)
+                .catch(err => errorMsg.innerText = "Ошибка: " + err.message);
+        }
+    });
+
+    // Магия переключения экранов при входе
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Временно направляем на настройку профиля при каждом входе для теста
+            showScreen('setup');
+            document.getElementById('auth-error').innerText = "";
+            document.getElementById('auth-password').value = "";
+        } else {
+            showScreen('auth');
+        }
+    });
+
+    // Выход
+    document.getElementById('btn-logout-setup').addEventListener('click', () => signOut(auth));
+
+    // --- ЛОГИКА НАСТРОЙКИ ПРОФИЛЯ ---
+    // 1. Выбор интересов
+    const chips = document.querySelectorAll('.chip');
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            const activeCount = document.querySelectorAll('.chip.active').length;
+            if (!chip.classList.contains('active') && activeCount >= 5) {
+                // Эффект дрожания если больше 5
+                chip.style.transform = "translateX(5px)"; setTimeout(() => chip.style.transform = "translateX(-5px)", 100); setTimeout(() => chip.style.transform = "translateX(0)", 200);
+                return;
             }
+            chip.classList.toggle('active');
         });
+    });
 
-        // --- НАБЛЮДАТЕЛЬ ЗА СОСТОЯНИЕМ ВХОДА (МАГИЯ ПЕРЕХОДА) ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Пользователь вошел! Скрываем авторизацию, показываем приложение
-                authScreen.classList.add('hidden');
-                appScreen.classList.remove('hidden');
-                
-                // В реальном приложении здесь проверяется база данных Firestore. 
-                // Для демонстрации: показываем настройку профиля
-                setupView.classList.remove('hidden');
-                discoveryView.classList.add('hidden');
-            } else {
-                // Пользователь не авторизован
-                authScreen.classList.remove('hidden');
-                appScreen.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
-
-        // --- ЛОГИКА НАСТРОЙКИ ПРОФИЛЯ ---
-        
-        // Выбор интересов
-        document.querySelectorAll('.interest-tag').forEach(tag => {
-            tag.addEventListener('click', () => tag.classList.toggle('selected'));
-        });
-
-        // Загрузка фото
-        const photoInput = document.getElementById('photo-input');
-        const photoGrid = document.getElementById('photo-grid');
-        let uploadedPhotosCount = 0;
-
-        photoInput.addEventListener('change', function() {
-            const files = Array.from(this.files);
-            
-            files.forEach(file => {
-                if (uploadedPhotosCount >= 5) {
-                    alert("Можно загрузить максимум 5 фотографий!");
-                    return;
-                }
-                
+    // 2. Загрузка фото (предпросмотр)
+    const photoInputs = document.querySelectorAll('.photo-input');
+    photoInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const newSlot = document.createElement('div');
-                    newSlot.className = 'photo-slot';
-                    newSlot.innerHTML = `<img src="${e.target.result}" alt="Photo">`;
-                    photoGrid.insertBefore(newSlot, photoGrid.firstChild);
-                    uploadedPhotosCount++;
+                reader.onload = (e) => {
+                    const label = this.parentElement;
+                    // Удаляем старое фото если есть
+                    const oldImg = label.querySelector('img');
+                    if(oldImg) oldImg.remove();
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    label.appendChild(img);
                 }
-                reader.readAsDataURL(file);
-            });
+                reader.readAsDataURL(this.files[0]);
+            }
         });
+    });
 
-        // Сохранение профиля и переход к карточкам
-        document.getElementById('btn-save-profile').addEventListener('click', () => {
-            const name = document.getElementById('prof-name').value;
-            if(!name) return alert("Введите имя!");
+    // 3. Сохранение и переход к свайпам
+    document.getElementById('btn-save-profile').addEventListener('click', () => {
+        const name = document.getElementById('prof-name').value;
+        if(name.trim().length < 2) {
+            alert("Пожалуйста, введите имя!");
+            return;
+        }
+        showScreen('main');
+    });
+
+    // --- АНИМАЦИИ СВАЙПОВ (Кнопки) ---
+    const card = document.querySelector('.swipe-card');
+    
+    function animateCard(direction) {
+        if(!card) return;
+        const xOffset = direction === 'left' ? -300 : (direction === 'right' ? 300 : 0);
+        const yOffset = direction === 'up' ? -300 : 0;
+        const rotate = direction === 'left' ? -20 : (direction === 'right' ? 20 : 0);
+        
+        card.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${rotate}deg)`;
+        card.style.opacity = '0';
+        
+        // Возврат карточки (эмуляция следующего пользователя)
+        setTimeout(() => {
+            card.style.transition = 'none';
+            card.style.transform = 'translate(0px, 0px) rotate(0deg) scale(0.95)';
+            card.style.opacity = '0';
             
-            // Здесь данные должны отправляться в Firebase Firestore. 
-            // Переключаем экраны:
-            setupView.classList.add('hidden');
-            discoveryView.classList.remove('hidden');
-        });
+            setTimeout(() => {
+                card.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s';
+                card.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+                card.style.opacity = '1';
+            }, 50);
+        }, 300);
+    }
 
-    </script>
+    document.getElementById('btn-pass').addEventListener('click', () => animateCard('left'));
+    document.getElementById('btn-like').addEventListener('click', () => animateCard('right'));
+    document.getElementById('btn-super').addEventListener('click', () => animateCard('up'));
+
+</script>
 </body>
 </html>
