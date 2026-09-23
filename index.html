@@ -12,14 +12,12 @@
             --glass-bg: rgba(255, 255, 255, 0.75); --glass-border: rgba(255, 255, 255, 0.6);
         }
 
-        /* ЖЕСТКОЕ СКРЫТИЕ ВСЕХ ПОЛОС ПРОКРУТКИ БРАУЗЕРА */
         ::-webkit-scrollbar { display: none; width: 0; height: 0; background: transparent; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; scrollbar-width: none; -ms-overflow-style: none; }
 
         html, body { width: 100%; height: 100%; overflow: hidden; background-color: #f4f5f7; margin: 0; padding: 0; }
         body { display: flex; justify-content: center; align-items: flex-start; color: var(--text-main); position: relative; }
 
-        /* АНИМИРОВАННЫЙ ФОН */
         .aura-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; background: #fafcff; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.8; animation: float 15s infinite alternate ease-in-out; }
         .orb:nth-child(1) { width: 400px; height: 400px; background: #FF416C; top: -10%; left: -10%; animation-delay: 0s; }
@@ -28,7 +26,6 @@
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -50px) scale(1.1); } 100% { transform: translate(0, 0) scale(1); } }
 
-        /* КОНТЕЙНЕР ПРИЛОЖЕНИЯ */
         .app-container { width: 100%; max-width: 420px; height: calc(100% - 45px); max-height: 900px; position: relative; z-index: 10; overflow: hidden; background: transparent; display: flex; flex-direction: column; }
         @media (min-width: 421px) {
             body { align-items: center; } 
@@ -36,15 +33,13 @@
             .aura-background { border-radius: 32px; }
         }
 
-        /* ГЛОБАЛЬНЫЙ КОПИРАЙТ */
         .global-copyright { position: absolute; bottom: 8px; left: 0; width: 100%; text-align: center; font-size: 11px; color: var(--text-muted); z-index: 1000; line-height: 1.4; pointer-events: none; }
-        .global-copyright a { color: var(--primary); text-decoration: none; font-weight: 700; pointer-events: auto; transition: 0.2s; }
+        .global-copyright a { color: var(--primary); text-decoration: none; font-weight: 700; pointer-events: auto; transition: 0.2s; cursor: pointer; }
         .global-copyright a:hover { opacity: 0.8; text-decoration: underline; }
 
         .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.4s; opacity: 0; pointer-events: none; transform: translateY(20px); z-index: 1; background: transparent; }
         .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); z-index: 10; }
 
-        /* ЭКРАН АВТОРИЗАЦИИ */
         .auth-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); }
         .logo-container { text-align: center; margin-bottom: 40px; }
         .logo-icon { font-size: 50px; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
@@ -63,18 +58,19 @@
         .btn-glow { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s; }
         .btn-glow:active { transform: translateY(2px) scale(0.98); }
 
-        /* ГЛАВНЫЙ ЭКРАН */
+        .auth-footer-links { text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
+        .auth-footer-links a { color: var(--text-muted); text-decoration: underline; cursor: pointer; margin: 0 5px; }
+
         .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; flex-shrink: 0;}
         .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; flex: 1; }
         
-        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); outline: none !important; -webkit-appearance: none; padding: 0; flex-shrink: 0; }
-        .icon-btn:active { background: rgba(0,0,0,0.05); }
+        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: white; border: none !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); outline: none !important; -webkit-appearance: none; padding: 0; flex-shrink: 0; transition: 0.2s; }
+        .icon-btn:active { background: rgba(0,0,0,0.05); transform: scale(0.95); }
 
         .main-views-container { flex: 1; position: relative; overflow: hidden; }
         .view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transition: 0.3s; opacity: 0; pointer-events: none; transform: translateX(20px); overflow-y: auto; overflow-x: hidden; padding-bottom: 85px; }
         .view.active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
-        /* VIEW: DISCOVERY */
         .card-container { flex: 1; position: relative; margin: 15px 20px 0 20px; perspective: 1000px; display: flex; flex-direction: column; min-height: 0; }
         .swipe-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e0e0e0; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; background-size: cover; background-position: center; transition: 0.3s ease-out; cursor: pointer; }
         
@@ -82,21 +78,16 @@
         .photo-dot { flex: 1; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; }
         .photo-dot.active { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
-        .banned-banner { 
-            position: absolute; top: 75px; left: 50%; transform: translateX(-50%); 
-            background: rgba(255, 65, 108, 0.95); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 18px; 
-            border-radius: 20px; font-weight: 800; font-size: 11px; z-index: 20; 
-            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); text-transform: uppercase; 
-            letter-spacing: 1px; pointer-events: none; white-space: nowrap; text-align: center;
-        }
+        .banned-banner { position: absolute; top: 75px; left: 50%; transform: translateX(-50%); background: rgba(255, 65, 108, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 18px; border-radius: 20px; font-weight: 800; font-size: 11px; z-index: 20; box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4); text-transform: uppercase; letter-spacing: 1px; pointer-events: none; white-space: nowrap; text-align: center; }
 
         .card-report-btn { position: absolute; top: 25px; right: 15px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; cursor: pointer; z-index: 10; transition: 0.2s; }
         .card-report-btn:active { transform: scale(0.95); }
 
         .card-info { background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 60%, transparent 100%); padding: 40px 25px 25px; color: white; width: 100%; pointer-events: none; }
-        .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; }
+        .card-name { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
         .card-age { font-size: 24px; font-weight: 400; opacity: 0.9; }
+        .verified-badge { width: 22px; height: 22px; object-fit: contain; }
+        
         .card-city { font-size: 14px; opacity: 0.8; margin-bottom: 10px; display: block; }
         .card-bio { font-size: 15px; line-height: 1.4; opacity: 0.9; margin-bottom: 15px; font-weight: 300; }
         .card-tags { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; flex-wrap: wrap;}
@@ -108,30 +99,27 @@
         .circle-btn:active { transform: scale(0.85); }
         .btn-nope { color: #FF416C; } .btn-msg { color: #8A2387; font-size: 24px; } .btn-like { color: #00E676; }
 
-        /* VIEW: LIKES */
         .likes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px 20px 20px; }
         .like-card { background: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.5); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; backdrop-filter: blur(10px); }
         .like-card img { width: 100%; height: 180px; object-fit: cover; }
         .like-card-info { padding: 12px; flex: 1; }
-        .like-card-name { font-weight: 700; font-size: 16px; color: var(--text-main); margin-bottom: 2px; }
+        .like-card-name { font-weight: 700; font-size: 16px; color: var(--text-main); margin-bottom: 2px; display: flex; align-items: center; gap: 5px; }
         .like-card-actions { display: flex; justify-content: space-evenly; padding: 0 10px 15px 10px; }
         .like-btn { width: 45px; height: 45px; border-radius: 50%; border: none !important; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transition: 0.2s; outline: none; }
         .like-btn:active { transform: scale(0.85); }
         .like-btn-nope { color: #FF416C; background: white; }
         .like-btn-yes { color: #00E676; background: white; }
 
-        /* VIEW: MESSAGES */
         .chat-list { padding: 10px 20px; }
         .chat-item { display: flex; align-items: center; padding: 15px; background: rgba(255,255,255,0.6); border-radius: 20px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .chat-item:active { transform: scale(0.98); }
         .chat-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .chat-info { flex: 1; overflow: hidden; }
-        .chat-name { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
+        .chat-name { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
         .chat-last-msg { font-size: 14px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;}
         .empty-state span { font-size: 50px; display: block; margin-bottom: 15px; opacity: 0.8; }
 
-        /* VIEW: PROFILE */
         .profile-content { padding: 20px; }
         .section-title { font-size: 18px; font-weight: 700; margin: 25px 0 15px; color: var(--text-main); }
         .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -150,15 +138,16 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; outline: none; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ПАНЕЛЬ АДМИНА */
+        /* ПАНЕЛЬ АДМИНА/МОДЕРАТОРА */
         .admin-dashboard { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0F0F13; color: white; z-index: 400; display: flex; flex-direction: column; transform: translateY(105%); opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .admin-dashboard.active { transform: translateY(0); opacity: 1; pointer-events: all; }
         .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; overflow-y: auto; }
         .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
+        .admin-card.hidden-for-mod { display: none; } /* Скрытие элементов для обычных модераторов */
         .admin-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .admin-card-icon { font-size: 38px; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
-        .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; }
+        .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; line-height: 1.3;}
         .admin-badge { position: absolute; top: -8px; right: -8px; background: #FF416C; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 3px solid #0F0F13; box-shadow: 0 4px 10px rgba(255,65,108,0.4); }
 
         /* МОДАЛЬНЫЕ ОКНА */
@@ -185,7 +174,7 @@
 
         .chat-room-avatar { width: 42px; height: 42px; border-radius: 50%; margin: 0 15px; object-fit: cover; }
         .chat-header-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-        .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2;}
+        .chat-room-name { font-size: 17px; font-weight: 700; line-height: 1.2; display: flex; align-items: center; gap: 5px;}
         .chat-room-status { font-size: 12px; font-weight: 500; color: var(--text-muted); transition: 0.3s; margin-top: 2px; }
         .chat-room-status.online { color: #00E676; }
         .chat-room-status.typing { color: var(--primary); font-style: italic; animation: pulseTyping 1.5s infinite; }
@@ -193,7 +182,6 @@
 
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         
-        /* СООБЩЕНИЯ С ДАТАМИ И ВРЕМЕНЕМ */
         .msg { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: popIn 0.3s; display: flex; flex-direction: column; }
         @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .msg.received { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -211,7 +199,6 @@
         .chat-input-area input { flex: 1; padding: 15px; background: #f0f2f5; border: none; border-radius: 25px; font-size: 15px; outline: none; }
         .chat-input-area button { width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none !important; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; outline: none; }
 
-        /* TOASTS */
         .toast-container { position: fixed; top: 20px; right: 20px; left: auto; transform: none; z-index: 2000; display: flex; flex-direction: column; gap: 10px; width: 300px; max-width: 90vw; pointer-events: none; align-items: flex-end; }
         .toast { background: rgba(255,255,255,0.95); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid rgba(255, 65, 108, 0.15); animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: all; cursor: pointer; width: 100%; position: relative; overflow: hidden; }
         .toast::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
@@ -222,7 +209,6 @@
         .toast.hiding { animation: slideOutRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
 
-        /* BOTTOM NAV */
         .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 75px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; align-items: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom, 10px); }
         .nav-item { font-size: 26px; color: #D1D1D6; cursor: pointer; transition: 0.3s; position: relative; padding: 10px 20px; filter: grayscale(100%); opacity: 0.6; }
         .nav-item.active { filter: grayscale(0%); opacity: 1; transform: translateY(-2px); }
@@ -326,7 +312,13 @@
                 <div class="profile-content">
                     
                     <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
-                        <button class="btn-glow" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Войти в панель управления</button>
+                        <button class="btn-glow" id="btn-open-admin" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Панель управления</button>
+                    </div>
+
+                    <div id="profile-security-warning" class="hidden" style="background:rgba(255, 65, 108, 0.1); border:1px solid rgba(255, 65, 108, 0.3); border-radius:15px; padding:15px; margin-bottom:20px; text-align:center;">
+                        <b style="color:var(--primary); font-size:14px;">⚠️ Ваш Email не подтвержден!</b>
+                        <p style="font-size:12px; color:var(--text-muted); margin:5px 0 10px;">Для безопасности аккаунта и восстановления пароля подтвердите почту.</p>
+                        <button class="btn-glow" style="padding:10px; font-size:13px; border-radius:10px;" onclick="sendEmailVerificationUser()">Отправить письмо</button>
                     </div>
 
                     <div class="section-title" style="margin-top: 0;">Фотографии (до 5)</div>
@@ -340,7 +332,6 @@
 
                     <div class="section-title">О себе</div>
                     
-                    <!-- ПОЛ В ПРОФИЛЕ ДЛЯ ФИЛЬТРАЦИИ -->
                     <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Ваш пол</div>
                     <div style="display:flex; gap:10px; margin-bottom: 20px;">
                         <div class="chip" id="my-gender-male" onclick="setMyGender('male')">Парень</div>
@@ -362,8 +353,13 @@
                     <button class="btn-glow" id="btn-save-profile" style="margin-top: 10px;">Сохранить профиль</button>
                     <button class="btn-reset" id="btn-reset-swipes">🔄 Сбросить просмотренные анкеты</button>
                     
-                    <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка</div>
+                    <div class="section-title" style="margin-top: 30px; text-align:center;">Поддержка и Юридическое</div>
                     <button class="btn-reset" style="margin-top:0; border-color: rgba(255, 65, 108, 0.2); color: var(--primary);" onclick="openAdminModal('modal-generic-report')">🐞 Сообщить о баге / Предложение</button>
+                    
+                    <div style="display:flex; justify-content:space-between; gap:10px; margin-top:10px;">
+                        <button class="btn-reset" style="margin-top:0; flex:1; font-size:12px; padding:10px;" onclick="openAdminModal('modal-terms')">Оферта</button>
+                        <button class="btn-reset" style="margin-top:0; flex:1; font-size:12px; padding:10px;" onclick="openAdminModal('modal-privacy')">Конфиденциальность</button>
+                    </div>
 
                     <div class="section-title" style="margin-top: 30px; text-align:center;">Настройки аккаунта</div>
                     <button class="btn-glow" id="btn-logout-profile" style="background: rgba(0,0,0,0.05); color: var(--text-main); border: 2px solid rgba(0,0,0,0.1); box-shadow: none; margin-bottom: 20px;">🚪 Выйти из аккаунта</button>
@@ -379,29 +375,34 @@
         </div>
     </div>
 
-    <!-- ================== FULLSCREEN ПАНЕЛЬ АДМИНИСТРАТОРА ================== -->
+    <!-- ================== FULLSCREEN ПАНЕЛЬ АДМИНИСТРАТОРА / МОДЕРАТОРА ================== -->
     <div id="admin-dashboard" class="admin-dashboard">
         <div class="admin-header">
-            <h2 style="margin:0; font-size: 20px; font-weight:800; display:flex; align-items:center; gap:8px;">👑 Панель управления</h2>
+            <h2 id="admin-dashboard-title" style="margin:0; font-size: 20px; font-weight:800; display:flex; align-items:center; gap:8px;">👑 Панель управления</h2>
             <button class="icon-btn" style="background:rgba(255,255,255,0.1); color:white; border:none!important;" onclick="document.getElementById('admin-dashboard').classList.remove('active')">✕</button>
         </div>
         <div class="admin-grid">
-            <div class="admin-card" onclick="openAdminModal('modal-broadcast')">
+            <div class="admin-card owner-only" onclick="openAdminModal('modal-broadcast')">
                 <div class="admin-card-icon">📢</div>
                 <div class="admin-card-title">Глобальная Рассылка</div>
+            </div>
+            <div class="admin-card owner-only" onclick="openAdminModal('modal-ban-requests')">
+                <div class="admin-badge hidden" id="admin-ban-req-badge">0</div>
+                <div class="admin-card-icon">⚖️</div>
+                <div class="admin-card-title">Заявки на Бан</div>
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-admin-reports')">
                 <div class="admin-badge hidden" id="admin-reports-badge">0</div>
                 <div class="admin-card-icon">🐞</div>
-                <div class="admin-card-title">Отчеты и Жалобы</div>
+                <div class="admin-card-title">Жалобы</div>
             </div>
             <div class="admin-card" onclick="fetchAdminUsersList()">
                 <div class="admin-card-icon">👥</div>
                 <div class="admin-card-title">База UID юзеров</div>
             </div>
-            <div class="admin-card" onclick="openAdminModal('modal-ban')">
+            <div class="admin-card owner-only" onclick="openAdminModal('modal-ban')">
                 <div class="admin-card-icon">🚫</div>
-                <div class="admin-card-title">Бан аккаунта</div>
+                <div class="admin-card-title">Прямой Бан аккаунта</div>
             </div>
             <div class="admin-card" onclick="openAdminModal('modal-logs')">
                 <div class="admin-card-icon">📋</div>
@@ -411,13 +412,13 @@
                 <div class="admin-card-icon">💬</div>
                 <div class="admin-card-title">Чаты UID</div>
             </div>
-            <div class="admin-card" onclick="openAdminModal('modal-photos')" style="grid-column: span 2;">
+            <div class="admin-card" onclick="openAdminModal('modal-photo-check')">
+                <div class="admin-card-icon">🤖</div>
+                <div class="admin-card-title">Модерация фото (ИИ)</div>
+            </div>
+            <div class="admin-card owner-only" onclick="openAdminModal('modal-photos')" style="grid-column: span 2;">
                 <div class="admin-card-icon">🖼️</div>
                 <div class="admin-card-title">Управление Фото</div>
-            </div>
-            <div class="admin-card" onclick="openAdminModal('modal-edit-user')" style="grid-column: span 2;">
-                <div class="admin-card-icon">✏️</div>
-                <div class="admin-card-title">Изменить анкету пользователя</div>
             </div>
         </div>
     </div>
@@ -482,6 +483,7 @@
         </div>
     </div>
 
+    <!-- ОКНО ДЛЯ БЫСТРОГО БАНА В ПРОФИЛЕ -->
     <div id="modal-profile-ban" class="admin-modal" style="z-index: 1000;">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🚫 Блокировка</div>
@@ -521,11 +523,55 @@
         </div>
     </div>
 
+    <!-- ДОКУМЕНТЫ -->
+    <div id="modal-terms" class="admin-modal" style="z-index: 900;">
+        <div class="admin-modal-content" style="max-height:80vh;">
+            <div class="admin-modal-title">Публичная Оферта</div>
+            <div style="font-size:13px; color:var(--text-main); line-height:1.5; overflow-y:auto; max-height:400px; padding-right:10px;">
+                <b>1. Общие положения</b><br>Настоящая оферта устанавливает правила использования приложения AuraLover...<br><br>
+                <b>2. Правила платформы</b><br>Запрещается рассылка спама, оскорбления, публикация чужих фото...
+            </div>
+            <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-terms')">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="modal-privacy" class="admin-modal" style="z-index: 900;">
+        <div class="admin-modal-content" style="max-height:80vh;">
+            <div class="admin-modal-title">Конфиденциальность</div>
+            <div style="font-size:13px; color:var(--text-main); line-height:1.5; overflow-y:auto; max-height:400px; padding-right:10px;">
+                <b>1. Сбор данных</b><br>Мы собираем ваш Email, загруженные фотографии и информацию профиля...<br><br>
+                <b>2. Обработка ИИ</b><br>Загружаемые вами фото могут автоматически анализироваться на соответствие правилам (AI Moderation)...
+            </div>
+            <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-privacy')">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛИ МОДЕРАЦИИ -->
     <div id="modal-admin-reports" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🐞 Отчеты от пользователей</div>
             <div id="admin-reports-list" style="max-height: 400px; overflow-y: auto;"></div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-reports')">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="modal-ban-requests" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">⚖️ Заявки модераторов на бан</div>
+            <div id="admin-ban-req-list" style="max-height: 400px; overflow-y: auto;">Загрузка...</div>
+            <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-ban-requests')">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="modal-photo-check" class="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-modal-title">🤖 ИИ Модерация фото</div>
+            <p style="font-size:12px; color:gray; margin-bottom:10px;">Сюда попадают фото, где нейросеть обнаружила несоответствие пола или нарушения.</p>
+            <div id="photo-check-list" style="max-height: 400px; overflow-y: auto; text-align:center; padding: 20px;">
+                <div style="font-size:30px;">✅</div>
+                <div style="font-size:14px; font-weight:bold; margin-top:10px;">Очередь пуста</div>
+            </div>
+            <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-photo-check')">Закрыть</button>
         </div>
     </div>
 
@@ -664,7 +710,7 @@
 <!-- FIREBASE SDK V10 -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, addDoc, serverTimestamp, orderBy, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -684,6 +730,7 @@
     const OWNER_UID = "AOMG79gW6zVVoEM9fcMnrpdHrxN2";
 
     let currentUserData = {}; 
+    let userRole = 'user'; // 'owner', 'moderator', 'user'
     let userPhotos = ["", "", "", "", ""]; 
     let myCustomInterests = []; 
     let myGender = 'male';
@@ -703,11 +750,13 @@
     let targetUserUnsubscribe = null; 
     let chatDocUnsubscribe = null;
     let reportsUnsubscribe = null; 
+    let banReqUnsubscribe = null;
     let sysChatUnsubscribe = null;
     
     let isInitialChatsLoad = true;
     let isInitialSysChatLoad = true;
     let isInitialReportsLoad = true;
+    let isInitialBanReqLoad = true;
 
     let systemChatData = null;
     let userChats = [];
@@ -736,16 +785,17 @@
 
     function clearLocalState() {
         if(auth.currentUser) setMyPresence(false);
-        currentUserData = {}; userPhotos = ["", "", "", "", ""]; myCustomInterests = []; profilesQueue = []; currentViewingProfile = null;
+        currentUserData = {}; userRole = 'user'; userPhotos = ["", "", "", "", ""]; myCustomInterests = []; profilesQueue = []; currentViewingProfile = null;
         if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } 
         if (userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; } 
         if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
         if (chatDocUnsubscribe) { chatDocUnsubscribe(); chatDocUnsubscribe = null; }
         if (reportsUnsubscribe) { reportsUnsubscribe(); reportsUnsubscribe = null; }
+        if (banReqUnsubscribe) { banReqUnsubscribe(); banReqUnsubscribe = null; }
         if (sysChatUnsubscribe) { sysChatUnsubscribe(); sysChatUnsubscribe = null; }
         
         activeChatId = null; window.activeTargetId = null; 
-        isInitialChatsLoad = true; isInitialSysChatLoad = true; isInitialReportsLoad = true;
+        isInitialChatsLoad = true; isInitialSysChatLoad = true; isInitialReportsLoad = true; isInitialBanReqLoad = true;
         systemChatData = null; userChats = []; allAdminUsersList = [];
         
         document.getElementById('prof-name').value = ""; document.getElementById('prof-age').value = "";
@@ -903,12 +953,53 @@
     };
 
     window.deleteReport = async (id) => {
-        if(!confirm("Пометить проблему как решенную и удалить?")) return;
+        if(!confirm("Пометить как решенную и удалить?")) return;
         try { await deleteDoc(doc(db, "reports", id)); } catch(e) { showToast("Ошибка", e.message); }
     };
-
-    window.toggleChatDropdown = () => document.getElementById('chat-dropdown').classList.toggle('active');
     
+    // --- ЗАПРОСЫ НА БАН (МОДЕРАЦИЯ) ---
+    window.requestBan = async (uid) => {
+        const reason = prompt("Укажите причину для владельца платформы:");
+        if (!reason) return;
+        try {
+            await addDoc(collection(db, "ban_requests"), {
+                targetUid: uid,
+                moderatorUid: auth.currentUser.uid,
+                moderatorName: currentUserData.name,
+                reason: reason,
+                timestamp: serverTimestamp()
+            });
+            showToast("Успех", "Запрос на блокировку отправлен владельцу.");
+            closeAdminModal('modal-view-profile');
+        } catch(e) { showToast("Ошибка", e.message); }
+    };
+    
+    window.approveBanReq = async (reqId, targetUid, reason) => {
+        if(!confirm("Одобрить бан и заблокировать пользователя?")) return;
+        try {
+            await updateDoc(doc(db, "users", targetUid), { isBanned: true, banReason: reason || "Нарушение правил" });
+            await deleteDoc(doc(db, "ban_requests", reqId));
+            showToast("Успех", "Пользователь заблокирован по запросу модератора.");
+        } catch(e) { showToast("Ошибка", e.message); }
+    };
+
+    window.rejectBanReq = async (reqId) => {
+        if(!confirm("Отклонить запрос?")) return;
+        try { await deleteDoc(doc(db, "ban_requests", reqId)); } catch(e) { showToast("Ошибка", e.message); }
+    };
+
+    // --- ВЫДАЧА РОЛЕЙ И ВЕРИФИКАЦИИ ---
+    window.toggleVerification = async (uid, currentStatus) => {
+        try { await updateDoc(doc(db, "users", uid), { isVerified: !currentStatus }); showToast("Успех", "Статус верификации обновлен!"); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
+    };
+
+    window.toggleModerator = async (uid, currentRole) => {
+        const newRole = currentRole === 'moderator' ? 'user' : 'moderator';
+        try { await updateDoc(doc(db, "users", uid), { role: newRole }); showToast("Успех", `Роль изменена на: ${newRole}`); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
+    };
+
+    // --- УПРАВЛЕНИЕ ЧАТОМ ---
+    window.toggleChatDropdown = () => document.getElementById('chat-dropdown').classList.toggle('active');
     document.addEventListener('click', (e) => {
         const dd = document.getElementById('chat-dropdown');
         if(dd && dd.classList.contains('active') && !e.target.closest('#chat-menu-container')) dd.classList.remove('active');
@@ -979,24 +1070,18 @@
         
         filtered.forEach(d => {
             const status = d.isOnline ? "🟢" : "⚪";
+            const verified = d.isVerified ? " ☑️" : "";
+            const roleBadge = d.id === OWNER_UID ? " 👑" : (d.role === 'moderator' ? " 🛡️" : "");
             html += `<div style="background:#f4f5f7; padding:10px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
                         <div style="flex:1; cursor:pointer;" onclick="viewUserProfile('${d.id}')">
-                            <b>${d.name || "Нет имени"}</b> ${status} <br>
+                            <b>${d.name || "Нет имени"}${verified}${roleBadge}</b> ${status} <br>
                             <span style="color:gray; font-size:11px;">UID: ${d.id}</span>
                         </div>
-                        <button onclick="navigator.clipboard.writeText('${d.id}'); showToast('Успех', 'UID Скопирован!');" style="padding:6px 10px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-size: 11px;">Копия UID</button>
+                        <button onclick="navigator.clipboard.writeText('${d.id}'); showToast('Успех', 'UID Скопирован!');" style="padding:6px 10px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-size: 11px;">Копия</button>
                     </div>`;
         });
         if(filtered.length === 0) html = "Пользователи не найдены.";
         listDiv.innerHTML = html;
-    };
-
-    // БЫСТРЫЙ БАН ПОВЕРХ АНКЕТЫ
-    window.openProfileBanModal = (uid) => {
-        if (uid === OWNER_UID) return showToast("Ошибка", "Владельца платформы невозможно заблокировать!");
-        document.getElementById('profile-ban-uid').value = uid;
-        document.getElementById('profile-ban-reason').value = "";
-        openAdminModal('modal-profile-ban');
     };
 
     window.executeProfileBan = async () => {
@@ -1005,21 +1090,15 @@
         if(!uid) return;
         try {
             await updateDoc(doc(db, "users", uid), { 
-                isBanned: true,
-                banReason: reason || "Нарушение правил платформы"
+                isBanned: true, banReason: reason || "Нарушение правил платформы"
             });
             showToast("Успех", "Пользователь заблокирован!");
-            closeAdminModal('modal-profile-ban');
-            viewUserProfile(uid); 
+            closeAdminModal('modal-profile-ban'); viewUserProfile(uid); 
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
     window.quickUnban = async (uid) => {
-        try {
-            await updateDoc(doc(db, "users", uid), { isBanned: false, banReason: null });
-            showToast("Успех", "Пользователь разблокирован!");
-            viewUserProfile(uid); 
-        } catch(e) { showToast("Ошибка", e.message); }
+        try { await updateDoc(doc(db, "users", uid), { isBanned: false, banReason: null }); showToast("Успех", "Пользователь разблокирован!"); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
     };
 
     window.sendBroadcast = async () => {
@@ -1040,17 +1119,10 @@
         if(!uid) return showToast("Внимание", "Введите UID!");
         if (uid === OWNER_UID) return showToast("Ошибка", "Владельца платформы невозможно заблокировать!");
         try {
-            await updateDoc(doc(db, "users", uid), { 
-                isBanned: isBanned,
-                banReason: isBanned ? (reason || "Нарушение правил сообщества") : null
-            });
+            await updateDoc(doc(db, "users", uid), { isBanned: isBanned, banReason: isBanned ? (reason || "Нарушение правил сообщества") : null });
             showToast("Успех", isBanned ? "Пользователь заблокирован!" : "Разблокирован!");
-            document.getElementById('ban-uid').value = ""; document.getElementById('ban-reason').value = "";
-            closeAdminModal('modal-ban');
-            
-            if(document.getElementById('modal-view-profile').classList.contains('active') && window.activeTargetId === uid) {
-                viewUserProfile(uid);
-            }
+            document.getElementById('ban-uid').value = ""; document.getElementById('ban-reason').value = ""; closeAdminModal('modal-ban');
+            if(document.getElementById('modal-view-profile').classList.contains('active') && window.activeTargetId === uid) { viewUserProfile(uid); }
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
@@ -1172,6 +1244,7 @@
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
+    // НАВИГАЦИЯ
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -1217,21 +1290,88 @@
         signOut(auth);
     };
 
+    window.sendEmailVerificationUser = async () => {
+        if (auth.currentUser) {
+            try {
+                await sendEmailVerification(auth.currentUser);
+                showToast("Успех", "Письмо отправлено! Проверьте папку Спам.");
+            } catch(e) {
+                showToast("Ошибка", "Слишком много запросов или ошибка: " + e.message);
+            }
+        }
+    };
+
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             showLoading("Загрузка...");
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
             setMyPresence(true); 
 
+            // БЕЗОПАСНОСТЬ: Проверка подтверждения Email
+            if (!user.emailVerified) {
+                document.getElementById('profile-security-warning').classList.remove('hidden');
+            } else {
+                document.getElementById('profile-security-warning').classList.add('hidden');
+            }
+
             const checkSnap = await getDoc(doc(db, "users", user.uid));
-            
-            if (user.uid === OWNER_UID) {
+            userRole = user.uid === OWNER_UID ? 'owner' : (checkSnap.exists() ? checkSnap.data().role || 'user' : 'user');
+
+            // АДМИН ИЛИ МОДЕРАТОР
+            if (userRole === 'owner' || userRole === 'moderator') {
                 document.getElementById('owner-secret-section').classList.remove('hidden');
+                document.getElementById('admin-dashboard-title').innerHTML = userRole === 'owner' ? "👑 Панель Владельца" : "🛡️ Панель Модератора";
                 
-                if (checkSnap.exists() && checkSnap.data().isBanned) {
+                // Скрытие функционала владельца от модератора
+                if (userRole === 'moderator') {
+                    document.querySelectorAll('.owner-only').forEach(el => el.classList.add('hidden-for-mod'));
+                } else {
+                    document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden-for-mod'));
+                    
+                    // Слушаем заявки на бан (ТОЛЬКО ВЛАДЕЛЕЦ)
+                    if(banReqUnsubscribe) banReqUnsubscribe();
+                    banReqUnsubscribe = onSnapshot(query(collection(db, "ban_requests"), orderBy("timestamp", "desc")), (snap) => {
+                        const badge = document.getElementById('admin-ban-req-badge');
+                        const list = document.getElementById('admin-ban-req-list');
+                        
+                        snap.docChanges().forEach((change) => {
+                            if (!isInitialBanReqLoad && change.type === "added") {
+                                showToast("🛡️ Модерация", "Новый запрос на блокировку пользователя!", () => openAdminModal('modal-ban-requests'));
+                            }
+                        });
+                        isInitialBanReqLoad = false;
+
+                        if(snap.empty) {
+                            badge.classList.add('hidden');
+                            list.innerHTML = "<p style='font-size:13px; color:gray;'>Запросов нет.</p>";
+                        } else {
+                            badge.classList.remove('hidden');
+                            badge.innerText = snap.size;
+                            let html = "";
+                            snap.forEach(doc => {
+                                const d = doc.data();
+                                html += `
+                                <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
+                                    <strong>Модератор: ${d.moderatorName}</strong>
+                                    <div style="font-size:13px; margin:5px 0;">Запросил бан UID: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile('${d.targetUid}')">${d.targetUid}</b></div>
+                                    <div style="font-size:14px; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">Причина: ${d.reason}</div>
+                                    <div style="display:flex; gap:10px; margin-top:10px;">
+                                        <button onclick="approveBanReq('${doc.id}', '${d.targetUid}', '${d.reason}')" style="background:#FF416C;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Забанить</button>
+                                        <button onclick="rejectBanReq('${doc.id}')" style="background:gray;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Отклонить</button>
+                                    </div>
+                                </div>`;
+                            });
+                            list.innerHTML = html;
+                        }
+                    });
+                }
+
+                // Снимаем случайный бан с владельца
+                if (userRole === 'owner' && checkSnap.exists() && checkSnap.data().isBanned) {
                     await updateDoc(doc(db, "users", user.uid), { isBanned: false, banReason: null });
                 }
                 
+                // Слушаем жалобы (МОДЕР И ВЛАДЕЛЕЦ)
                 if(reportsUnsubscribe) reportsUnsubscribe();
                 reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
                     const badge = document.getElementById('admin-reports-badge');
@@ -1269,6 +1409,7 @@
             } else {
                 document.getElementById('owner-secret-section').classList.add('hidden');
                 
+                // Блокировка обычных юзеров
                 if(checkSnap.exists() && checkSnap.data().isBanned) {
                     const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
                     document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
@@ -1286,7 +1427,7 @@
                 if (snap.exists()) {
                     const data = snap.data();
                     
-                    if(data.isBanned && user.uid !== OWNER_UID) {
+                    if(data.isBanned && userRole !== 'owner') {
                         const reason = data.banReason || "Нарушение правил платформы.";
                         document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
                         document.getElementById('auth-ban-message').style.display = 'block';
@@ -1351,7 +1492,8 @@
             const uSnap = await getDoc(doc(db, "users", uid));
             if(uSnap.exists()) {
                 const u = uSnap.data();
-                html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
+                const verified = u.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
+                html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name} ${verified}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
             }
         }
         container.innerHTML = html;
@@ -1365,7 +1507,7 @@
             const chatId = [auth.currentUser.uid, targetId].sort().join('_');
             await setDoc(doc(db, "chats", chatId), {
                 users: [auth.currentUser.uid, targetId],
-                userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
+                userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "", isVerified: !!currentUserData.isVerified }, [targetId]: { name: targetName, photo: targetPhoto, isVerified: false } },
                 lastMessage: "Aura: Взаимная симпатия! ✨", lastMessageSenderId: "system", timestamp: serverTimestamp()
             }, { merge: true });
             
@@ -1416,7 +1558,8 @@
             empty.classList.add('hidden'); actions.classList.remove('hidden'); card.classList.remove('hidden');
             currentViewingProfile = profilesQueue.shift();
             
-            document.getElementById('card-name').innerHTML = `${currentViewingProfile.name}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
+            const verified = currentViewingProfile.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
+            document.getElementById('card-name').innerHTML = `${currentViewingProfile.name} ${verified}, <span class="card-age" id="card-age">${currentViewingProfile.age}</span>`;
             document.getElementById('card-city').innerText = "📍 " + (currentViewingProfile.city || "");
             document.getElementById('card-bio').innerText = currentViewingProfile.bio || "";
             
@@ -1440,6 +1583,7 @@
     async function handleSwipe(isLike) {
         if(!currentViewingProfile) return;
         const targetId = currentViewingProfile.id, targetName = currentViewingProfile.name, targetPhoto = currentViewingProfile.photos?.[0] || "";
+        const targetVerified = !!currentViewingProfile.isVerified;
         const card = document.getElementById('main-card');
         card.style.transform = `translate(${isLike ? 350 : -350}px, 0px) rotate(${isLike ? 25 : -25}deg)`; card.style.opacity = '0';
         
@@ -1453,7 +1597,10 @@
                 const chatId = [auth.currentUser.uid, targetId].sort().join('_');
                 setDoc(doc(db, "chats", chatId), {
                     users: [auth.currentUser.uid, targetId],
-                    userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
+                    userInfo: { 
+                        [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "", isVerified: !!currentUserData.isVerified }, 
+                        [targetId]: { name: targetName, photo: targetPhoto, isVerified: targetVerified } 
+                    },
                     lastMessage: "Aura: Взаимная симпатия! ✨", lastMessageSenderId: "system", timestamp: serverTimestamp()
                 }, { merge: true });
                 addDoc(collection(db, `chats/${chatId}/messages`), { text: "Aura уведомления: Вы взаимно понравились друг другу! Теперь вы можете начать общение. ✨", senderId: "system", timestamp: serverTimestamp() });
@@ -1473,6 +1620,7 @@
     document.getElementById('btn-direct-msg').onclick = async () => {
         if(!currentViewingProfile) return;
         const targetId = currentViewingProfile.id, targetName = currentViewingProfile.name, targetPhoto = currentViewingProfile.photos?.[0] || "";
+        const targetVerified = !!currentViewingProfile.isVerified;
         const myRef = doc(db, "users", auth.currentUser.uid);
         if (currentUserData.likedMe && currentUserData.likedMe.includes(targetId)) updateDoc(myRef, { likedMe: arrayRemove(targetId) });
         updateDoc(myRef, { swiped: arrayUnion(targetId) });
@@ -1481,7 +1629,10 @@
         const chatId = [auth.currentUser.uid, targetId].sort().join('_');
         await setDoc(doc(db, "chats", chatId), {
             users: [auth.currentUser.uid, targetId],
-            userInfo: { [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "" }, [targetId]: { name: targetName, photo: targetPhoto } },
+            userInfo: { 
+                [auth.currentUser.uid]: { name: currentUserData.name, photo: userPhotos[0] || "", isVerified: !!currentUserData.isVerified }, 
+                [targetId]: { name: targetName, photo: targetPhoto, isVerified: targetVerified } 
+            },
             timestamp: serverTimestamp()
         }, { merge: true });
 
@@ -1503,18 +1654,18 @@
         const muted = currentUserData.mutedChats || [];
 
         if (systemChatData) {
-            html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+            html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
-                    <div class="chat-name">🌟 Aura Обновления</div>
-                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">${systemChatData.lastMessage || "Добро пожаловать в Aura!"}</div>
+                    <div class="chat-name" style="font-size:16px;">🌟 Уведомления AuraLover</div>
+                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">${systemChatData.lastMessage || "Добро пожаловать!"}</div>
                 </div>
             </div>`;
         } else {
-             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Aura Обновления', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
-                    <div class="chat-name">🌟 Aura Обновления</div>
+                    <div class="chat-name" style="font-size:16px;">🌟 Уведомления AuraLover</div>
                     <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">Добро пожаловать в Aura!</div>
                 </div>
             </div>`;
@@ -1528,12 +1679,13 @@
                 const otherUser = data.userInfo[otherUserId];
                 const safePhoto = otherUser.photo || 'https://via.placeholder.com/150';
                 const isMuted = muted.includes(data.id);
+                const verified = otherUser.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
                 
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
                 html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${safePhoto}', '${otherUserId}')">
                     <img class="chat-avatar" src="${safePhoto}">
                     <div class="chat-info">
-                        <div class="chat-name">${otherUser.name} ${isMuted ? '<span style="font-size:12px;opacity:0.5;">🔕</span>' : ''}</div>
+                        <div class="chat-name">${otherUser.name} ${verified} ${isMuted ? '<span style="font-size:12px;opacity:0.5;">🔕</span>' : ''}</div>
                         <div class="chat-last-msg">${msgPreview || ""}</div>
                     </div>
                 </div>`;
@@ -1548,7 +1700,7 @@
             if(snap.exists()) {
                 systemChatData = { id: snap.id, ...snap.data() };
                 if (!isInitialSysChatLoad && systemChatData.lastMessageSenderId === 'system') {
-                    showToast("📢 Aura Обновления", systemChatData.lastMessage, () => openTab('view-chats', navItems[2]));
+                    showToast("📢 Системные уведомления", systemChatData.lastMessage, () => openTab('view-chats', navItems[2]));
                     document.getElementById('chat-badge').classList.add('active');
                 }
             }
@@ -1622,7 +1774,7 @@
         if (isSys) { 
             statusEl.innerText = "Официальный канал 📢"; 
             statusEl.className = "chat-room-status online"; 
-            if(auth.currentUser && auth.currentUser.uid === OWNER_UID) inputArea.style.display = 'flex';
+            if(userRole === 'owner') inputArea.style.display = 'flex';
             else inputArea.style.display = 'none';
             return; 
         }
@@ -1633,9 +1785,16 @@
         else { statusEl.innerText = "Не в сети ⚪"; statusEl.className = "chat-room-status"; }
     }
 
-    window.openChat = (chatId, name, photoUrl, targetId) => {
+    window.openChat = async (chatId, name, photoUrl, targetId) => {
         activeChatId = chatId; window.activeTargetId = targetId; 
-        document.getElementById('chat-active-name').innerText = name;
+        
+        let verifiedHTML = '';
+        if (targetId !== 'system') {
+            const uSnap = await getDoc(doc(db, "users", targetId));
+            if (uSnap.exists() && uSnap.data().isVerified) verifiedHTML = '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">';
+        }
+
+        document.getElementById('chat-active-name').innerHTML = `${name} ${verifiedHTML}`;
         document.getElementById('chat-active-avatar').src = photoUrl || 'https://via.placeholder.com/150';
         document.getElementById('chat-room').classList.add('active');
         document.getElementById('chat-message-input').value = "";
@@ -1677,7 +1836,12 @@
                     let dateText = "";
                     if (currentDateStr === today.toDateString()) dateText = "Сегодня";
                     else if (currentDateStr === yesterday.toDateString()) dateText = "Вчера";
-                    else dateText = msgTime.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    else {
+                        const d = msgTime.getDate().toString().padStart(2, '0');
+                        const m = (msgTime.getMonth() + 1).toString().padStart(2, '0');
+                        const y = msgTime.getFullYear();
+                        dateText = `${d}.${m}.${y}`;
+                    }
                     
                     html += `<div class="chat-date-divider">${dateText}</div>`;
                     lastDateStr = currentDateStr;
@@ -1722,18 +1886,30 @@
                 document.getElementById('vp-banned-banner').style.display = isBanned ? 'block' : 'none';
 
                 const adminControls = document.getElementById('vp-admin-controls');
-                if(auth.currentUser && auth.currentUser.uid === OWNER_UID) {
+                if(userRole === 'owner' || userRole === 'moderator') {
                     adminControls.style.display = 'flex';
-                    if(isBanned) {
-                        adminControls.innerHTML = `<button class="btn-glow" style="background:#00E676; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickUnban('${uid}')">Разблокировать пользователя</button>`;
-                    } else {
-                        adminControls.innerHTML = `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); openProfileBanModal('${uid}')">Заблокировать пользователя</button>`;
+                    let buttonsHTML = '';
+                    
+                    if(userRole === 'owner') {
+                        if(isBanned) buttonsHTML += `<button class="btn-glow" style="background:#00E676; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickUnban('${uid}')">Разблокировать пользователя</button>`;
+                        else buttonsHTML += `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); openProfileBanModal('${uid}')">Заблокировать пользователя</button>`;
+                        
+                        const verifyText = data.isVerified ? "Забрать галочку" : "Выдать галочку";
+                        buttonsHTML += `<button class="btn-glow" style="background:#00C9FF; padding:12px; font-size:14px; margin-top:5px;" onclick="event.stopPropagation(); toggleVerification('${uid}', ${!!data.isVerified})">${verifyText}</button>`;
+                        
+                        const modText = data.role === 'moderator' ? "Снять права модератора" : "Назначить модератором";
+                        buttonsHTML += `<button class="btn-glow" style="background:#8A2387; padding:12px; font-size:14px; margin-top:5px;" onclick="event.stopPropagation(); toggleModerator('${uid}', '${data.role || 'user'}')">${modText}</button>`;
+
+                    } else if (userRole === 'moderator' && uid !== OWNER_UID && data.role !== 'moderator') {
+                        if(!isBanned) buttonsHTML += `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); requestBan('${uid}')">Запросить блокировку</button>`;
                     }
+                    adminControls.innerHTML = buttonsHTML;
                 } else {
                     adminControls.style.display = 'none';
                 }
 
-                document.getElementById('vp-card-name').innerHTML = `${data.name}, <span class="card-age" id="vp-card-age">${data.age}</span>`;
+                const verified = data.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
+                document.getElementById('vp-card-name').innerHTML = `${data.name} ${verified}, <span class="card-age" id="vp-card-age">${data.age}</span>`;
                 document.getElementById('vp-card-city').innerText = "📍 " + (data.city || "");
                 document.getElementById('vp-card-bio').innerText = data.bio || "";
                 
