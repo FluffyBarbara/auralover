@@ -58,9 +58,6 @@
         .btn-glow { width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; border: none; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4); transition: 0.3s; }
         .btn-glow:active { transform: translateY(2px) scale(0.98); }
 
-        .auth-footer-links { text-align: center; margin-top: 15px; font-size: 12px; color: var(--text-muted); }
-        .auth-footer-links a { color: var(--text-muted); text-decoration: underline; cursor: pointer; margin: 0 5px; }
-
         .app-header { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.5); z-index: 100; flex-shrink: 0;}
         .header-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; flex: 1; }
         
@@ -144,7 +141,7 @@
         .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; overflow-y: auto; }
         .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .admin-card.hidden-for-mod { display: none; } /* Скрытие элементов для обычных модераторов */
+        .admin-card.hidden-for-mod { display: none; }
         .admin-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .admin-card-icon { font-size: 38px; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
         .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; line-height: 1.3;}
@@ -204,7 +201,6 @@
         .toast::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary), var(--accent)); }
         .toast-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; padding-left: 5px;}
         .toast-body { font-size: 14px; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9; padding-left: 5px;}
-        
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .toast.hiding { animation: slideOutRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
@@ -265,7 +261,6 @@
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" id="main-header-title">Просмотр анкет</div>
-            <!-- КНОПКА ФИЛЬТРА АНКЕТ -->
             <button class="icon-btn" id="btn-search-settings" onclick="openAdminModal('modal-search-settings')" style="background:transparent; border:none!important; font-size:24px; color:var(--text-main); font-weight:bold;">⋮</button>
         </div>
 
@@ -375,7 +370,7 @@
         </div>
     </div>
 
-    <!-- ================== FULLSCREEN ПАНЕЛЬ АДМИНИСТРАТОРА / МОДЕРАТОРА ================== -->
+    <!-- ================== FULLSCREEN ПАНЕЛЬ АДМИНИСТРАТОРА ================== -->
     <div id="admin-dashboard" class="admin-dashboard">
         <div class="admin-header">
             <h2 id="admin-dashboard-title" style="margin:0; font-size: 20px; font-weight:800; display:flex; align-items:center; gap:8px;">👑 Панель управления</h2>
@@ -425,7 +420,6 @@
 
     <!-- МОДАЛЬНЫЕ ОКНА АДМИНКИ И ДОП. ФУНКЦИОНАЛА -->
 
-    <!-- МОДАЛКА НАСТРОЕК ПОИСКА (ФИЛЬТРЫ) -->
     <div id="modal-search-settings" class="admin-modal" style="z-index: 800;">
         <div class="admin-modal-content">
             <div class="admin-modal-title">Настройки поиска</div>
@@ -458,7 +452,6 @@
         </div>
     </div>
 
-
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
         <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
             <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:75vh; max-height:650px; display:flex;">
@@ -483,7 +476,6 @@
         </div>
     </div>
 
-    <!-- ОКНО ДЛЯ БЫСТРОГО БАНА В ПРОФИЛЕ -->
     <div id="modal-profile-ban" class="admin-modal" style="z-index: 1000;">
         <div class="admin-modal-content">
             <div class="admin-modal-title">🚫 Блокировка</div>
@@ -655,6 +647,7 @@
         </div>
     </div>
     
+    <!-- МОДАЛКА ПРОСМОТРА МЕДИА ИЗ ЧАТА -->
     <div id="modal-chat-media" class="admin-modal" style="z-index: 500;">
         <div class="admin-modal-content" style="text-align:center;">
             <div style="font-size:40px; margin-bottom:10px;">📁</div>
@@ -1322,13 +1315,11 @@
                 document.getElementById('owner-secret-section').classList.remove('hidden');
                 document.getElementById('admin-dashboard-title').innerHTML = userRole === 'owner' ? "👑 Панель Владельца" : "🛡️ Панель Модератора";
                 
-                // Скрытие функционала владельца от модератора
                 if (userRole === 'moderator') {
                     document.querySelectorAll('.owner-only').forEach(el => el.classList.add('hidden-for-mod'));
                 } else {
                     document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden-for-mod'));
                     
-                    // Слушаем заявки на бан (ТОЛЬКО ВЛАДЕЛЕЦ)
                     if(banReqUnsubscribe) banReqUnsubscribe();
                     banReqUnsubscribe = onSnapshot(query(collection(db, "ban_requests"), orderBy("timestamp", "desc")), (snap) => {
                         const badge = document.getElementById('admin-ban-req-badge');
@@ -1366,12 +1357,10 @@
                     });
                 }
 
-                // Снимаем случайный бан с владельца
                 if (userRole === 'owner' && checkSnap.exists() && checkSnap.data().isBanned) {
                     await updateDoc(doc(db, "users", user.uid), { isBanned: false, banReason: null });
                 }
                 
-                // Слушаем жалобы (МОДЕР И ВЛАДЕЛЕЦ)
                 if(reportsUnsubscribe) reportsUnsubscribe();
                 reportsUnsubscribe = onSnapshot(query(collection(db, "reports"), orderBy("timestamp", "desc")), (snap) => {
                     const badge = document.getElementById('admin-reports-badge');
@@ -1399,7 +1388,7 @@
                             <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                 <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
                                 <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text} ${linkHtml}</div>
-                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: ${d.uid} ${d.reportedUid ? '| Нарушитель: ' + d.reportedUid : ''}</div>
+                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile('${d.uid}')">${d.uid}</b> ${d.reportedUid ? '| Нарушитель: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile(\'' + d.reportedUid + '\')">' + d.reportedUid + '</b>' : ''}</div>
                                 <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Решено</button>
                             </div>`;
                         });
@@ -1409,7 +1398,6 @@
             } else {
                 document.getElementById('owner-secret-section').classList.add('hidden');
                 
-                // Блокировка обычных юзеров
                 if(checkSnap.exists() && checkSnap.data().isBanned) {
                     const reason = checkSnap.data().banReason || "Нарушение правил сообщества.";
                     document.getElementById('auth-ban-message').innerHTML = `<b style="color:#FF416C;">Ваш аккаунт заблокирован!</b><br><span style="color:var(--text-main); font-size:13px; margin-top:5px; display:block;">Причина: ${reason}</span>`;
@@ -1492,7 +1480,7 @@
             const uSnap = await getDoc(doc(db, "users", uid));
             if(uSnap.exists()) {
                 const u = uSnap.data();
-                const verified = u.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
+                const verified = u.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge" style="width:16px; height:16px;">' : '';
                 html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name} ${verified}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
             }
         }
@@ -1658,7 +1646,7 @@
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
                     <div class="chat-name" style="font-size:16px;">🌟 Уведомления AuraLover</div>
-                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">${systemChatData.lastMessage || "Добро пожаловать!"}</div>
+                    <div class="chat-last-msg" style="color:var(--primary); font-weight:600;">${systemChatData.lastMessage || "Добро пожаловать в Aura!"}</div>
                 </div>
             </div>`;
         } else {
@@ -1679,7 +1667,7 @@
                 const otherUser = data.userInfo[otherUserId];
                 const safePhoto = otherUser.photo || 'https://via.placeholder.com/150';
                 const isMuted = muted.includes(data.id);
-                const verified = otherUser.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
+                const verified = otherUser.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge" style="width:16px; height:16px;">' : '';
                 
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
                 html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${safePhoto}', '${otherUserId}')">
