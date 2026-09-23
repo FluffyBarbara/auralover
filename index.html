@@ -135,19 +135,17 @@
         .btn-reset { width: 100%; padding: 15px; background: rgba(0,0,0,0.04); color: var(--text-muted); border: 2px solid rgba(0,0,0,0.05); border-radius: 18px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; outline: none; }
         .btn-reset:active { transform: scale(0.98); background: rgba(0,0,0,0.08); }
 
-        /* ПАНЕЛЬ АДМИНА/МОДЕРАТОРА */
         .admin-dashboard { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0F0F13; color: white; z-index: 400; display: flex; flex-direction: column; transform: translateY(105%); opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .admin-dashboard.active { transform: translateY(0); opacity: 1; pointer-events: all; }
         .admin-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px 20px; overflow-y: auto; }
         .admin-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 25px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; position: relative; }
-        .admin-card.hidden-for-mod { display: none; }
+        .admin-card.hidden-for-mod { display: none; } 
         .admin-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .admin-card-icon { font-size: 38px; margin-bottom: 15px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
         .admin-card-title { font-size: 13px; font-weight: 600; color: #ddd; letter-spacing: 0.5px; line-height: 1.3;}
         .admin-badge { position: absolute; top: -8px; right: -8px; background: #FF416C; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 3px solid #0F0F13; box-shadow: 0 4px 10px rgba(255,65,108,0.4); }
 
-        /* МОДАЛЬНЫЕ ОКНА */
         .admin-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 15, 19, 0.85); backdrop-filter: blur(15px); z-index: 500; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: 0.3s; }
         .admin-modal.active { opacity: 1; pointer-events: all; }
         .admin-modal-content { background: white; width: 100%; max-width: 380px; border-radius: 28px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); max-height: 85vh; overflow-y: auto; color: var(--text-main); }
@@ -158,7 +156,6 @@
         .admin-textarea:focus { border-color: var(--primary); background: white; }
         .admin-modal-actions { display: flex; gap: 10px; margin-top: 10px; }
 
-        /* ЧАТ-КОМНАТА И МЕНЮ В ЧАТЕ */
         .chat-room { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f7; z-index: 200; display: flex; flex-direction: column; transform: translateX(105%); opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .chat-room.active { transform: translateX(0); opacity: 1; pointer-events: all; }
         .chat-room-header { padding: 10px 20px; background: white; display: flex; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -175,7 +172,6 @@
         .chat-room-status { font-size: 12px; font-weight: 500; color: var(--text-muted); transition: 0.3s; margin-top: 2px; }
         .chat-room-status.online { color: #00E676; }
         .chat-room-status.typing { color: var(--primary); font-style: italic; animation: pulseTyping 1.5s infinite; }
-        @keyframes pulseTyping { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         
@@ -229,7 +225,6 @@
 
 <div class="app-container">
     <div id="loading-overlay"><div class="spinner"></div><div style="font-weight: 600; color: var(--primary);" id="loading-text">Загрузка...</div></div>
-
     <div id="toast-container" class="toast-container"></div>
 
     <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
@@ -261,6 +256,7 @@
     <div id="screen-main" class="screen">
         <div class="app-header">
             <div class="header-title" id="main-header-title">Просмотр анкет</div>
+            <!-- КНОПКА ФИЛЬТРА АНКЕТ -->
             <button class="icon-btn" id="btn-search-settings" onclick="openAdminModal('modal-search-settings')" style="background:transparent; border:none!important; font-size:24px; color:var(--text-main); font-weight:bold;">⋮</button>
         </div>
 
@@ -305,7 +301,6 @@
             <!-- ВКЛАДКА 4: ПРОФИЛЬ -->
             <div id="view-profile" class="view">
                 <div class="profile-content">
-                    
                     <div id="owner-secret-section" class="hidden" style="margin-bottom: 25px;">
                         <button class="btn-glow" id="btn-open-admin" style="background: linear-gradient(135deg, #1C1C28, #3A3A4A); box-shadow: 0 10px 25px rgba(0,0,0,0.3);" onclick="document.getElementById('admin-dashboard').classList.add('active')">👑 Панель управления</button>
                     </div>
@@ -391,7 +386,7 @@
                 <div class="admin-card-icon">🐞</div>
                 <div class="admin-card-title">Жалобы</div>
             </div>
-            <div class="admin-card" onclick="fetchAdminUsersList()">
+            <div class="admin-card" onclick="window.fetchAdminUsersList()">
                 <div class="admin-card-icon">👥</div>
                 <div class="admin-card-title">База UID юзеров</div>
             </div>
@@ -423,30 +418,25 @@
     <div id="modal-search-settings" class="admin-modal" style="z-index: 800;">
         <div class="admin-modal-content">
             <div class="admin-modal-title">Настройки поиска</div>
-            
             <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Кого вы ищете?</div>
             <div style="display:flex; gap:10px; margin-bottom: 25px;">
-                <div class="chip" id="search-gender-female" onclick="setSearchGender('female')">Девушку</div>
-                <div class="chip" id="search-gender-male" onclick="setSearchGender('male')">Парня</div>
-                <div class="chip" id="search-gender-all" onclick="setSearchGender('all')">Всех</div>
+                <div class="chip" id="search-gender-female" onclick="window.setSearchGender('female')">Девушку</div>
+                <div class="chip" id="search-gender-male" onclick="window.setSearchGender('male')">Парня</div>
+                <div class="chip" id="search-gender-all" onclick="window.setSearchGender('all')">Всех</div>
             </div>
-
             <div style="font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 15px 0 10px;">Желаемый возраст</div>
-            
             <div style="margin-bottom: 25px;">
                 <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-main); font-weight:600; margin-bottom:5px;">
                     <span>Минимальный: <b id="age-min-val" style="color:var(--primary);">18</b></span>
                 </div>
                 <input type="range" id="age-min" min="18" max="60" value="18" oninput="document.getElementById('age-min-val').innerText = this.value; if(parseInt(this.value) > parseInt(document.getElementById('age-max').value)) { document.getElementById('age-max').value = this.value; document.getElementById('age-max-val').innerText = this.value == 60 ? '60+' : this.value; }" style="width:100%; margin-bottom:15px; accent-color: var(--primary);">
-                
                 <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-main); font-weight:600; margin-bottom:5px;">
                     <span>Максимальный: <b id="age-max-val" style="color:var(--primary);">60+</b></span>
                 </div>
                 <input type="range" id="age-max" min="18" max="60" value="60" oninput="document.getElementById('age-max-val').innerText = this.value == 60 ? '60+' : this.value; if(parseInt(this.value) < parseInt(document.getElementById('age-min').value)) { document.getElementById('age-min').value = this.value; document.getElementById('age-min-val').innerText = this.value; }" style="width:100%; accent-color: var(--primary);">
             </div>
-
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="saveSearchSettings()">Применить фильтры</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="window.saveSearchSettings()">Применить фильтры</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-search-settings')">Отмена</button>
             </div>
         </div>
@@ -454,14 +444,11 @@
 
     <div id="modal-view-profile" class="admin-modal" style="z-index: 600;">
         <div class="admin-modal-content" style="padding:0; overflow:hidden; background:transparent; box-shadow:none; max-width: 400px; width: 100%;">
-            <div class="swipe-card" id="view-profile-card" onclick="handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:75vh; max-height:650px; display:flex;">
-                
+            <div class="swipe-card" id="view-profile-card" onclick="window.handleCardTap(event, 'view-profile-card', 'view')" style="position:relative; transform:none; height:75vh; max-height:650px; display:flex;">
                 <div id="vp-banned-banner" class="banned-banner" style="display:none;">Заблокирован администрацией</div>
-
                 <div class="photo-indicators" id="view-profile-card-indicators"></div>
-                <button class="card-report-btn" onclick="event.stopPropagation(); openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</button>
+                <button class="card-report-btn" onclick="event.stopPropagation(); window.openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</button>
                 <button onclick="event.stopPropagation(); closeAdminModal('modal-view-profile')" class="icon-btn" style="position:absolute; top:20px; left:15px; width:40px; height:40px; font-size:22px; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index: 10; border:none!important; background:white;">←</button>
-
                 <div class="card-info" style="border-radius: 0 0 32px 32px; width: 100%; pointer-events: auto;">
                     <div style="pointer-events: none;">
                         <div class="card-name" id="vp-card-name">Имя, <span class="card-age" id="vp-card-age">20</span></div>
@@ -469,7 +456,6 @@
                         <div class="card-bio" id="vp-card-bio">Описание...</div>
                         <div class="card-tags" id="vp-card-tags"></div>
                     </div>
-                    
                     <div id="vp-admin-controls" style="display:none; flex-direction:column; gap:10px; margin-top:15px; padding-top:15px; border-top: 1px solid rgba(255,255,255,0.2);"></div>
                 </div>
             </div>
@@ -483,7 +469,7 @@
             <input type="hidden" id="profile-ban-uid">
             <input type="text" id="profile-ban-reason" class="admin-input" placeholder="Нарушение правил платформы...">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="executeProfileBan()">Заблокировать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="window.executeProfileBan()">Заблокировать</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-profile-ban')">Отмена</button>
             </div>
         </div>
@@ -496,7 +482,7 @@
             <textarea id="generic-report-text" class="admin-textarea" placeholder="Опишите проблему..."></textarea>
             <input type="url" id="generic-report-link" class="admin-input" placeholder="Ссылка на фото/видео (YouTube, imgur...)">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="submitReport('generic')">Отправить</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="window.submitReport('generic')">Отправить</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-generic-report')">Отмена</button>
             </div>
         </div>
@@ -509,7 +495,7 @@
             <textarea id="user-report-text" class="admin-textarea" placeholder="Причина жалобы..."></textarea>
             <input type="url" id="user-report-link" class="admin-input" placeholder="Доказательства (ссылка на скрин/видео)">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="submitReport('user')">Отправить жалобу</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="window.submitReport('user')">Отправить жалобу</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-user-report')">Отмена</button>
             </div>
         </div>
@@ -549,7 +535,7 @@
 
     <div id="modal-ban-requests" class="admin-modal">
         <div class="admin-modal-content">
-            <div class="admin-modal-title">⚖️ Заявки модераторов на бан</div>
+            <div class="admin-modal-title">⚖️ Заявки на бан</div>
             <div id="admin-ban-req-list" style="max-height: 400px; overflow-y: auto;">Загрузка...</div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-ban-requests')">Закрыть</button>
         </div>
@@ -570,7 +556,7 @@
     <div id="modal-admin-users" class="admin-modal">
         <div class="admin-modal-content">
             <div class="admin-modal-title">👥 База пользователей</div>
-            <input type="text" id="admin-search-input" class="admin-input" placeholder="Поиск по имени, городу или UID..." oninput="renderAdminUsersList(this.value)">
+            <input type="text" id="admin-search-input" class="admin-input" placeholder="Поиск по имени, городу или UID..." oninput="window.renderAdminUsersList(this.value)">
             <div id="admin-users-list" style="max-height: 350px; overflow-y: auto; font-size: 13px;">Загрузка...</div>
             <button class="btn-reset" style="margin-top:15px; padding: 12px;" onclick="closeAdminModal('modal-admin-users')">Закрыть</button>
         </div>
@@ -581,7 +567,7 @@
             <div class="admin-modal-title">📢 Глобальная Рассылка</div>
             <textarea id="broadcast-text" class="admin-textarea" placeholder="Текст системного уведомления..."></textarea>
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="sendBroadcast()">Опубликовать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="window.sendBroadcast()">Опубликовать</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-broadcast')">Отмена</button>
             </div>
         </div>
@@ -593,8 +579,8 @@
             <input type="text" id="ban-uid" class="admin-input" placeholder="UID пользователя...">
             <input type="text" id="ban-reason" class="admin-input" placeholder="Причина блокировки (будет видна юзеру)...">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="toggleUserBanModal(true)">Заблокировать</button>
-                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #00E676;" onclick="toggleUserBanModal(false)">Разблокировать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #FF416C;" onclick="window.toggleUserBanModal(true)">Заблокировать</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 14px; background: #00E676;" onclick="window.toggleUserBanModal(false)">Разблокировать</button>
             </div>
             <button class="btn-reset" style="margin-top:10px; padding: 12px;" onclick="closeAdminModal('modal-ban')">Закрыть</button>
         </div>
@@ -604,7 +590,7 @@
         <div class="admin-modal-content">
             <div class="admin-modal-title">📋 Логи по UID</div>
             <input type="text" id="logs-uid" class="admin-input" placeholder="UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserLogs()">Получить логи</button>
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="window.fetchUserLogs()">Получить логи</button>
             <div id="logs-result" style="font-size: 11px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 140px; overflow-y: auto; margin-bottom: 12px; white-space: pre-wrap;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-logs')">Закрыть</button>
         </div>
@@ -614,7 +600,7 @@
         <div class="admin-modal-content">
             <div class="admin-modal-title">💬 Сообщения по UID</div>
             <input type="text" id="msgs-uid" class="admin-input" placeholder="UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="fetchUserMessages()">Найти чаты</button>
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="window.fetchUserMessages()">Найти чаты</button>
             <div id="msgs-result" style="font-size: 12px; background: #f4f5f7; padding: 10px; border-radius: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 12px;"></div>
             <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-msgs')">Закрыть</button>
         </div>
@@ -624,10 +610,10 @@
         <div class="admin-modal-content">
             <div class="admin-modal-title">🖼️ Управление фото</div>
             <input type="text" id="photos-uid" class="admin-input" placeholder="UID пользователя...">
-            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="loadUserPhotosForAdmin()">Найти фото</button>
+            <button class="btn-glow" style="padding: 12px; font-size: 15px; margin-bottom: 12px;" onclick="window.loadUserPhotosForAdmin()">Найти фото</button>
             <div id="admin-photos-grid" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px; min-height:80px;"></div>
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="deleteAllUserPhotos()">Очистить все</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px; background: #FF416C;" onclick="window.deleteAllUserPhotos()">Очистить все</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-photos')">Отмена</button>
             </div>
         </div>
@@ -641,13 +627,12 @@
             <input type="number" id="edit-age" class="admin-input" placeholder="Новый возраст...">
             <input type="text" id="edit-city" class="admin-input" placeholder="Новый город...">
             <div class="admin-modal-actions">
-                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="saveEditedUser()">Сохранить</button>
+                <button class="btn-glow" style="padding: 12px; font-size: 15px;" onclick="window.saveEditedUser()">Сохранить</button>
                 <button class="btn-reset" style="margin-top:0; padding: 12px;" onclick="closeAdminModal('modal-edit-user')">Отмена</button>
             </div>
         </div>
     </div>
     
-    <!-- МОДАЛКА ПРОСМОТРА МЕДИА ИЗ ЧАТА -->
     <div id="modal-chat-media" class="admin-modal" style="z-index: 500;">
         <div class="admin-modal-content" style="text-align:center;">
             <div style="font-size:40px; margin-bottom:10px;">📁</div>
@@ -662,7 +647,7 @@
         <div class="chat-room-header">
             <button class="icon-btn" id="btn-close-chat" style="margin-right:10px; background:transparent; border:none!important; font-size:24px; font-weight:bold;">←</button>
             
-            <div style="display:flex; align-items:center; flex:1; cursor:pointer; overflow:hidden;" onclick="viewUserProfile(window.activeTargetId)">
+            <div style="display:flex; align-items:center; flex:1; cursor:pointer; overflow:hidden;" onclick="window.viewUserProfile(window.activeTargetId)">
                 <img src="" class="chat-room-avatar" id="chat-active-avatar">
                 <div class="chat-header-info">
                     <div class="chat-room-name" id="chat-active-name">Имя</div>
@@ -671,13 +656,13 @@
             </div>
             
             <div style="position:relative;" id="chat-menu-container">
-                <button class="icon-btn" style="background:transparent; border:none!important; font-size:24px; font-weight:bold; color:var(--text-muted);" onclick="toggleChatDropdown()">⋮</button>
+                <button class="icon-btn" style="background:transparent; border:none!important; font-size:24px; font-weight:bold; color:var(--text-muted);" onclick="window.toggleChatDropdown()">⋮</button>
                 <div class="chat-dropdown" id="chat-dropdown">
-                    <div class="dropdown-item" style="color:var(--text-main);" onclick="scrollToStart()">⬆️ Начало диалога</div>
-                    <div class="dropdown-item" style="color:var(--text-main);" onclick="viewChatMedia()">📁 Медиа/Ссылки/Музыка</div>
-                    <div class="dropdown-item" style="color:var(--text-main);" id="dropdown-mute-text" onclick="toggleMuteChat()">🔕 Заглушить уведомления</div>
-                    <div class="dropdown-item" style="color:#FF416C;" onclick="openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</div>
-                    <div class="dropdown-item" style="color:#FF416C; font-weight:bold;" onclick="leaveChat()">🚪 Покинуть чат</div>
+                    <div class="dropdown-item" style="color:var(--text-main);" onclick="window.scrollToStart()">⬆️ Начало диалога</div>
+                    <div class="dropdown-item" style="color:var(--text-main);" onclick="window.viewChatMedia()">📁 Медиа/Ссылки/Музыка</div>
+                    <div class="dropdown-item" style="color:var(--text-main);" id="dropdown-mute-text" onclick="window.toggleMuteChat()">🔕 Заглушить уведомления</div>
+                    <div class="dropdown-item" style="color:#FF416C;" onclick="window.openUserReportModal(window.activeTargetId)">⚠️ Пожаловаться</div>
+                    <div class="dropdown-item" style="color:#FF416C; font-weight:bold;" onclick="window.leaveChat()">🚪 Покинуть чат</div>
                 </div>
             </div>
         </div>
@@ -723,7 +708,7 @@
     const OWNER_UID = "AOMG79gW6zVVoEM9fcMnrpdHrxN2";
 
     let currentUserData = {}; 
-    let userRole = 'user'; // 'owner', 'moderator', 'user'
+    let userRole = 'user'; 
     let userPhotos = ["", "", "", "", ""]; 
     let myCustomInterests = []; 
     let myGender = 'male';
@@ -738,10 +723,12 @@
     let cardPhotosMain = []; let cardIndexMain = 0;
     let cardPhotosView = []; let cardIndexView = 0;
 
-    let chatUnsubscribe = null;
+    let chatMessagesUnsubscribe = null;
+    let chatTypingUnsubscribe = null;
+
     let userDocUnsubscribe = null; 
     let targetUserUnsubscribe = null; 
-    let chatDocUnsubscribe = null;
+    let chatListUnsubscribe = null;
     let reportsUnsubscribe = null; 
     let banReqUnsubscribe = null;
     let sysChatUnsubscribe = null;
@@ -779,10 +766,11 @@
     function clearLocalState() {
         if(auth.currentUser) setMyPresence(false);
         currentUserData = {}; userRole = 'user'; userPhotos = ["", "", "", "", ""]; myCustomInterests = []; profilesQueue = []; currentViewingProfile = null;
-        if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } 
+        if (chatListUnsubscribe) { chatListUnsubscribe(); chatListUnsubscribe = null; } 
         if (userDocUnsubscribe) { userDocUnsubscribe(); userDocUnsubscribe = null; } 
         if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
-        if (chatDocUnsubscribe) { chatDocUnsubscribe(); chatDocUnsubscribe = null; }
+        if (chatMessagesUnsubscribe) { chatMessagesUnsubscribe(); chatMessagesUnsubscribe = null; }
+        if (chatTypingUnsubscribe) { chatTypingUnsubscribe(); chatTypingUnsubscribe = null; }
         if (reportsUnsubscribe) { reportsUnsubscribe(); reportsUnsubscribe = null; }
         if (banReqUnsubscribe) { banReqUnsubscribe(); banReqUnsubscribe = null; }
         if (sysChatUnsubscribe) { sysChatUnsubscribe(); sysChatUnsubscribe = null; }
@@ -877,14 +865,15 @@
         }
     });
 
-    // --- ФИЛЬТРЫ И НАСТРОЙКИ ПОИСКА ---
     window.setSearchGender = (g) => {
+        if (!g || (g !== 'male' && g !== 'female' && g !== 'all')) g = 'all';
         searchGender = g;
         document.querySelectorAll('#modal-search-settings .chip').forEach(c => c.classList.remove('active'));
         document.getElementById('search-gender-' + g).classList.add('active');
     };
     
     window.setMyGender = (g) => {
+        if (!g || (g !== 'male' && g !== 'female')) g = 'male';
         myGender = g;
         document.getElementById('my-gender-male').classList.remove('active');
         document.getElementById('my-gender-female').classList.remove('active');
@@ -909,7 +898,6 @@
             loadProfilesFromCity();
         } catch(e) { showToast("Ошибка", e.message); }
     };
-
 
     window.openUserReportModal = (uid) => {
         if(!uid || uid === 'system') return showToast("Ошибка", "Невозможно выполнить действие.");
@@ -950,7 +938,6 @@
         try { await deleteDoc(doc(db, "reports", id)); } catch(e) { showToast("Ошибка", e.message); }
     };
     
-    // --- ЗАПРОСЫ НА БАН (МОДЕРАЦИЯ) ---
     window.requestBan = async (uid) => {
         const reason = prompt("Укажите причину для владельца платформы:");
         if (!reason) return;
@@ -981,17 +968,15 @@
         try { await deleteDoc(doc(db, "ban_requests", reqId)); } catch(e) { showToast("Ошибка", e.message); }
     };
 
-    // --- ВЫДАЧА РОЛЕЙ И ВЕРИФИКАЦИИ ---
     window.toggleVerification = async (uid, currentStatus) => {
-        try { await updateDoc(doc(db, "users", uid), { isVerified: !currentStatus }); showToast("Успех", "Статус верификации обновлен!"); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
+        try { await updateDoc(doc(db, "users", uid), { isVerified: !currentStatus }); showToast("Успех", "Статус верификации обновлен!"); window.viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
     };
 
     window.toggleModerator = async (uid, currentRole) => {
         const newRole = currentRole === 'moderator' ? 'user' : 'moderator';
-        try { await updateDoc(doc(db, "users", uid), { role: newRole }); showToast("Успех", `Роль изменена на: ${newRole}`); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
+        try { await updateDoc(doc(db, "users", uid), { role: newRole }); showToast("Успех", `Роль изменена на: ${newRole}`); window.viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
     };
 
-    // --- УПРАВЛЕНИЕ ЧАТОМ ---
     window.toggleChatDropdown = () => document.getElementById('chat-dropdown').classList.toggle('active');
     document.addEventListener('click', (e) => {
         const dd = document.getElementById('chat-dropdown');
@@ -1036,7 +1021,6 @@
 
     window.viewChatMedia = () => { openAdminModal('modal-chat-media'); document.getElementById('chat-dropdown').classList.remove('active'); };
 
-    // --- АДМИН ПАНЕЛЬ ---
     window.fetchAdminUsersList = async () => {
         const listDiv = document.getElementById('admin-users-list');
         listDiv.innerHTML = "Загрузка базы...";
@@ -1046,7 +1030,7 @@
             const snaps = await getDocs(q);
             allAdminUsersList = [];
             snaps.forEach(s => { allAdminUsersList.push({ id: s.id, ...s.data() }); });
-            renderAdminUsersList("");
+            window.renderAdminUsersList("");
         } catch(e) { listDiv.innerHTML = "Ошибка: " + e.message; }
     };
 
@@ -1066,7 +1050,7 @@
             const verified = d.isVerified ? " ☑️" : "";
             const roleBadge = d.id === OWNER_UID ? " 👑" : (d.role === 'moderator' ? " 🛡️" : "");
             html += `<div style="background:#f4f5f7; padding:10px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="flex:1; cursor:pointer;" onclick="viewUserProfile('${d.id}')">
+                        <div style="flex:1; cursor:pointer;" onclick="window.viewUserProfile('${d.id}')">
                             <b>${d.name || "Нет имени"}${verified}${roleBadge}</b> ${status} <br>
                             <span style="color:gray; font-size:11px;">UID: ${d.id}</span>
                         </div>
@@ -1086,12 +1070,12 @@
                 isBanned: true, banReason: reason || "Нарушение правил платформы"
             });
             showToast("Успех", "Пользователь заблокирован!");
-            closeAdminModal('modal-profile-ban'); viewUserProfile(uid); 
+            closeAdminModal('modal-profile-ban'); window.viewUserProfile(uid); 
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
     window.quickUnban = async (uid) => {
-        try { await updateDoc(doc(db, "users", uid), { isBanned: false, banReason: null }); showToast("Успех", "Пользователь разблокирован!"); viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
+        try { await updateDoc(doc(db, "users", uid), { isBanned: false, banReason: null }); showToast("Успех", "Пользователь разблокирован!"); window.viewUserProfile(uid); } catch(e) { showToast("Ошибка", e.message); }
     };
 
     window.sendBroadcast = async () => {
@@ -1115,7 +1099,7 @@
             await updateDoc(doc(db, "users", uid), { isBanned: isBanned, banReason: isBanned ? (reason || "Нарушение правил сообщества") : null });
             showToast("Успех", isBanned ? "Пользователь заблокирован!" : "Разблокирован!");
             document.getElementById('ban-uid').value = ""; document.getElementById('ban-reason').value = ""; closeAdminModal('modal-ban');
-            if(document.getElementById('modal-view-profile').classList.contains('active') && window.activeTargetId === uid) { viewUserProfile(uid); }
+            if(document.getElementById('modal-view-profile').classList.contains('active') && window.activeTargetId === uid) { window.viewUserProfile(uid); }
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
@@ -1193,7 +1177,7 @@
                 count++;
                 grid.innerHTML += `<div style="position:relative; width: 60px; height: 80px; border-radius: 8px; overflow:hidden;">
                     <img src="${photo}" style="width:100%;height:100%;object-fit:cover;">
-                    <button onclick="deleteSingleAdminPhoto(${index})" style="position:absolute;top:2px;right:2px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;">X</button>
+                    <button onclick="window.deleteSingleAdminPhoto(${index})" style="position:absolute;top:2px;right:2px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:10px;cursor:pointer;">X</button>
                 </div>`;
             }
         });
@@ -1237,7 +1221,6 @@
         } catch(e) { showToast("Ошибка", e.message); }
     };
 
-    // НАВИГАЦИЯ
     const navItems = document.querySelectorAll('.nav-item');
     const views = document.querySelectorAll('.view');
     const headerTitle = document.getElementById('main-header-title');
@@ -1300,7 +1283,6 @@
             if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
             setMyPresence(true); 
 
-            // БЕЗОПАСНОСТЬ: Проверка подтверждения Email
             if (!user.emailVerified) {
                 document.getElementById('profile-security-warning').classList.remove('hidden');
             } else {
@@ -1310,7 +1292,6 @@
             const checkSnap = await getDoc(doc(db, "users", user.uid));
             userRole = user.uid === OWNER_UID ? 'owner' : (checkSnap.exists() ? checkSnap.data().role || 'user' : 'user');
 
-            // АДМИН ИЛИ МОДЕРАТОР
             if (userRole === 'owner' || userRole === 'moderator') {
                 document.getElementById('owner-secret-section').classList.remove('hidden');
                 document.getElementById('admin-dashboard-title').innerHTML = userRole === 'owner' ? "👑 Панель Владельца" : "🛡️ Панель Модератора";
@@ -1344,11 +1325,11 @@
                                 html += `
                                 <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                     <strong>Модератор: ${d.moderatorName}</strong>
-                                    <div style="font-size:13px; margin:5px 0;">Запросил бан UID: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile('${d.targetUid}')">${d.targetUid}</b></div>
+                                    <div style="font-size:13px; margin:5px 0;">Запросил бан UID: <b style="cursor:pointer; color:var(--primary)" onclick="window.viewUserProfile('${d.targetUid}')">${d.targetUid}</b></div>
                                     <div style="font-size:14px; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">Причина: ${d.reason}</div>
                                     <div style="display:flex; gap:10px; margin-top:10px;">
-                                        <button onclick="approveBanReq('${doc.id}', '${d.targetUid}', '${d.reason}')" style="background:#FF416C;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Забанить</button>
-                                        <button onclick="rejectBanReq('${doc.id}')" style="background:gray;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Отклонить</button>
+                                        <button onclick="window.approveBanReq('${doc.id}', '${d.targetUid}', '${d.reason}')" style="background:#FF416C;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Забанить</button>
+                                        <button onclick="window.rejectBanReq('${doc.id}')" style="background:gray;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;flex:1;font-weight:bold;">Отклонить</button>
                                     </div>
                                 </div>`;
                             });
@@ -1388,8 +1369,8 @@
                             <div style="background:#f4f5f7; padding:15px; border-radius:15px; margin-bottom:12px; color:#1C1C28; text-align:left;">
                                 <strong>${d.name}</strong> <span style="font-size:11px;color:#8F90A6;float:right;">${date}</span>
                                 <div style="font-size:14px; margin:10px 0; background:white; padding:12px; border-radius:12px; border:1px solid #e2e2e2;">${d.text} ${linkHtml}</div>
-                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile('${d.uid}')">${d.uid}</b> ${d.reportedUid ? '| Нарушитель: <b style="cursor:pointer; color:var(--primary)" onclick="viewUserProfile(\'' + d.reportedUid + '\')">' + d.reportedUid + '</b>' : ''}</div>
-                                <button onclick="deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Решено</button>
+                                <div style="font-size:11px; color:#8F90A6; margin-bottom:10px;">UID: <b style="cursor:pointer; color:var(--primary)" onclick="window.viewUserProfile('${d.uid}')">${d.uid}</b> ${d.reportedUid ? '| Нарушитель: <b style="cursor:pointer; color:var(--primary)" onclick="window.viewUserProfile(\'' + d.reportedUid + '\')">' + d.reportedUid + '</b>' : ''}</div>
+                                <button onclick="window.deleteReport('${doc.id}')" style="background:#00E676;color:white;border:none;padding:8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:bold;width:100%;">✅ Решено</button>
                             </div>`;
                         });
                         list.innerHTML = html;
@@ -1434,10 +1415,10 @@
                     document.getElementById('prof-city').value = currentUserData.city || "";
                     document.getElementById('prof-bio').value = currentUserData.bio || "";
                     
-                    if(currentUserData.gender) setMyGender(currentUserData.gender);
-                    else setMyGender('male');
+                    if(currentUserData.gender) window.setMyGender(currentUserData.gender);
+                    else window.setMyGender('male');
 
-                    if(currentUserData.searchGender) setSearchGender(currentUserData.searchGender);
+                    if(currentUserData.searchGender) window.setSearchGender(currentUserData.searchGender);
                     if(currentUserData.searchAgeMin) { document.getElementById('age-min').value = currentUserData.searchAgeMin; document.getElementById('age-min-val').innerText = currentUserData.searchAgeMin; }
                     if(currentUserData.searchAgeMax) { document.getElementById('age-max').value = currentUserData.searchAgeMax; document.getElementById('age-max-val').innerText = currentUserData.searchAgeMax == 60 ? '60+' : currentUserData.searchAgeMax; }
 
@@ -1481,7 +1462,7 @@
             if(uSnap.exists()) {
                 const u = uSnap.data();
                 const verified = u.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge" style="width:16px; height:16px;">' : '';
-                html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name} ${verified}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
+                html += `<div class="like-card"><img src="${u.photos?.[0] || 'https://via.placeholder.com/150'}"><div class="like-card-info"><div class="like-card-name">${u.name} ${verified}, ${u.age}</div></div><div class="like-card-actions"><button class="like-btn like-btn-nope" onclick="window.handleLikeResponse('${uid}', false)">✕</button><button class="like-btn like-btn-yes" onclick="window.handleLikeResponse('${uid}', true, '${u.name}', '${u.photos?.[0] || ""}')">♥</button></div></div>`;
             }
         }
         container.innerHTML = html;
@@ -1642,7 +1623,7 @@
         const muted = currentUserData.mutedChats || [];
 
         if (systemChatData) {
-            html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+            html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="window.openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
                     <div class="chat-name" style="font-size:16px;">🌟 Уведомления AuraLover</div>
@@ -1650,7 +1631,7 @@
                 </div>
             </div>`;
         } else {
-             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
+             html += `<div class="chat-item" style="border: 1px solid var(--primary); background: rgba(255, 65, 108, 0.05);" onclick="window.openChat('system_broadcast', 'Системные уведомления от AuraLover', 'https://cdn-icons-png.flaticon.com/512/8660/8660341.png', 'system')">
                 <img class="chat-avatar" src="https://cdn-icons-png.flaticon.com/512/8660/8660341.png">
                 <div class="chat-info">
                     <div class="chat-name" style="font-size:16px;">🌟 Уведомления AuraLover</div>
@@ -1670,7 +1651,7 @@
                 const verified = otherUser.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge" style="width:16px; height:16px;">' : '';
                 
                 const msgPreview = data.lastMessageSenderId === auth.currentUser.uid ? `Вы: ${data.lastMessage}` : data.lastMessage;
-                html += `<div class="chat-item" onclick="openChat('${data.id}', '${otherUser.name}', '${safePhoto}', '${otherUserId}')">
+                html += `<div class="chat-item" onclick="window.openChat('${data.id}', '${otherUser.name}', '${safePhoto}', '${otherUserId}')">
                     <img class="chat-avatar" src="${safePhoto}">
                     <div class="chat-info">
                         <div class="chat-name">${otherUser.name} ${verified} ${isMuted ? '<span style="font-size:12px;opacity:0.5;">🔕</span>' : ''}</div>
@@ -1697,8 +1678,8 @@
         });
 
         const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser.uid));
-        if (chatUnsubscribe) chatUnsubscribe();
-        chatUnsubscribe = onSnapshot(q, (snapshot) => {
+        if (chatListUnsubscribe) chatListUnsubscribe();
+        chatListUnsubscribe = onSnapshot(q, (snapshot) => {
             const muted = currentUserData.mutedChats || [];
             
             snapshot.docChanges().forEach((change) => {
@@ -1804,11 +1785,12 @@
         const messagesDiv = document.getElementById('chat-messages');
         messagesDiv.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>Загрузка...</div>";
         
-        if (chatDocUnsubscribe) chatDocUnsubscribe();
-        if (targetUserUnsubscribe) targetUserUnsubscribe();
+        if (chatMessagesUnsubscribe) { chatMessagesUnsubscribe(); chatMessagesUnsubscribe = null; }
+        if (chatTypingUnsubscribe) { chatTypingUnsubscribe(); chatTypingUnsubscribe = null; }
+        if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
 
         const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"));
-        chatDocUnsubscribe = onSnapshot(q, (snapshot) => {
+        chatMessagesUnsubscribe = onSnapshot(q, (snapshot) => {
             let html = "";
             let lastDateStr = null;
 
@@ -1855,78 +1837,18 @@
                     updateChatStatusUI(); 
                 }
             });
-            chatDocUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
+            chatTypingUnsubscribe = onSnapshot(doc(db, "chats", chatId), (snap) => {
                 if(snap.exists() && activeChatId === chatId) { activeTargetTyping = !!snap.data().typing?.[targetId]; updateChatStatusUI(); }
             });
         }
     };
 
-    // --- ПРОСМОТР АНКЕТЫ ИЗ ЧАТА / АДМИНКИ ---
-    window.viewUserProfile = async (uid) => {
-        if (!uid || uid === 'system') return;
-        showLoading("Загрузка профиля...");
-        try {
-            const snap = await getDoc(doc(db, "users", uid));
-            if (snap.exists()) {
-                const data = snap.data();
-                const isBanned = data.isBanned;
-
-                document.getElementById('vp-banned-banner').style.display = isBanned ? 'block' : 'none';
-
-                const adminControls = document.getElementById('vp-admin-controls');
-                if(userRole === 'owner' || userRole === 'moderator') {
-                    adminControls.style.display = 'flex';
-                    let buttonsHTML = '';
-                    
-                    if(userRole === 'owner') {
-                        if(isBanned) buttonsHTML += `<button class="btn-glow" style="background:#00E676; padding:12px; font-size:14px;" onclick="event.stopPropagation(); quickUnban('${uid}')">Разблокировать пользователя</button>`;
-                        else buttonsHTML += `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); openProfileBanModal('${uid}')">Заблокировать пользователя</button>`;
-                        
-                        const verifyText = data.isVerified ? "Забрать галочку" : "Выдать галочку";
-                        buttonsHTML += `<button class="btn-glow" style="background:#00C9FF; padding:12px; font-size:14px; margin-top:5px;" onclick="event.stopPropagation(); toggleVerification('${uid}', ${!!data.isVerified})">${verifyText}</button>`;
-                        
-                        const modText = data.role === 'moderator' ? "Снять права модератора" : "Назначить модератором";
-                        buttonsHTML += `<button class="btn-glow" style="background:#8A2387; padding:12px; font-size:14px; margin-top:5px;" onclick="event.stopPropagation(); toggleModerator('${uid}', '${data.role || 'user'}')">${modText}</button>`;
-
-                    } else if (userRole === 'moderator' && uid !== OWNER_UID && data.role !== 'moderator') {
-                        if(!isBanned) buttonsHTML += `<button class="btn-glow" style="background:#FF416C; padding:12px; font-size:14px;" onclick="event.stopPropagation(); requestBan('${uid}')">Запросить блокировку</button>`;
-                    }
-                    adminControls.innerHTML = buttonsHTML;
-                } else {
-                    adminControls.style.display = 'none';
-                }
-
-                const verified = data.isVerified ? '<img src="https://cdn-icons-png.flaticon.com/512/7641/7641727.png" class="verified-badge">' : '';
-                document.getElementById('vp-card-name').innerHTML = `${data.name} ${verified}, <span class="card-age" id="vp-card-age">${data.age}</span>`;
-                document.getElementById('vp-card-city').innerText = "📍 " + (data.city || "");
-                document.getElementById('vp-card-bio').innerText = data.bio || "";
-                
-                cardPhotosView = (data.photos || []).filter(p => p !== "");
-                cardIndexView = 0;
-                updateCardPhotoUI('view');
-                
-                const tags = document.getElementById('vp-card-tags'); tags.innerHTML = '';
-                if(data.interests) {
-                    const myInterestsNorm = myCustomInterests.map(i => i.toLowerCase().trim());
-                    data.interests.forEach(i => {
-                        const isShared = myInterestsNorm.includes(i.toLowerCase().trim());
-                        const style = isShared ? 'border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,0.9);' : '';
-                        tags.innerHTML += `<div class="card-tag" style="${style}">${i}</div>`;
-                    });
-                }
-                openAdminModal('modal-view-profile');
-            } else {
-                showToast("Ошибка", "Анкета удалена или не существует.");
-            }
-        } catch(e) { showToast("Ошибка", e.message); }
-        finally { hideLoading(); }
-    };
-    
-    document.getElementById('btn-close-chat').onclick = () => { 
+    window.document.getElementById('btn-close-chat').onclick = () => { 
         document.getElementById('chat-room').classList.remove('active'); 
         document.getElementById('chat-dropdown').classList.remove('active');
-        if (chatDocUnsubscribe) chatDocUnsubscribe(); 
-        if (targetUserUnsubscribe) targetUserUnsubscribe();
+        if (chatMessagesUnsubscribe) { chatMessagesUnsubscribe(); chatMessagesUnsubscribe = null; }
+        if (chatTypingUnsubscribe) { chatTypingUnsubscribe(); chatTypingUnsubscribe = null; }
+        if (targetUserUnsubscribe) { targetUserUnsubscribe(); targetUserUnsubscribe = null; }
         activeChatId = null; window.activeTargetId = null;
     };
     
@@ -1971,7 +1893,6 @@
     
     document.querySelectorAll('.photo-input').forEach(inp => { inp.onchange = async function() { if(this.files[0]){ userPhotos[this.parentElement.getAttribute('data-index')] = await compressImage(this.files[0]); renderPhotos(); } this.value=""; }; });
 
-    // СОХРАНЕНИЕ ПРОФИЛЯ + ДИНАМИЧЕСКОЕ ОБНОВЛЕНИЕ ЧАТОВ
     document.getElementById('btn-save-profile').onclick = async () => {
         const btn = document.getElementById('btn-save-profile');
         const name = document.getElementById('prof-name').value, age = document.getElementById('prof-age').value, city = document.getElementById('prof-city').value, bio = document.getElementById('prof-bio').value;
